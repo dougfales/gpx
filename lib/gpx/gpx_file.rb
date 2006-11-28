@@ -53,10 +53,10 @@ module GPX
 
             bounds_element = (XPath.match(@xml, "/gpx/metadata/bounds").first rescue nil)
             if bounds_element
-               @bounds.min_lat = bounds_element.attributes["min_lat"].to_f
-               @bounds.min_lon = bounds_element.attributes["min_lon"].to_f
-               @bounds.max_lat = bounds_element.attributes["max_lat"].to_f
-               @bounds.max_lon = bounds_element.attributes["max_lon"].to_f
+               @bounds.min_lat = get_bounds_attr_value(bounds_element, %w{ min_lat minlat minLat })
+               @bounds.min_lon = get_bounds_attr_value(bounds_element, %w{ min_lon minlon minLon})
+               @bounds.max_lat = get_bounds_attr_value(bounds_element, %w{ max_lat maxlat maxLat})
+               @bounds.max_lon = get_bounds_attr_value(bounds_element, %w{ max_lon maxlon maxLon})
             else
                get_bounds = true
             end
@@ -80,6 +80,15 @@ module GPX
                calculate_duration
             end
          end
+      end
+
+      def get_bounds_attr_value(el, possible_names)
+         result = nil
+         possible_names.each do |name|
+            result = el.attributes[name]
+            break unless result.nil?
+         end
+         return (result.to_f rescue nil)
       end
 
       # Returns the distance, in kilometers, meters, or miles, of all of the

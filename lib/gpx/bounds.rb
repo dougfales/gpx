@@ -45,10 +45,10 @@ module GPX
 
       def to_xml
          bnd = REXML::Element.new('bounds')
-         bnd.attributes['min_lat'] = min_lat
-         bnd.attributes['min_lon'] = min_lon
-         bnd.attributes['max_lat'] = max_lat
-         bnd.attributes['max_lon'] = max_lon
+         bnd.attributes['minlat'] = min_lat
+         bnd.attributes['minlon'] = min_lon
+         bnd.attributes['maxlat'] = max_lat
+         bnd.attributes['maxlon'] = max_lon
          bnd
       end
 
