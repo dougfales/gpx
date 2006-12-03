@@ -87,7 +87,7 @@ module GPX
 
       # Returns true if the given time is within this Segment.
       def contains_time?(time)
-         (time >= @earliest_point.time and time <= @latest_point.time)
+         (time >= @earliest_point.time and time <= @latest_point.time) rescue false
       end
 
       # Finds the closest point in time to the passed-in time argument.  Useful
