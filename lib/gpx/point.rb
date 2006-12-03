@@ -90,9 +90,11 @@ module GPX
          pt = Element.new('trkpt')
          pt.attributes['lat'] = lat
          pt.attributes['lon'] = lon
-         time_elem = Element.new('time')
-         time_elem.text = time.xmlschema
-         pt.elements << time_elem
+         unless time.nil?
+            time_elem = Element.new('time')
+            time_elem.text = time.xmlschema
+            pt.elements << time_elem
+         end
          elev = Element.new('ele')
          elev.text = elevation
          pt.elements << elev

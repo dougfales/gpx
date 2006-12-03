@@ -204,8 +204,10 @@ module GPX
       end
 
       def update_meta_data(pt, last_pt)
-         @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
-         @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
+         unless pt.time.nil?
+            @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
+            @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
+         end
          unless pt.elevation.nil?
             @lowest_point   = pt if(@lowest_point.nil? or pt.elevation < @lowest_point.elevation)
             @highest_point  = pt if(@highest_point.nil? or pt.elevation > @highest_point.elevation)
