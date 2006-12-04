@@ -33,7 +33,7 @@ work-in-progress than an attempt at full GPX compliance.  The track side of the
 library has seen much more use than the route/waypoint side, so if you're doing
 something with routes or waypoints, you may need to tweak some things.  
 
-Since this code uses REXML to read an entire GPX file into memory, it is not
+Since this code uses XML to read an entire GPX file into memory, it is not
 the fastest possible solution for working with GPX data, especially if you are
 working with tracks from several days or weeks.  
 

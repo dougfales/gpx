@@ -21,7 +21,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 $:.unshift(File.dirname(__FILE__))
-require 'rexml/document'
+require 'rubygems'
+require 'xml/libxml'
 require 'date'
 require 'time'
 require 'csv'

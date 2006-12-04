@@ -29,13 +29,13 @@ module GPX
 
       attr_reader :points, :name, :gpx_file
 
-      # Initialize a Route from a REXML::Element.
+      # Initialize a Route from a XML::Node.
       def initialize(opts = {})
          rte_element = opts[:element]
          @gpx_file = opts[:gpx_file]
-         @name = rte_element.elements["child::name"].text
+         @name = rte_element.find("child::gpx:name", NS).first.content
          @points = []
-         XPath.each(rte_element, "child::rtept") do |point|
+         rte_element.find("child::gpx:rtept", NS).each do |point|
             @points << Point.new(:element => point)
          end
 
@@ -51,13 +51,13 @@ module GPX
          points.delete_if{ |pt| area.contains? pt }
       end
 
-      # Convert this Route to a REXML::Element.
+      # Convert this Route to a XML::Node.
       def to_xml
-         rte = Element.new('rte')
-         name_elem = Element.new('name')
-         name_elem.text = name
-         rte.elements << name_elem
-         points.each { |rte_pt| rte.elements << rte_pt.to_xml('rtept') }
+         rte = Node.new('rte')
+         name_elem = Node.new('name')
+         name_elem <<  name
+         rte <<  name_elem
+         points.each { |rte_pt| rte <<  rte_pt.to_xml('rtept') }
          rte
       end
 

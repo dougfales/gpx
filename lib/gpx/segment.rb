@@ -31,7 +31,7 @@ module GPX
       attr_reader :earliest_point, :latest_point, :bounds, :highest_point, :lowest_point, :distance
       attr_accessor :points, :track 
 
-      # If a REXML::Element object is passed-in, this will initialize a new
+      # If a XML::Node object is passed-in, this will initialize a new
       # Segment based on its contents.  Otherwise, a blank Segment is created.
       def initialize(opts = {})
          @track = opts[:track]
@@ -45,8 +45,8 @@ module GPX
          if(opts[:element])
             segment_element = opts[:element]
             last_pt = nil
-            unless segment_element.is_a?(Text)
-               XPath.each(segment_element, "child::trkpt") do |trkpt| 
+            if segment_element.is_a?(XML::Node)
+               segment_element.find("child::gpx:trkpt", NS).each do |trkpt| 
                   pt = TrackPoint.new(:element => trkpt, :segment => self)  
                   unless pt.time.nil?
                      @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
@@ -131,10 +131,10 @@ module GPX
          (points.nil? or (points.size == 0))
       end
 
-      # Converts this Segment to a REXML::Element object.
+      # Converts this Segment to a XML::Node object.
       def to_xml
-         seg = Element.new('trkseg')
-         points.each { |pt| seg.elements << pt.to_xml }
+         seg = Node.new('trkseg')
+         points.each { |pt| seg <<  pt.to_xml }
          seg
       end
 

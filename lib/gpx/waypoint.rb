@@ -39,7 +39,7 @@ module GPX
       def delete_area(area)
       end
 
-      # Initializes a waypoint from a REXML::Element.
+      # Initializes a waypoint from a XML::Node.
       def initialize(opts = {})
          wpt_elem = opts[:element]
          super(:element => wpt_elem)
@@ -47,25 +47,25 @@ module GPX
          @gpx_file = opts[:gpx_file]
       end
 
-      # Converts a waypoint to a REXML::Element.
+      # Converts a waypoint to a XML::Node.
       def to_xml
-         wpt = Element.new('wpt')
+         wpt = Node.new('wpt')
          wpt.attributes['lat'] = lat
          wpt.attributes['lon'] = lon
          if self.respond_to? :name
-            name_elem = Element.new('name')
-            name_elem.text = self.name 
-            wpt.elements << name_elem
+            name_elem = Node.new('name')
+            name_elem <<  self.name 
+            wpt <<  name_elem
          end
          if self.respond_to? :sym
-            sym_elem = Element.new('sym')
-            sym_elem.text = self.sym
-            wpt.elements << sym_elem
+            sym_elem = Node.new('sym')
+            sym_elem <<  self.sym
+            wpt <<  sym_elem
          end
          if self.respond_to? :ele
-            elev_elem = Element.new('ele')
-            elev_elem.text = self.ele
-            wpt.elements << elev_elem
+            elev_elem = Node.new('ele')
+            elev_elem <<  self.ele
+            wpt <<  elev_elem
          end
          wpt
       end

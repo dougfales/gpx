@@ -1,4 +1,5 @@
 require 'test/unit'
+require 'yaml'
 require File.dirname(__FILE__) + '/../lib/gpx'
 
 class TestSegment < Test::Unit::TestCase

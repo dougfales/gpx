@@ -32,7 +32,7 @@ module GPX
       attr_reader :points, :bounds, :lowest_point, :highest_point, :distance
       attr_accessor :segments, :name, :gpx_file
 
-      # Initialize a track from a REXML::Element, or, if no :element option is
+      # Initialize a track from a XML::Node, or, if no :element option is
       # passed, initialize a blank Track object.
       def initialize(opts = {})
          @gpx_file = opts[:gpx_file]
@@ -41,8 +41,8 @@ module GPX
          reset_meta_data
          if(opts[:element]) 
             trk_element = opts[:element]
-            @name = (trk_element.elements["child::name"].text rescue "")
-            XPath.each(trk_element, "child::trkseg") do |seg_element|
+            @name = (trk_element.find("child::gpx:name", NS).first.content rescue "")
+            trk_element.find("child::gpx:trkseg", NS).each do |seg_element|
                seg = Segment.new(:element => seg_element, :track => self)
                update_meta_data(seg)
                @segments << seg
@@ -101,14 +101,14 @@ module GPX
          (points.nil? or points.size.zero?)
       end
 
-      # Creates a new REXML::Element from the contents of this instance.
+      # Creates a new XML::Node from the contents of this instance.
       def to_xml
-         trk= Element.new('trk')
-         name_elem = Element.new('name')
-         name_elem.text = name
-         trk.elements << name_elem
+         trk= Node.new('trk')
+         name_elem = Node.new('name')
+         name_elem <<  name
+         trk <<  name_elem
          segments.each do |seg|
-            trk.elements << seg.to_xml
+            trk <<  seg.to_xml
          end
          trk
       end

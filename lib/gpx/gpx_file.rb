@@ -44,14 +44,15 @@ module GPX
          @duration = 0
          if(opts[:gpx_file])
             gpx_file = opts[:gpx_file]
-            case gpx_file
-            when String
-               gpx_file = File.open(gpx_file)
-            end
+            #case gpx_file
+            #when String
+            #   gpx_file = File.open(gpx_file)
+            #end
+            gpx_file = gpx_file.name if gpx_file.is_a?(File) 
             reset_meta_data
-            @xml = Document.new(gpx_file, :ignore_whitespace_nodes => :all)
+            @xml = Document.file(gpx_file)
 
-            bounds_element = (XPath.match(@xml, "/gpx/metadata/bounds").first rescue nil)
+            bounds_element = (@xml.find("//gpx:gpx/gpx:metadata/gpx:bounds", NS).to_a.first rescue nil)
             if bounds_element
                @bounds.min_lat = get_bounds_attr_value(bounds_element, %w{ min_lat minlat minLat })
                @bounds.min_lon = get_bounds_attr_value(bounds_element, %w{ min_lon minlon minLon})
@@ -61,13 +62,16 @@ module GPX
                get_bounds = true
             end
 
-            @tracks = XPath.match(@xml, "/gpx/trk").collect do |trk| 
+            @tracks = [] 
+            @xml.find("//gpx:gpx/gpx:trk", NS).each do |trk| 
                trk = Track.new(:element => trk, :gpx_file => self) 
                update_meta_data(trk, get_bounds)
-               trk
+               @tracks << trk
             end
-            @waypoints = XPath.match(@xml, "/gpx/wpt").collect { |wpt| Waypoint.new(:element => wpt, :gpx_file => self) }
-            @routes =    XPath.match(@xml, "/gpx/rte").collect { |rte| Route.new(:element => rte, :gpx_file => self) }
+            @waypoints = [] 
+            @xml.find("//gpx:gpx/gpx:wpt", NS).each { |wpt| @waypoints << Waypoint.new(:element => wpt, :gpx_file => self) }
+            @routes = []
+            @xml.find("//gpx:gpx/gpx:rte", NS).each { |rte| @routes << Route.new(:element => rte, :gpx_file => self) }
 
             @tracks.delete_if { |t| t.empty? }
 
@@ -85,7 +89,7 @@ module GPX
       def get_bounds_attr_value(el, possible_names)
          result = nil
          possible_names.each do |name|
-            result = el.attributes[name]
+            result = el[name]
             break unless result.nil?
          end
          return (result.to_f rescue nil)
@@ -184,32 +188,32 @@ module GPX
       def write(filename)
 
          doc = Document.new
-         gpx_elem = Element.new('gpx')
-         doc.add(gpx_elem)
-         gpx_elem.attributes['xmlns:xsi'] = "http://www.w3.org/2001/XMLSchema-instance" 
-         gpx_elem.attributes['xmlns'] = "http://www.topografix.com/GPX/1/1" 
-         gpx_elem.attributes['version'] = "1.1" 
-         gpx_elem.attributes['creator'] = "GPX RubyGem 0.1 Copyright 2006 Doug Fales -- http://walkingboss.com" 
-         gpx_elem.attributes['xsi:schemaLocation'] = "http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+         doc.root = Node.new('gpx')
+         gpx_elem = doc.root
+         gpx_elem['xmlns:xsi'] = "http://www.w3.org/2001/XMLSchema-instance" 
+         gpx_elem['xmlns'] = "http://www.topografix.com/GPX/1/1" 
+         gpx_elem['version'] = "1.1" 
+         gpx_elem['creator'] = "GPX RubyGem 0.1 Copyright 2006 Doug Fales -- http://walkingboss.com" 
+         gpx_elem['xsi:schemaLocation'] = "http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
 
-         meta_data_elem = Element.new('metadata')
-         name_elem = Element.new('name')
-         name_elem.text = File.basename(filename)
-         meta_data_elem.elements << name_elem
+         meta_data_elem = Node.new('metadata')
+         name_elem = Node.new('name')
+         name_elem << File.basename(filename)
+         meta_data_elem << name_elem
 
-         time_elem = Element.new('time')
-         time_elem.text = Time.now.xmlschema
-         meta_data_elem.elements << time_elem
+         time_elem = Node.new('time')
+         time_elem << Time.now.xmlschema
+         meta_data_elem << time_elem
 
-         meta_data_elem.elements << bounds.to_xml
+         meta_data_elem << bounds.to_xml
 
-         gpx_elem.elements << meta_data_elem
+         gpx_elem << meta_data_elem
 
-         tracks.each    { |t|   gpx_elem.add_element t.to_xml } unless tracks.nil?
-         waypoints.each { |w| gpx_elem.add_element w.to_xml } unless waypoints.nil?
-         routes.each    { |r| gpx_elem.add_element r.to_xml } unless routes.nil?
+         tracks.each    { |t| gpx_elem << t.to_xml } unless tracks.nil?
+         waypoints.each { |w| gpx_elem << w.to_xml } unless waypoints.nil?
+         routes.each    { |r| gpx_elem << r.to_xml } unless routes.nil?
 
-         File.open(filename, 'w') { |f| doc.write(f) }
+         doc.save(filename, true)
       end
 
       private 

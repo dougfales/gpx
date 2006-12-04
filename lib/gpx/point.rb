@@ -29,16 +29,16 @@ module GPX
 
       # When you need to manipulate individual points, you can create a Point
       # object with a latitude, a longitude, an elevation, and a time.  In
-      # addition, you can pass a REXML element to this initializer, and the
+      # addition, you can pass an XML element to this initializer, and the
       # relevant info will be parsed out.
       def initialize(opts = {:lat => 0.0, :lon => 0.0, :elevation => 0.0, :time => Time.now } )
          if (opts[:element]) 
             elem = opts[:element]
-            @lat, @lon = elem.attributes["lat"].to_f, elem.attributes["lon"].to_f
+            @lat, @lon = elem["lat"].to_f, elem["lon"].to_f
             @latr, @lonr = (D_TO_R * @lat), (D_TO_R * @lon)
             #'-'? yyyy '-' mm '-' dd 'T' hh ':' mm ':' ss ('.' s+)? (zzzzzz)?
-            @time = (Time.xmlschema(elem.elements["time"].text) rescue nil)
-            @elevation = elem.elements["ele"].text.to_f if elem.elements["ele"]
+            @time = (Time.xmlschema(elem.find("gpx:time", NS).first.content) rescue nil)
+            @elevation = elem.find("gpx:ele", NS).first.content.to_f unless elem.find("gpx:ele", NS).empty?
          else
             @lat = opts[:lat]
             @lon = opts[:lon]
@@ -85,19 +85,19 @@ module GPX
          @lon = longitude
       end
 
-      # Convert this point to a REXML::Element.
+      # Convert this point to a XML::Node.
       def to_xml(elem_name = 'trkpt')
-         pt = Element.new('trkpt')
-         pt.attributes['lat'] = lat
-         pt.attributes['lon'] = lon
+         pt = Node.new('trkpt')
+         pt['lat'] = lat.to_s
+         pt['lon'] = lon.to_s
          unless time.nil?
-            time_elem = Element.new('time')
-            time_elem.text = time.xmlschema
-            pt.elements << time_elem
+            time_elem = Node.new('time')
+            time_elem << time.xmlschema
+            pt << time_elem
          end
-         elev = Element.new('ele')
-         elev.text = elevation
-         pt.elements << elev
+         elev = Node.new('ele')
+         elev << elevation
+         pt <<  elev
          pt
       end
 
