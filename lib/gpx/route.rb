@@ -33,9 +33,9 @@ module GPX
       def initialize(opts = {})
          rte_element = opts[:element]
          @gpx_file = opts[:gpx_file]
-         @name = rte_element.find("child::gpx:name", NS).first.content
+         @name = rte_element.find("child::gpx:name", @ns).first.content
          @points = []
-         rte_element.find("child::gpx:rtept", NS).each do |point|
+         rte_element.find("child::gpx:rtept", @ns).each do |point|
             @points << Point.new(:element => point)
          end
 

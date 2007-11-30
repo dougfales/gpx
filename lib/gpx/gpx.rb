@@ -28,7 +28,6 @@ module GPX
    class Base
    include XML
 
-NS = 'gpx:http://www.topografix.com/GPX/1/1'
       # This initializer can take an XML::Node and scrape out any text
       # elements with the names given in the "text_elements" array.  Each
       # element found underneath "parent" with a name in "text_elements" causes

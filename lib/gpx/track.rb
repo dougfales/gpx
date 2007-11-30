@@ -41,9 +41,9 @@ module GPX
          reset_meta_data
          if(opts[:element]) 
             trk_element = opts[:element]
-            @name = (trk_element.find("child::gpx:name", NS).first.content rescue "")
-            trk_element.find("child::gpx:trkseg", NS).each do |seg_element|
-               seg = Segment.new(:element => seg_element, :track => self)
+            @name = (trk_element.find("child::gpx:name", @gpx_file.ns).first.content rescue "")
+            trk_element.find("child::gpx:trkseg", @gpx_file.ns).each do |seg_element|
+               seg = Segment.new(:element => seg_element, :track => self, :gpx_file => @gpx_file)
                update_meta_data(seg)
                @segments << seg
                @points.concat(seg.points) unless seg.nil?

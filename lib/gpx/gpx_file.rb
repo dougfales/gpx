@@ -22,7 +22,7 @@
 #++
 module GPX
    class GPXFile < Base
-      attr_reader :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :distance, :duration, :average_speed
+      attr_reader :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :distance, :duration, :average_speed, :ns
 
 
       # This initializer can be used to create a new GPXFile from an existing
@@ -50,9 +50,16 @@ module GPX
             #end
             gpx_file = gpx_file.name if gpx_file.is_a?(File) 
             reset_meta_data
-            @xml = Document.file(gpx_file)
-
-            bounds_element = (@xml.find("//gpx:gpx/gpx:metadata/gpx:bounds", NS).to_a.first rescue nil)
+            @xml = XML::Document.file(gpx_file)
+            
+            # set XML namespace for XML find
+            if @xml.root.namespace_node
+              @ns = 'gpx:' + @xml.root.namespace_node.href
+            else
+              @ns = 'gpx:http://www.topografix.com/GPX/1/1'  # default to GPX 1.1
+            end
+            
+            bounds_element = (@xml.find("//gpx:gpx/gpx:metadata/gpx:bounds", @ns).to_a.first rescue nil)
             if bounds_element
                @bounds.min_lat = get_bounds_attr_value(bounds_element, %w{ min_lat minlat minLat })
                @bounds.min_lon = get_bounds_attr_value(bounds_element, %w{ min_lon minlon minLon})
@@ -61,17 +68,17 @@ module GPX
             else
                get_bounds = true
             end
-
+            
             @tracks = [] 
-            @xml.find("//gpx:gpx/gpx:trk", NS).each do |trk| 
+            @xml.find("//gpx:gpx/gpx:trk", @ns).each do |trk| 
                trk = Track.new(:element => trk, :gpx_file => self) 
                update_meta_data(trk, get_bounds)
                @tracks << trk
             end
             @waypoints = [] 
-            @xml.find("//gpx:gpx/gpx:wpt", NS).each { |wpt| @waypoints << Waypoint.new(:element => wpt, :gpx_file => self) }
+            @xml.find("//gpx:gpx/gpx:wpt", @ns).each { |wpt| @waypoints << Waypoint.new(:element => wpt, :gpx_file => self) }
             @routes = []
-            @xml.find("//gpx:gpx/gpx:rte", NS).each { |rte| @routes << Route.new(:element => rte, :gpx_file => self) }
+            @xml.find("//gpx:gpx/gpx:rte", @ns).each { |rte| @routes << Route.new(:element => rte, :gpx_file => self) }
 
             @tracks.delete_if { |t| t.empty? }
 

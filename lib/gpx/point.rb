@@ -32,13 +32,14 @@ module GPX
       # addition, you can pass an XML element to this initializer, and the
       # relevant info will be parsed out.
       def initialize(opts = {:lat => 0.0, :lon => 0.0, :elevation => 0.0, :time => Time.now } )
+         @gpx_file = opts[:gpx_file]
          if (opts[:element]) 
             elem = opts[:element]
             @lat, @lon = elem["lat"].to_f, elem["lon"].to_f
             @latr, @lonr = (D_TO_R * @lat), (D_TO_R * @lon)
             #'-'? yyyy '-' mm '-' dd 'T' hh ':' mm ':' ss ('.' s+)? (zzzzzz)?
-            @time = (Time.xmlschema(elem.find("gpx:time", NS).first.content) rescue nil)
-            @elevation = elem.find("gpx:ele", NS).first.content.to_f unless elem.find("gpx:ele", NS).empty?
+            @time = (Time.xmlschema(elem.find("gpx:time", @gpx_file.ns).first.content) rescue nil)
+            @elevation = elem.find("gpx:ele", @gpx_file.ns).first.content.to_f unless elem.find("gpx:ele", @gpx_file.ns).empty?
          else
             @lat = opts[:lat]
             @lon = opts[:lon]

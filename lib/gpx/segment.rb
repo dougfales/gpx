@@ -34,6 +34,7 @@ module GPX
       # If a XML::Node object is passed-in, this will initialize a new
       # Segment based on its contents.  Otherwise, a blank Segment is created.
       def initialize(opts = {})
+         @gpx_file = opts[:gpx_file]
          @track = opts[:track]
          @points = []
          @earliest_point = nil
@@ -46,8 +47,8 @@ module GPX
             segment_element = opts[:element]
             last_pt = nil
             if segment_element.is_a?(XML::Node)
-               segment_element.find("child::gpx:trkpt", NS).each do |trkpt| 
-                  pt = TrackPoint.new(:element => trkpt, :segment => self)  
+               segment_element.find("child::gpx:trkpt", @gpx_file.ns).each do |trkpt| 
+                  pt = TrackPoint.new(:element => trkpt, :segment => self, :gpx_file => @gpx_file)  
                   unless pt.time.nil?
                      @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
                      @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0"
+creator="GPSBabel - http://www.gpsbabel.org"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/0"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+	<trk>
+	  <name>ACTIVE LOG #74</name>
+	  <number>82</number>
+	<trkseg>
+	<trkpt lat="37.378388923" lon="-122.063654875">
+	  <ele>35.706055</ele>
+	<time>2007-11-23T23:49:43Z</time>
+	</trkpt>
+	</trkseg>
+</trk>
+</gpx>
