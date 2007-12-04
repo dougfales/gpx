@@ -27,7 +27,7 @@ module GPX
    # not seen much use yet, since WalkingBoss does not use waypoints right now. 
    class Waypoint < Point
 
-      SUB_ELEMENTS = %q{ magvar geoidheight name cmt desc src link sym type fix sat hdop vdop pdop ageofdgpsdata dgpsid extensions } 
+      SUB_ELEMENTS = %w{ magvar geoidheight name cmt desc src link sym type fix sat hdop vdop pdop ageofdgpsdata dgpsid extensions } 
 
       attr_reader :gpx_file
 
@@ -42,9 +42,9 @@ module GPX
       # Initializes a waypoint from a XML::Node.
       def initialize(opts = {})
          wpt_elem = opts[:element]
-         super(:element => wpt_elem)
-         instantiate_with_text_elements(wpt_elem, SUB_ELEMENTS)
          @gpx_file = opts[:gpx_file]
+         super(:element => wpt_elem, :gpx_file => @gpx_file)
+         instantiate_with_text_elements(wpt_elem, SUB_ELEMENTS)
       end
 
       # Converts a waypoint to a XML::Node.
