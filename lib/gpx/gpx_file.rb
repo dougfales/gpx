@@ -34,6 +34,8 @@ module GPX
       #         puts "Duration: #{gpx_file.duration}"
       #         puts "Bounds: #{gpx_file.bounds}"
       #
+      # To read a GPX file from a string, use :gpx_data.
+      #         gpx_file = GPXFile.new(:gpx_data => '<xml ...><gpx>...</gpx>)
       # To create a new blank GPXFile instance:
       #         gpx_file = GPXFile.new
       # Note that you can pass in any instance variables to this form of the initializer, including Tracks or Segments:
@@ -42,16 +44,20 @@ module GPX
       #
       def initialize(opts = {}) 
          @duration = 0
-         if(opts[:gpx_file])
-            gpx_file = opts[:gpx_file]
-            #case gpx_file
-            #when String
-            #   gpx_file = File.open(gpx_file)
-            #end
-            gpx_file = gpx_file.name if gpx_file.is_a?(File) 
-            reset_meta_data
-            @xml = XML::Document.file(gpx_file)
-            
+         if(opts[:gpx_file] or opts[:gpx_data])
+            if opts[:gpx_file]
+              gpx_file = opts[:gpx_file]
+              #case gpx_file
+              #when String
+              #   gpx_file = File.open(gpx_file)
+              #end
+              gpx_file = gpx_file.name if gpx_file.is_a?(File) 
+              @xml = XML::Document.file(gpx_file)
+            else
+              parser = XML::Parser.new
+              parser.string = opts[:gpx_data]
+              @xml = parser.parse
+            end
             # set XML namespace for XML find
             if @xml.root.namespace_node
               @ns = 'gpx:' + @xml.root.namespace_node.href
@@ -59,6 +65,7 @@ module GPX
               @ns = 'gpx:http://www.topografix.com/GPX/1/1'  # default to GPX 1.1
             end
             
+            reset_meta_data
             bounds_element = (@xml.find("//gpx:gpx/gpx:metadata/gpx:bounds", @ns).to_a.first rescue nil)
             if bounds_element
                @bounds.min_lat = get_bounds_attr_value(bounds_element, %w{ min_lat minlat minLat })
