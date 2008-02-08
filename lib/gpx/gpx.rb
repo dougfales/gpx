@@ -35,15 +35,12 @@ module GPX
       # have to pick out individual text elements in each initializer of each
       # class (Route, TrackPoint, Track, etc).  Just pass an array of possible
       # attributes to this method.
-      def instantiate_with_text_elements(parent, text_elements)
+      def instantiate_with_text_elements(parent, text_elements, ns)
          text_elements.each do |el|
-            unless parent.find(el).empty?
-               val = parent.find(el).first.content
-               code = <<-code
-                  attr_accessor #{ el }
-                  #{el}=#{val}
-               code
-               class_eval code
+	   child_xpath = "gpx:#{el}"
+            unless parent.find(child_xpath, ns).empty?
+               val = parent.find(child_xpath, ns).first.content
+	       self.send("#{el}=", val)
             end
          end
 

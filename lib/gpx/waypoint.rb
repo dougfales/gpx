@@ -30,6 +30,7 @@ module GPX
       SUB_ELEMENTS = %w{ magvar geoidheight name cmt desc src link sym type fix sat hdop vdop pdop ageofdgpsdata dgpsid extensions } 
 
       attr_reader :gpx_file
+      SUB_ELEMENTS.each { |sub_el| attr_accessor sub_el.to_sym }
 
       # Not implemented
       def crop(area)
@@ -44,7 +45,23 @@ module GPX
          wpt_elem = opts[:element]
          @gpx_file = opts[:gpx_file]
          super(:element => wpt_elem, :gpx_file => @gpx_file)
-         instantiate_with_text_elements(wpt_elem, SUB_ELEMENTS)
+         instantiate_with_text_elements(wpt_elem, SUB_ELEMENTS, @gpx_file.ns)
+      end
+
+      # Prints out a friendly summary of this track (sans points).  Useful for
+      # debugging and sanity checks.
+      def to_s
+         result = "Waypoint \n"
+         result << "\tName: #{name}\n"
+         result << "\tLatitude: #{lat} \n"
+         result << "\tLongitude: #{lon} \n"
+         result << "\tElevation: #{elevation}\n "
+         result << "\tTime: #{time}\n"
+	 SUB_ELEMENTS.each do |sub_element_attribute|
+	   val = self.send(sub_element_attribute)
+	   result << "\t#{sub_element_attribute}: #{val}\n" unless val.nil?
+         end
+         result
       end
 
       # Converts a waypoint to a XML::Node.

@@ -25,7 +25,7 @@ module GPX
    # The base class for all points.  Trackpoint and Waypoint both descend from this base class.
    class Point < Base
       D_TO_R = PI/180.0;
-      attr_accessor :lat, :lon, :time, :elevation
+      attr_accessor :lat, :lon, :time, :elevation, :gpx_file
 
       # When you need to manipulate individual points, you can create a Point
       # object with a latitude, a longitude, an elevation, and a time.  In
