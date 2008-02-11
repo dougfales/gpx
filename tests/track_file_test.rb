@@ -1,7 +1,7 @@
 require 'test/unit'
 require File.dirname(__FILE__) + '/../lib/gpx'
 
-class TestTrackFile < Test::Unit::TestCase
+class TrackFileTest < Test::Unit::TestCase
    TRACK_FILE = File.join(File.dirname(__FILE__), "gpx_files/tracks.gpx")
    OTHER_TRACK_FILE = File.join(File.dirname(__FILE__), "gpx_files/arches.gpx")
 

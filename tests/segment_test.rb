@@ -2,7 +2,7 @@ require 'test/unit'
 require 'yaml'
 require File.dirname(__FILE__) + '/../lib/gpx'
 
-class TestSegment < Test::Unit::TestCase
+class SegmentTest < Test::Unit::TestCase
    ONE_SEGMENT = File.join(File.dirname(__FILE__), "gpx_files/one_segment.gpx")
 
    def setup
