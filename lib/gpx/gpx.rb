@@ -21,7 +21,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 module GPX
-   VERSION = "0.2"
+   VERSION = "0.3"
 
    # A common base class which provides a useful initializer method to many
    # class in the GPX library.
@@ -34,7 +34,7 @@ module GPX
       # an attribute to be initialized on the instance.  This means you don't
       # have to pick out individual text elements in each initializer of each
       # class (Route, TrackPoint, Track, etc).  Just pass an array of possible
-      # attributes to this method.
+      # attributes to this method.  
       def instantiate_with_text_elements(parent, text_elements, ns)
          text_elements.each do |el|
 	   child_xpath = "gpx:#{el}"
