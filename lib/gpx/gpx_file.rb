@@ -22,7 +22,7 @@
 #++
 module GPX
    class GPXFile < Base
-      attr_reader :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :distance, :duration, :average_speed, :ns
+      attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name
 
 
       # This initializer can be used to create a new GPXFile from an existing
@@ -75,6 +75,9 @@ module GPX
             else
                get_bounds = true
             end
+
+		    @time = Time.parse(@xml.find("//gpx:gpx/gpx:metadata/gpx:time", @ns).first.content) rescue nil
+			@name = @xml.find("//gpx:gpx/gpx:metadata/gpx:name", @ns).first.content rescue nil
             
             @tracks = [] 
             @xml.find("//gpx:gpx/gpx:trk", @ns).each do |trk| 
@@ -98,6 +101,9 @@ module GPX
                calculate_duration
             end
          end
+		 @tracks ||= []
+		 @routes ||= []
+		 @waypoints ||= []
       end
 
       def get_bounds_attr_value(el, possible_names)
@@ -199,7 +205,7 @@ module GPX
 
       # Serialize the current GPXFile to a gpx file named <filename>.
       # If the file does not exist, it is created.  If it does exist, it is overwritten.
-      def write(filename)
+      def write(filename, update_time = true)
 
          doc = Document.new
          doc.root = Node.new('gpx')
@@ -216,7 +222,10 @@ module GPX
          meta_data_elem << name_elem
 
          time_elem = Node.new('time')
-         time_elem << Time.now.xmlschema
+
+		 @time = Time.now if(@time.nil? or update_time)
+		 time_elem << @time.xmlschema
+
          meta_data_elem << time_elem
 
          meta_data_elem << bounds.to_xml

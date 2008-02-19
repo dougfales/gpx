@@ -46,7 +46,6 @@ module GPX
                seg = Segment.new(:element => seg_element, :track => self, :gpx_file => @gpx_file)
                update_meta_data(seg)
                @segments << seg
-               @points.concat(seg.points) unless seg.nil?
             end
          end
       end

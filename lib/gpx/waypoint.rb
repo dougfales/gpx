@@ -42,10 +42,19 @@ module GPX
 
       # Initializes a waypoint from a XML::Node.
       def initialize(opts = {})
-         wpt_elem = opts[:element]
-         @gpx_file = opts[:gpx_file]
-         super(:element => wpt_elem, :gpx_file => @gpx_file)
-         instantiate_with_text_elements(wpt_elem, SUB_ELEMENTS, @gpx_file.ns)
+		if(opts[:element] and opts[:gpx_file])
+		  wpt_elem = opts[:element]
+		  @gpx_file = opts[:gpx_file]
+		  super(:element => wpt_elem, :gpx_file => @gpx_file)
+		  instantiate_with_text_elements(wpt_elem, SUB_ELEMENTS, @gpx_file.ns)
+		else
+		  opts.each do |key, value|
+			assignment_method = "#{key}="
+			if self.respond_to?(assignment_method)
+			  self.send(assignment_method, value)
+			end
+		  end
+		end
       end
 
       # Prints out a friendly summary of this track (sans points).  Useful for
@@ -67,22 +76,19 @@ module GPX
       # Converts a waypoint to a XML::Node.
       def to_xml
          wpt = Node.new('wpt')
-         wpt.attributes['lat'] = lat
-         wpt.attributes['lon'] = lon
-         if self.respond_to? :name
-            name_elem = Node.new('name')
-            name_elem <<  self.name 
-            wpt <<  name_elem
+         wpt['lat'] = lat.to_s
+         wpt['lon'] = lon.to_s
+		 SUB_ELEMENTS.each do |sub_element_name|
+		   if(self.respond_to?(sub_element_name) and (!self.send(sub_element_name).nil?))
+            sub_elem_node = Node.new(sub_element_name)
+            sub_elem_node <<  self.send(sub_element_name) 
+            wpt <<  sub_elem_node
+           end
          end
-         if self.respond_to? :sym
-            sym_elem = Node.new('sym')
-            sym_elem <<  self.sym
-            wpt <<  sym_elem
-         end
-         if self.respond_to? :ele
-            elev_elem = Node.new('ele')
-            elev_elem <<  self.ele
-            wpt <<  elev_elem
+		 unless(self.elevation.nil?)
+            ele_node = Node.new('ele')
+            ele_node <<  self.elevation
+            wpt <<  ele_node
          end
          wpt
       end

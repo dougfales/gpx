@@ -27,17 +27,22 @@ module GPX
    # automatically logging your progress at regular intervals.  
    class Route < Base
 
-      attr_reader :points, :name, :gpx_file
+      attr_accessor :points, :name, :gpx_file
 
       # Initialize a Route from a XML::Node.
       def initialize(opts = {})
+		if(opts[:gpx_file] and opts[:element])
          rte_element = opts[:element]
          @gpx_file = opts[:gpx_file]
          @name = rte_element.find("child::gpx:name", @gpx_file.ns).first.content
          @points = []
          rte_element.find("child::gpx:rtept", @gpx_file.ns).each do |point|
-            @points << Point.new(:element => point, :gpx_file => @gpx_file)
+		   @points << Point.new(:element => point, :gpx_file => @gpx_file)
          end
+	   else
+		 @points = (opts[:points] or [])
+		 @name = (opts[:name])
+	   end
 
       end
 

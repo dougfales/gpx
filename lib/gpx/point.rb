@@ -88,7 +88,7 @@ module GPX
 
       # Convert this point to a XML::Node.
       def to_xml(elem_name = 'trkpt')
-         pt = Node.new('trkpt')
+         pt = Node.new(elem_name)
          pt['lat'] = lat.to_s
          pt['lon'] = lon.to_s
          unless time.nil?

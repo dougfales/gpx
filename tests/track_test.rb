@@ -11,7 +11,7 @@ class TrackTest < Test::Unit::TestCase
 
    def test_track_read
       assert_equal("ACTIVE LOG", @track.name)
-      assert_equal( 364, @track.points.size) 
+      assert_equal( 182, @track.points.size) 
       assert_equal(8, @track.segments.size)
       assert_equal("3.07249668492626", @track.distance.to_s) 
       assert_equal(1267.155, @track.lowest_point.elevation)
