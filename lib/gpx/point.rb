@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006  Doug Fales 
+# Copyright (c) 2006  Doug Fales
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -25,7 +25,7 @@ module GPX
    # The base class for all points.  Trackpoint and Waypoint both descend from this base class.
    class Point < Base
       D_TO_R = PI/180.0;
-      attr_accessor :lat, :lon, :time, :elevation, :gpx_file
+      attr_accessor :lat, :lon, :time, :elevation, :gpx_file, :speed
 
       # When you need to manipulate individual points, you can create a Point
       # object with a latitude, a longitude, an elevation, and a time.  In
@@ -33,18 +33,20 @@ module GPX
       # relevant info will be parsed out.
       def initialize(opts = {:lat => 0.0, :lon => 0.0, :elevation => 0.0, :time => Time.now } )
          @gpx_file = opts[:gpx_file]
-         if (opts[:element]) 
+         if (opts[:element])
             elem = opts[:element]
             @lat, @lon = elem["lat"].to_f, elem["lon"].to_f
             @latr, @lonr = (D_TO_R * @lat), (D_TO_R * @lon)
             #'-'? yyyy '-' mm '-' dd 'T' hh ':' mm ':' ss ('.' s+)? (zzzzzz)?
             @time = (Time.xmlschema(elem.find("gpx:time", @gpx_file.ns).first.content) rescue nil)
             @elevation = elem.find("gpx:ele", @gpx_file.ns).first.content.to_f unless elem.find("gpx:ele", @gpx_file.ns).empty?
+            @speed = elem.find("gpx:speed", @gpx_file.ns).first.content.to_f unless elem.find("gpx:speed", @gpx_file.ns).empty?
          else
             @lat = opts[:lat]
             @lon = opts[:lon]
             @elevation = opts[:elevation]
             @time = opts[:time]
+            @speed = opts[:speed]
          end
 
       end
