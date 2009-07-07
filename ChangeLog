@@ -1,0 +1,132 @@
+2009-07-07 02:51  dougfales
+
+	* lib/gpx/gpx.rb: Revving to version 0.5.
+
+2009-07-07 02:43  dougfales
+
+	* README: Changing my contact email address.
+
+2009-07-07 02:41  dougfales
+
+	* lib/gpx/gpx_file.rb, tests/gpx_file_test.rb,
+	  tests/gpx_files/with_or_without_elev.gpx: Patches from Tom
+	  Verbeure (mtbguru.com) to work with libxml-ruby 1.x.
+
+2009-06-17 14:20  dougfales
+
+	* lib/gpx/point.rb: Patch from Kang-min Liu to support speed
+	  element.
+
+2008-02-19 04:09  dougfales
+
+	* lib/gpx/gpx.rb: Revving to 0.4.
+
+2008-02-19 04:06  dougfales
+
+	* lib/gpx/gpx.rb, lib/gpx/gpx_file.rb, lib/gpx/point.rb,
+	  lib/gpx/route.rb, lib/gpx/track.rb, lib/gpx/waypoint.rb,
+	  tests/gpx_file_test.rb, tests/gpx_files, tests/gpx_files/big.gpx,
+	  tests/output, tests/output_test.rb, tests/track_test.rb: Adding
+	  some new unit tests and fixing several file export bugs reported
+	  by Jochen Topf.
+	  New unit tests also uncovered a bug where the number of
+	  trackpoints reported in a file was twice the actual number.
+
+2008-02-11 21:20  dougfales
+
+	* lib/gpx/gpx.rb: Going to version 0.3.
+
+2008-02-11 21:13  dougfales
+
+	* tests/gpx10_test.rb, tests/gpx_files/routes.gpx,
+	  tests/gpx_files/waypoints.gpx, tests/magellan_test.rb,
+	  tests/route_test.rb, tests/segment_test.rb,
+	  tests/track_file_test.rb, tests/track_test.rb,
+	  tests/waypoint_test.rb: Updating unit tests in light of recent
+	  fixes to routes and waypoints code.
+
+2008-02-08 23:26  dougfales
+
+	* lib/gpx/gpx.rb, lib/gpx/point.rb, lib/gpx/route.rb,
+	  lib/gpx/waypoint.rb: Thanks to Mike Gauland for discovering some
+	  route- and waypoint-related bugs. I've fixed them and also added
+	  #to_s on Waypoint so it's easier to debug.
+
+2007-12-04 17:58  dougfales
+
+	* lib/gpx/waypoint.rb: Thanks to Christian Koerner for finding and
+	  fixing these bugs in the waypoint
+	  code.
+
+2007-12-04 17:52  dougfales
+
+	* lib/gpx/gpx_file.rb, tests/gpx_file_test.rb: Another patch from
+	  Gaku Ueda. This one allows you to pass in a string of GPX
+	  data using the :gpx_date => option. Thanks Gaku!
+
+2007-11-30 06:29  dougfales
+
+	* lib/gpx/gpx.rb: Updating the version #.
+
+2007-11-30 06:26  dougfales
+
+	* lib/gpx/gpx.rb, lib/gpx/gpx_file.rb, lib/gpx/point.rb,
+	  lib/gpx/route.rb, lib/gpx/segment.rb, lib/gpx/track.rb,
+	  tests/gpx10_test.rb, tests/gpx_files/gpx10.gpx: Updates courtesy
+	  of Gaku Ueda:
+	  * Adding support for GPX 1.0 as well as 1.1 (since libxml
+	  namespace parsing
+	  was hard-coded to 1.1. previously).
+	  * Adding a GPX 1.0 unit test file.
+	  * Miscellaneous updates to make it work with Ruby 1.8.6.
+
+2006-12-04 06:47  dougfales
+
+	* README, lib/gpx.rb, lib/gpx/bounds.rb, lib/gpx/gpx.rb,
+	  lib/gpx/gpx_file.rb, lib/gpx/point.rb, lib/gpx/route.rb,
+	  lib/gpx/segment.rb, lib/gpx/track.rb, lib/gpx/waypoint.rb,
+	  tests/segment_test.rb: First stab at using libxml-ruby instead of
+	  REXML. I'm seeing the unit tests
+	  finish in under 14 seconds. That is compared to 2 minutes using
+	  REXML.
+
+2006-12-03 07:31  dougfales
+
+	* lib/gpx/point.rb, lib/gpx/segment.rb: Fixing more nil time
+	  exceptions.
+
+2006-12-03 06:59  dougfales
+
+	* lib/gpx/segment.rb: Fixing an exception in contains_time?.
+
+2006-11-28 15:35  dougfales
+
+	* lib/gpx/bounds.rb, lib/gpx/gpx_file.rb: A couple of fixes to make
+	  the library comply with the different attribute names
+	  possible on the bounds element.
+	  
+	  Formerly, a bounds element with a minlat or minLat attribute
+	  (instead of
+	  min_lat) would not be properly parsed. Now all three styles of
+	  attribute name
+	  are accepted.
+
+2006-10-28 22:09  dougfales
+
+	* lib/gpx/segment.rb: Fixing nil time bug.
+
+2006-10-14 13:20  dougfales
+
+	* ., README, Rakefile, bin, docs, lib, lib/gpx, lib/gpx.rb,
+	  lib/gpx/bounds.rb, lib/gpx/gpx.rb, lib/gpx/gpx_file.rb,
+	  lib/gpx/magellan_track_log.rb, lib/gpx/point.rb,
+	  lib/gpx/route.rb, lib/gpx/segment.rb, lib/gpx/track.rb,
+	  lib/gpx/trackpoint.rb, lib/gpx/waypoint.rb, tests,
+	  tests/gpx_files, tests/gpx_files/arches.gpx,
+	  tests/gpx_files/magellan_track.log,
+	  tests/gpx_files/one_segment.gpx, tests/gpx_files/one_track.gpx,
+	  tests/gpx_files/routes.gpx, tests/gpx_files/tracks.gpx,
+	  tests/gpx_files/waypoints.gpx, tests/magellan_test.rb,
+	  tests/segment_test.rb, tests/track_file_test.rb,
+	  tests/track_test.rb: Initial import of gpx gem.
+
