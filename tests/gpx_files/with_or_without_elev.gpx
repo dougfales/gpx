@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="MapSource 6.5" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+
+  <metadata>
+    <link href="http://www.garmin.com">
+      <text>Garmin International</text>
+    </link>
+    <time>2007-04-16T18:11:47Z</time>
+    <bounds maxlat="40.207429" maxlon="116.670578" minlat="39.876895" minlon="101.636217"/>
+  </metadata>
+
+  <trk>
+    <name>ACTIVE LOG</name>
+    <trkseg>
+      <trkpt lat="40.079434" lon="116.295948">
+        <ele>50.606567</ele>
+        <time>2007-03-25T05:17:34Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+
+  <trk>
+    <name>LINE-13</name>
+    <trkseg>
+      <trkpt lat="39.949744" lon="116.427398"/>
+    </trkseg>
+  </trk>
+
+</gpx>

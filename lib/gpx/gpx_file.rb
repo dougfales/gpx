@@ -54,13 +54,12 @@ module GPX
               gpx_file = gpx_file.name if gpx_file.is_a?(File) 
               @xml = XML::Document.file(gpx_file)
             else
-              parser = XML::Parser.new
-              parser.string = opts[:gpx_data]
+              parser = XML::Parser.string(opts[:gpx_data])
               @xml = parser.parse
             end
             # set XML namespace for XML find
-            if @xml.root.namespace_node
-              @ns = 'gpx:' + @xml.root.namespace_node.href
+            if @xml.root.namespaces.namespace
+              @ns = 'gpx:' + @xml.root.namespaces.namespace.href
             else
               @ns = 'gpx:http://www.topografix.com/GPX/1/1'  # default to GPX 1.1
             end
@@ -197,8 +196,8 @@ module GPX
       # you modify the GPX data (i.e. by adding or deleting points) and you
       # want the meta data to accurately reflect the new data.
       def update_meta_data(trk, get_bounds = true)
-         @lowest_point   = trk.lowest_point if(@lowest_point.nil? or trk.lowest_point.elevation < @lowest_point.elevation)
-         @highest_point  = trk.highest_point if(@highest_point.nil? or trk.highest_point.elevation > @highest_point.elevation)
+         @lowest_point   = trk.lowest_point if(@lowest_point.nil? or (!trk.lowest_point.nil? and trk.lowest_point.elevation < @lowest_point.elevation))
+         @highest_point  = trk.highest_point if(@highest_point.nil? or (!trk.highest_point.nil? and trk.highest_point.elevation > @highest_point.elevation))
          @bounds.add(trk.bounds) if get_bounds
          @distance += trk.distance
       end
@@ -236,7 +235,7 @@ module GPX
          waypoints.each { |w| gpx_elem << w.to_xml } unless waypoints.nil?
          routes.each    { |r| gpx_elem << r.to_xml } unless routes.nil?
 
-         doc.save(filename, true)
+         doc.save(filename, :indent => true)
       end
 
       private 
