@@ -1,6 +1,6 @@
 = GPX Gem
 Copyright (C) 2006  Doug Fales
-Doug Fales mailto:doug.fales@gmail.com
+Doug Fales mailto:doug@falesafeconsulting.com
 
 == What It Does
 This library reads GPX files and provides an API for reading and manipulating
@@ -28,7 +28,7 @@ Converting a Magellan track log to GPX:
 
 == Notes
 This library was written to bridge the gap between my Garmin Geko
-and my website, WalkingBoss.org.  For that reason, it has always been more of a
+and my website, WalkingBoss.org (RIP).  For that reason, it has always been more of a
 work-in-progress than an attempt at full GPX compliance.  The track side of the
 library has seen much more use than the route/waypoint side, so if you're doing
 something with routes or waypoints, you may need to tweak some things.  
