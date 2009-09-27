@@ -22,7 +22,7 @@
 #++
 module GPX
    class GPXFile < Base
-      attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name
+      attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :version, :time, :name
 
 
       # This initializer can be used to create a new GPXFile from an existing
@@ -205,31 +205,36 @@ module GPX
       # Serialize the current GPXFile to a gpx file named <filename>.
       # If the file does not exist, it is created.  If it does exist, it is overwritten.
       def write(filename, update_time = true)
-
          doc = Document.new
          doc.root = Node.new('gpx')
          gpx_elem = doc.root
-         gpx_elem['xmlns:xsi'] = "http://www.w3.org/2001/XMLSchema-instance" 
-         gpx_elem['xmlns'] = "http://www.topografix.com/GPX/1/1" 
-         gpx_elem['version'] = "1.1" 
-         gpx_elem['creator'] = "GPX RubyGem 0.1 Copyright 2006 Doug Fales -- http://walkingboss.com" 
-         gpx_elem['xsi:schemaLocation'] = "http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+         gpx_elem['xmlns:xsi'] = "http://www.w3.org/2001/XMLSchema-instance"
+         @version = '1.1' if (@version.nil? || !(['1.0', '1.1'].include?(@version))) # default to version 1.1 of the schema (only version 1.0 and 1.1 of the schema exist)
+         version_dir = @version.gsub('.','/')
+         gpx_elem['xmlns'] = @ns || "http://www.topografix.com/GPX/#{version_dir}" 
+         gpx_elem['version'] = "#{@version}"
+         gpx_elem['creator'] = "GPX RubyGem #{GPX::VERSION} Copyright 2006-2009 Doug Fales -- http://gpx.rubyforge.org/" 
+         gpx_elem['xsi:schemaLocation'] = "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd"
 
-         meta_data_elem = Node.new('metadata')
+         # setup the metadata elements
          name_elem = Node.new('name')
          name_elem << File.basename(filename)
-         meta_data_elem << name_elem
-
          time_elem = Node.new('time')
+    		 @time = Time.now if(@time.nil? or update_time)
+    		 time_elem << @time.xmlschema
 
-		 @time = Time.now if(@time.nil? or update_time)
-		 time_elem << @time.xmlschema
-
-         meta_data_elem << time_elem
-
-         meta_data_elem << bounds.to_xml
-
-         gpx_elem << meta_data_elem
+         # version 1.0 of the schema doesn't support the metadata element, so push them straight to the root 'gpx' element
+         if (@version == '1.0') then
+           gpx_elem << name_elem
+           gpx_elem << time_elem
+           gpx_elem << bounds.to_xml                      
+         else
+           meta_data_elem = Node.new('metadata')
+           meta_data_elem << name_elem
+           meta_data_elem << time_elem
+           meta_data_elem << bounds.to_xml           
+           gpx_elem << meta_data_elem
+         end
 
          tracks.each    { |t| gpx_elem << t.to_xml } unless tracks.nil?
          waypoints.each { |w| gpx_elem << w.to_xml } unless waypoints.nil?
