@@ -74,8 +74,8 @@ module GPX
       end
 
       # Converts a waypoint to a XML::Node.
-      def to_xml
-         wpt = Node.new('wpt')
+      def to_xml(elem_name = 'wpt')
+         wpt = Node.new(elem_name)
          wpt['lat'] = lat.to_s
          wpt['lon'] = lon.to_s
 		 SUB_ELEMENTS.each do |sub_element_name|

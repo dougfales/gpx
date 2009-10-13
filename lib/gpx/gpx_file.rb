@@ -205,6 +205,20 @@ module GPX
       # Serialize the current GPXFile to a gpx file named <filename>.
       # If the file does not exist, it is created.  If it does exist, it is overwritten.
       def write(filename, update_time = true)
+         @time = Time.now if(@time.nil? or update_time)
+         @name ||= File.basename(filename)
+         doc = generate_xml_doc
+         doc.save(filename, :indent => true)
+      end
+
+      def to_s(update_time = true)
+         @time = Time.now if(@time.nil? or update_time)
+         doc = generate_xml_doc
+         doc.to_s
+      end
+
+      private 
+      def generate_xml_doc
          doc = Document.new
          doc.root = Node.new('gpx')
          gpx_elem = doc.root
@@ -218,10 +232,9 @@ module GPX
 
          # setup the metadata elements
          name_elem = Node.new('name')
-         name_elem << File.basename(filename)
+         name_elem << @name
          time_elem = Node.new('time')
-    		 @time = Time.now if(@time.nil? or update_time)
-    		 time_elem << @time.xmlschema
+         time_elem << @time.xmlschema
 
          # version 1.0 of the schema doesn't support the metadata element, so push them straight to the root 'gpx' element
          if (@version == '1.0') then
@@ -240,10 +253,8 @@ module GPX
          waypoints.each { |w| gpx_elem << w.to_xml } unless waypoints.nil?
          routes.each    { |r| gpx_elem << r.to_xml } unless routes.nil?
 
-         doc.save(filename, :indent => true)
+         return doc
       end
-
-      private 
 
       # Calculates and sets the duration attribute by subtracting the time on
       # the very first point from the time on the very last point.
