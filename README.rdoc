@@ -1,7 +1,6 @@
 = GPX Gem
 
-Copyright (C) 2006  Doug Fales
-Doug Fales mailto:doug@falesafeconsulting.com
+Copyright (C) 2006 Doug Fales mailto:doug@falesafeconsulting.com
 
 == What It Does
 
