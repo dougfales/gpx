@@ -69,7 +69,7 @@ class TrackFileTest < Test::Unit::TestCase
    end
 
    def test_write
-      @other_track_file.write("myoutput.gpx")
+      @other_track_file.write("tests/output/myoutput.gpx")
    end
 
 end

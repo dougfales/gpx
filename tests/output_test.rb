@@ -1,9 +1,14 @@
 require 'test/unit'
+require 'fileutils'
 require File.dirname(__FILE__) + '/../lib/gpx'
 
 class OutputTest < Test::Unit::TestCase
 
   include GPX
+
+  def setup
+    FileUtils.mkdir_p(File.join(File.dirname(__FILE__), "output"))
+  end
 
   def test_new_gpx_file_from_scratch
 	gpx_file = GPXFile.new
@@ -25,24 +30,24 @@ class OutputTest < Test::Unit::TestCase
 	
 	track_point_data.each do |trk_pt_hash|
 	  segment.points <<  TrackPoint.new(trk_pt_hash)
-    end
+        end
 	
 	track.segments << segment
 	gpx_file.tracks << track
 	
 	waypoint_data = [
 	  {:lat => 39.997298, :lon => -105.292674, :name => 'GRG-CA', :sym => 'Waypoint', :elevation => 1766.535},
-      {:lat => 33.330190, :lon => -111.946110, :name => 'GRMPHX', :sym => 'Waypoint', :elevation => 361.0981, 
+          {:lat => 33.330190, :lon => -111.946110, :name => 'GRMPHX', :sym => 'Waypoint', :elevation => 361.0981, 
 		:cmt => "Hey here's a comment.", :desc => "Somewhere in my backyard.", :fix => '3d', :sat => "8", :hdop => "50.5", :vdop => "6.8", :pdop => "7.6"},
-      {:lat => 25.061783, :lon => 121.640267,  :name => 'GRMTWN', :sym => 'Waypoint', :elevation => 38.09766},
-      {:lat => 39.999840, :lon => -105.214696, :name => 'SBDR',   :sym => 'Waypoint', :elevation => 1612.965},
-      {:lat => 39.989739, :lon => -105.295285, :name => 'TO',     :sym => 'Waypoint', :elevation => 2163.556},
-      {:lat => 40.035301, :lon => -105.254443, :name => 'VICS',   :sym => 'Waypoint', :elevation => 1535.34}
-    ]
+          {:lat => 25.061783, :lon => 121.640267,  :name => 'GRMTWN', :sym => 'Waypoint', :elevation => 38.09766},
+          {:lat => 39.999840, :lon => -105.214696, :name => 'SBDR',   :sym => 'Waypoint', :elevation => 1612.965},
+          {:lat => 39.989739, :lon => -105.295285, :name => 'TO',     :sym => 'Waypoint', :elevation => 2163.556},
+          {:lat => 40.035301, :lon => -105.254443, :name => 'VICS',   :sym => 'Waypoint', :elevation => 1535.34}
+        ]
 	
 	waypoint_data.each do |wpt_hash|
 	  gpx_file.waypoints << Waypoint.new(wpt_hash)
-    end
+        end
 	
 	route_point_data = [
 	  {:lat => 40.035467, :lon =>-105.254366, :time => Time.parse("2005-12-31T22:02:29Z"), :elevation => 1735.798},
@@ -52,7 +57,7 @@ class OutputTest < Test::Unit::TestCase
 	route = Route.new()
 	route_point_data.each do |rte_pt_hash|
 	  route.points << Point.new(rte_pt_hash)
-    end
+        end
 	
 	gpx_file.routes << route
 	
@@ -73,19 +78,19 @@ class OutputTest < Test::Unit::TestCase
 	  trk_pt_hash.each do |key, value|
 		assert_equal(value, written_segment.points[index].send(key))
 	  end
-    end
+        end
 	
 	
 	
 	# Make sure the one route has the attributes we initialized it with
 	assert_equal(1, written_gpx_file.routes.size)
-    written_route = written_gpx_file.routes[0]
+        written_route = written_gpx_file.routes[0]
 	assert_equal(route_point_data.size, written_route.points.size)
 	route_point_data.each_with_index do |rte_pt_hash, index|
 	  rte_pt_hash.each do |key, value|
 		assert_equal(value, written_route.points[index].send(key))
 	  end
-    end
+        end
 	
 	# Make sure the waypoints have all of the attributes we initialized them with
 	written_waypoints = written_gpx_file.waypoints
@@ -93,7 +98,7 @@ class OutputTest < Test::Unit::TestCase
 	waypoint_data.each_with_index do |wpt_hash, index|
 	  wpt_hash.each do |key, value|
 		assert_equal(value, written_waypoints[index].send(key.to_s), key)
-      end
+          end
 	end
 
 	expected_value = sprintf(THE_WORKS, gpx_file.time.xmlschema)
