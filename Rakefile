@@ -42,35 +42,6 @@ Rake::RDocTask.new("doc") { |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 }
 
-# Genereate the package
-spec = Gem::Specification.new do |s|
-
-  s.name = 'gpx'
-  s.version = PKG_VERSION
-  s.summary = <<-EOF
-   A basic API for reading and writing GPX files.
-  EOF
-  s.description = <<-EOF
-   A basic API for reading and writing GPX files.
-  EOF
-
-  s.files = PKG_FILES
-
-  s.require_path = 'lib'
-  s.autorequire = 'gpx'
-
-  s.has_rdoc = true
-
-  s.author = "Doug Fales"
-  s.email = "doug.fales@gmail.com"
-  s.homepage = "http://gpx.rubyforge.com/"
-end
-
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.need_zip = true
-  pkg.need_tar = true
-end
-
 desc "Report code statistics (KLOCs, etc) from the application"
 task :stats do
   require 'code_statistics'
