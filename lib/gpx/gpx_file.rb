@@ -52,20 +52,19 @@ module GPX
               #   gpx_file = File.open(gpx_file)
               #end
               gpx_file = gpx_file.name if gpx_file.is_a?(File) 
-              @xml = XML::Document.file(gpx_file)
+              @xml = Hpricot(File.open(gpx_file))
             else
-              parser = XML::Parser.string(opts[:gpx_data])
-              @xml = parser.parse
+              @xml = Hpricot(opts[:gpx_data])
             end
             # set XML namespace for XML find
-            if @xml.root.namespaces.namespace
-              @ns = 'gpx:' + @xml.root.namespaces.namespace.href
-            else
-              @ns = 'gpx:http://www.topografix.com/GPX/1/1'  # default to GPX 1.1
-            end
+            #if @xml.root.namespaces.namespace
+            #  @ns = 'gpx:' + @xml.root.namespaces.namespace.href
+            #else
+            #  @ns = 'gpx:http://www.topografix.com/GPX/1/1'  # default to GPX 1.1
+            #end
             
             reset_meta_data
-            bounds_element = (@xml.find("//gpx:gpx/gpx:metadata/gpx:bounds", @ns).to_a.first rescue nil)
+            bounds_element = (@xml.at("//metadata/bounds") rescue nil)
             if bounds_element
                @bounds.min_lat = get_bounds_attr_value(bounds_element, %w{ min_lat minlat minLat })
                @bounds.min_lon = get_bounds_attr_value(bounds_element, %w{ min_lon minlon minLon})
@@ -75,20 +74,18 @@ module GPX
                get_bounds = true
             end
 
-		    @time = Time.parse(@xml.find("//gpx:gpx/gpx:metadata/gpx:time", @ns).first.content) rescue nil
-			@name = @xml.find("//gpx:gpx/gpx:metadata/gpx:name", @ns).first.content rescue nil
-            
+		    @time = Time.parse(@xml.at("//metadata/time").inner_text) rescue nil
+			@name = @xml.at("//metadata/name").inner_text rescue nil
             @tracks = [] 
-            @xml.find("//gpx:gpx/gpx:trk", @ns).each do |trk| 
+            @xml.search("//trk").each do |trk| 
                trk = Track.new(:element => trk, :gpx_file => self) 
                update_meta_data(trk, get_bounds)
                @tracks << trk
             end
             @waypoints = [] 
-            @xml.find("//gpx:gpx/gpx:wpt", @ns).each { |wpt| @waypoints << Waypoint.new(:element => wpt, :gpx_file => self) }
+            @xml.search("//wpt").each { |wpt| @waypoints << Waypoint.new(:element => wpt, :gpx_file => self) }
             @routes = []
-            @xml.find("//gpx:gpx/gpx:rte", @ns).each { |rte| @routes << Route.new(:element => rte, :gpx_file => self) }
-
+            @xml.search("//rte").each { |rte| @routes << Route.new(:element => rte, :gpx_file => self) }
             @tracks.delete_if { |t| t.empty? }
 
             calculate_duration
@@ -222,7 +219,7 @@ module GPX
          doc = Document.new
          doc.root = Node.new('gpx')
          gpx_elem = doc.root
-         gpx_elem['xmlns:xsi'] = "http://www.w3.org/2001/XMLSchema-instance"
+         gpx_elem['xsi'] = "http://www.w3.org/2001/XMLSchema-instance"
          @version = '1.1' if (@version.nil? || !(['1.0', '1.1'].include?(@version))) # default to version 1.1 of the schema (only version 1.0 and 1.1 of the schema exist)
          version_dir = @version.gsub('.','/')
          gpx_elem['xmlns'] = @ns || "http://www.topografix.com/GPX/#{version_dir}" 

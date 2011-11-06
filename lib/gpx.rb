@@ -22,7 +22,7 @@
 #++
 $:.unshift(File.dirname(__FILE__))
 require 'rubygems'
-require 'xml/libxml'
+require 'hpricot'
 require 'date'
 require 'time'
 require 'csv'
