@@ -46,7 +46,7 @@ module GPX
         wpt_elem = opts[:element]
         @gpx_file = opts[:gpx_file]
         super(:element => wpt_elem, :gpx_file => @gpx_file)
-        instantiate_with_text_elements(wpt_elem, SUB_ELEMENTS, @gpx_file.ns)
+        instantiate_with_text_elements(wpt_elem, SUB_ELEMENTS)
       else
         opts.each do |key, value|
           assignment_method = "#{key}="

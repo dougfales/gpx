@@ -41,8 +41,8 @@ module GPX
          reset_meta_data
          if(opts[:element]) 
             trk_element = opts[:element]
-            @name = (trk_element.find("child::gpx:name", @gpx_file.ns).first.content rescue "")
-            trk_element.find("child::gpx:trkseg", @gpx_file.ns).each do |seg_element|
+            @name = (trk_element.at("//name").inner_text rescue "")
+            trk_element.search("//trkseg").each do |seg_element|
                seg = Segment.new(:element => seg_element, :track => self, :gpx_file => @gpx_file)
                update_meta_data(seg)
                @segments << seg
@@ -69,8 +69,8 @@ module GPX
       # correlating things like pictures, video, and other events, if you are
       # working with a timestamp.
       def closest_point(time)
-         segment = segments.find { |s| s.contains_time?(time) }
-         segment.closest_point(time)
+         segment = segments.select { |s| s.contains_time?(time) }
+         segment.first
       end
 
       # Removes all points outside of a given area and updates the meta data.
@@ -114,6 +114,7 @@ module GPX
 
       # Prints out a friendly summary of this track (sans points).  Useful for
       # debugging and sanity checks.
+
       def to_s
          result = "Track \n"
          result << "\tName: #{name}\n"

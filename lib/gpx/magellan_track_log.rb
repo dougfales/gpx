@@ -60,11 +60,11 @@ module GPX
 
          # Takes the name of a magellan file, converts the contents to GPX, and
          # writes the result to gpx_filename.
-         def  convert_to_gpx(magellan_filename, gpx_filename)
+         def convert_to_gpx(magellan_filename, gpx_filename)
 
             segment = Segment.new
 
-            CSV.open(magellan_filename, "r") do |row| 
+            CSV.open(magellan_filename, "r").each do |row| 
                next if(row.size < 10 or row[INVALID_FLAG] == 'V')
 
                lat_deg  = row[LAT][0..1]
