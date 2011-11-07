@@ -21,7 +21,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 module GPX
-  VERSION = "0.6"
+  VERSION = "0.7"
 
   # A common base class which provides a useful initializer method to many
   # class in the GPX library.

@@ -1,5 +1,4 @@
-require 'xml/libxml'
-require 'lib/gpx/gpx' # load this and xml/libxml just to get GPX::VERSION
+require './lib/gpx/gpx' # load this just to get GPX::VERSION
 require 'rake'        # For FileList
 Gem::Specification.new do |s|
   s.name = 'gpx'
