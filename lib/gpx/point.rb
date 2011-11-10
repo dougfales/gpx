@@ -38,9 +38,9 @@ module GPX
             @lat, @lon = elem["lat"].to_f, elem["lon"].to_f
             @latr, @lonr = (D_TO_R * @lat), (D_TO_R * @lon)
             #'-'? yyyy '-' mm '-' dd 'T' hh ':' mm ':' ss ('.' s+)? (zzzzzz)?
-            @time = (Time.xmlschema(elem.find("gpx:time", @gpx_file.ns).first.content) rescue nil)
-            @elevation = elem.find("gpx:ele", @gpx_file.ns).first.content.to_f unless elem.find("gpx:ele", @gpx_file.ns).empty?
-            @speed = elem.find("gpx:speed", @gpx_file.ns).first.content.to_f unless elem.find("gpx:speed", @gpx_file.ns).empty?
+            @time = (Time.xmlschema(elem.at("time").inner_text) rescue nil)
+            @elevation = elem.at("ele").inner_text.to_f unless elem.at("ele").nil?
+            @speed = elem.at("speed").inner_text.to_f unless elem.at("speed").nil?
          else
             @lat = opts[:lat]
             @lon = opts[:lon]
