@@ -193,8 +193,14 @@ module GPX
       # you modify the GPX data (i.e. by adding or deleting points) and you
       # want the meta data to accurately reflect the new data.
       def update_meta_data(trk, get_bounds = true)
-         @lowest_point   = trk.lowest_point if(@lowest_point.nil? or (!trk.lowest_point.nil? and trk.lowest_point.elevation < @lowest_point.elevation))
-         @highest_point  = trk.highest_point if(@highest_point.nil? or (!trk.highest_point.nil? and trk.highest_point.elevation > @highest_point.elevation))
+         @lowest_point   = trk.lowest_point if (
+            @lowest_point.nil? or 
+            (!@lowest_point.nil? && !trk.lowest_point.nil? && trk.lowest_point.elevation < @lowest_point.elevation)
+         )
+         @highest_point  = trk.highest_point if (
+            @highest_point.nil? or 
+            (!@highest_point.nil? && !trk.highest_point.nil? && trk.highest_point.elevation > @highest_point.elevation)
+         )
          @bounds.add(trk.bounds) if get_bounds
          @distance += trk.distance
       end
@@ -204,17 +210,24 @@ module GPX
       def write(filename, update_time = true)
          @time = Time.now if(@time.nil? or update_time)
          @name ||= File.basename(filename)
-         doc = generate_xml_doc
-         doc.save(filename, :indent => true)
+         
+         # TODO: This code is old, used lib REXML.
+         #doc = generate_xml_doc
+         #doc.save(filename, :indent => true)
       end
 
       def to_s(update_time = true)
          @time = Time.now if(@time.nil? or update_time)
-         doc = generate_xml_doc
-         doc.to_s
+         
+         # TODO: This code is old, used lib REXML.
+         #doc = generate_xml_doc
+         #doc.to_s
       end
 
       private 
+      
+      # TODO: This code is old, used lib REXML.
+      # We have to change the use of the library "hpricot".
       def generate_xml_doc
          doc = Document.new
          doc.root = Node.new('gpx')
