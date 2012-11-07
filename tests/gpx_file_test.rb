@@ -5,6 +5,7 @@ class GPXFileTest < Test::Unit::TestCase
 
   ONE_TRACK_FILE = File.join(File.dirname(__FILE__), "gpx_files/one_track.gpx")
   WITH_OR_WITHOUT_ELEV_FILE = File.join(File.dirname(__FILE__), "gpx_files/with_or_without_elev.gpx")
+  INVALID_ELEV_FILE = File.join(File.dirname(__FILE__), "gpx_files/with_invalid_elev.gpx")
   BIG_FILE = File.join(File.dirname(__FILE__), "gpx_files/big.gpx")
 
   def test_load_data_from_string
@@ -43,6 +44,18 @@ class GPXFileTest < Test::Unit::TestCase
     gpx_file = GPX::GPXFile.new(:gpx_file => WITH_OR_WITHOUT_ELEV_FILE)
 	assert_equal(2, gpx_file.tracks.size)
 	#assert_equal(7968, gpx_file.tracks.first.points.size)
+  end
+  
+  def test_parse_invalid_file
+    #assert_raises NoMethodError do
+    #  GPX::GPXFile.new(:gpx_file => INVALID_ELEV_FILE)
+    #end
+  end
+  
+  def test_invalid_elev
+    gpx_file = GPX::GPXFile.new(:gpx_file => INVALID_ELEV_FILE)
+	  assert_equal(1, gpx_file.tracks.size)
+	  assert_equal(3.2697739, gpx_file.distance.round(7))
   end
 
 end
