@@ -1,5 +1,5 @@
 require 'test/unit'
-require File.dirname(__FILE__) + '/../lib/gpx'
+require 'gpx'
 
 class GPX10Test < Test::Unit::TestCase
    GPX_FILE = File.join(File.dirname(__FILE__), "gpx_files/gpx10.gpx")

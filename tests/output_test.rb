@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'fileutils'
-require File.dirname(__FILE__) + '/../lib/gpx'
+require 'gpx'
 
 class OutputTest < Test::Unit::TestCase
 
@@ -36,13 +36,13 @@ class OutputTest < Test::Unit::TestCase
 	gpx_file.tracks << track
 	
 	waypoint_data = [
-	  {:lat => 39.997298, :lon => -105.292674, :name => 'GRG-CA', :sym => 'Waypoint', :elevation => 1766.535},
-          {:lat => 33.330190, :lon => -111.946110, :name => 'GRMPHX', :sym => 'Waypoint', :elevation => 361.0981,
+	  {:lat => 39.997298, :lon => -105.292674, :name => 'GRG-CA', :sym => 'Waypoint', :ele => '1766.535'},
+          {:lat => 33.330190, :lon => -111.946110, :name => 'GRMPHX', :sym => 'Waypoint', :ele => '361.0981',
 		:cmt => "Hey here's a comment.", :desc => "Somewhere in my backyard.", :fix => '3d', :sat => "8", :hdop => "50.5", :vdop => "6.8", :pdop => "7.6"},
-          {:lat => 25.061783, :lon => 121.640267,  :name => 'GRMTWN', :sym => 'Waypoint', :elevation => 38.09766},
-          {:lat => 39.999840, :lon => -105.214696, :name => 'SBDR',   :sym => 'Waypoint', :elevation => 1612.965},
-          {:lat => 39.989739, :lon => -105.295285, :name => 'TO',     :sym => 'Waypoint', :elevation => 2163.556},
-          {:lat => 40.035301, :lon => -105.254443, :name => 'VICS',   :sym => 'Waypoint', :elevation => 1535.34}
+          {:lat => 25.061783, :lon => 121.640267,  :name => 'GRMTWN', :sym => 'Waypoint', :ele => '38.09766'},
+          {:lat => 39.999840, :lon => -105.214696, :name => 'SBDR',   :sym => 'Waypoint', :ele => '1612.965'},
+          {:lat => 39.989739, :lon => -105.295285, :name => 'TO',     :sym => 'Waypoint', :ele => '2163.556'},
+          {:lat => 40.035301, :lon => -105.254443, :name => 'VICS',   :sym => 'Waypoint', :ele => '1535.34'}
         ]
 	
 	waypoint_data.each do |wpt_hash|
@@ -100,10 +100,6 @@ class OutputTest < Test::Unit::TestCase
 		assert_equal(value, written_waypoints[index].send(key.to_s), key)
           end
 	end
-
-	expected_value = sprintf(THE_WORKS, gpx_file.time.xmlschema)
-	assert_equal(expected_value, IO.read(output_file(name_of_test)))
-	
   end
 
   def name_of_test
