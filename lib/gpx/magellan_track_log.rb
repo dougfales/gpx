@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006  Doug Fales 
+# Copyright (c) 2006  Doug Fales
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -27,14 +27,14 @@ module GPX
 
    class MagellanTrackLog
       #PMGNTRK
-      # This message is to be used to transmit Track information (basically a list of previous position fixes) 
-      # which is often displayed on the plotter or map screen of the unit.  The first field in this message 
-      # is the Latitude, followed by N or S.  The next field is the Longitude followed by E or W.  The next 
-      # field is the altitude followed by “F” for feet or “M” for meters.  The next field is 
-      # the UTC time of the fix.  The next field consists of a status letter of “A” to indicated that 
-      # the data is valid, or “V” to indicate that the data is not valid.  The last character field is 
-      # the name of the track, for those units that support named tracks.  The last field contains the UTC date 
-      # of the fix.  Note that this field is (and its preceding comma) is only produced by the unit when the 
+      # This message is to be used to transmit Track information (basically a list of previous position fixes)
+      # which is often displayed on the plotter or map screen of the unit.  The first field in this message
+      # is the Latitude, followed by N or S.  The next field is the Longitude followed by E or W.  The next
+      # field is the altitude followed by “F” for feet or “M” for meters.  The next field is
+      # the UTC time of the fix.  The next field consists of a status letter of “A” to indicated that
+      # the data is valid, or “V” to indicate that the data is not valid.  The last character field is
+      # the name of the track, for those units that support named tracks.  The last field contains the UTC date
+      # of the fix.  Note that this field is (and its preceding comma) is only produced by the unit when the
       # command PMGNCMD,TRACK,2 is given.  It is not present when a simple command of PMGNCMD,TRACK is issued.
 
       #NOTE: The Latitude and Longitude Fields are shown as having two decimal
@@ -42,13 +42,13 @@ module GPX
       # length of the message does not exceed 82 bytes.
 
       # $PMGNTRK,llll.ll,a,yyyyy.yy,a,xxxxx,a,hhmmss.ss,A,c----c,ddmmyy*hh<CR><LF>
-      require 'csv' 
+      require 'csv'
 
       LAT       = 1
       LAT_HEMI  = 2
       LON       = 3
       LON_HEMI  = 4
-      ELE       = 5 
+      ELE       = 5
       ELE_UNITS = 6
       TIME      = 7
       INVALID_FLAG = 8
@@ -64,7 +64,7 @@ module GPX
 
             segment = Segment.new
 
-            CSV.open(magellan_filename, "r").each do |row| 
+            CSV.open(magellan_filename, "r").each do |row|
                next if(row.size < 10 or row[INVALID_FLAG] == 'V')
 
                lat_deg  = row[LAT][0..1]
@@ -102,7 +102,7 @@ module GPX
                pt = TrackPoint.new(:lat => lat, :lon => lon, :time => time, :elevation => ele)
                segment.append_point(pt)
 
-            end 
+            end
 
             trk = Track.new
             trk.append_segment(segment)
@@ -118,11 +118,11 @@ module GPX
                f.each do |line|
                   i +=  1
                   if line =~ /^\$PMGNTRK/
-                     return true 
+                     return true
                   elsif line =~ /<\?xml/
                      return false
                   elsif(i > 10)
-                     return false 
+                     return false
                   end
                end
             end

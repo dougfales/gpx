@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006  Doug Fales 
+# Copyright (c) 2006  Doug Fales
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -39,7 +39,7 @@ module GPX
          @segments = []
          @points = []
          reset_meta_data
-         if(opts[:element]) 
+         if(opts[:element])
             trk_element = opts[:element]
             @name = (trk_element.at("//name").inner_text rescue "")
             trk_element.search("//trkseg").each do |seg_element|
@@ -49,7 +49,7 @@ module GPX
             end
          end
       end
-       
+
       # Append a segment to this track, updating its meta data along the way.
       def append_segment(seg)
          update_meta_data(seg)
@@ -77,18 +77,18 @@ module GPX
       # The "area" paremeter is usually a Bounds object.
       def crop(area)
          reset_meta_data
-         segments.each do |seg| 
-            seg.crop(area) 
+         segments.each do |seg|
+            seg.crop(area)
             update_meta_data(seg) unless seg.empty?
          end
          segments.delete_if { |seg| seg.empty? }
       end
 
-      # Deletes all points within a given area and updates the meta data.  
+      # Deletes all points within a given area and updates the meta data.
       def delete_area(area)
          reset_meta_data
-         segments.each do |seg| 
-            seg.delete_area(area) 
+         segments.each do |seg|
+            seg.delete_area(area)
             update_meta_data(seg) unless seg.empty?
          end
          segments.delete_if { |seg| seg.empty? }

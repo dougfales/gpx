@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006  Doug Fales 
+# Copyright (c) 2006  Doug Fales
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -24,10 +24,10 @@
 module GPX
 
   # This class supports the concept of a waypoint.  Beware that this class has
-  # not seen much use yet, since WalkingBoss does not use waypoints right now. 
+  # not seen much use yet, since WalkingBoss does not use waypoints right now.
   class Waypoint < Point
 
-    SUB_ELEMENTS = %w{ magvar geoidheight name cmt desc src link sym type fix sat hdop vdop pdop ageofdgpsdata dgpsid extensions } 
+    SUB_ELEMENTS = %w{ magvar geoidheight name cmt desc src link sym type fix sat hdop vdop pdop ageofdgpsdata dgpsid extensions }
 
     attr_reader :gpx_file
     SUB_ELEMENTS.each { |sub_el| attr_accessor sub_el.to_sym }
@@ -81,7 +81,7 @@ module GPX
       SUB_ELEMENTS.each do |sub_element_name|
         if(self.respond_to?(sub_element_name) and (!self.send(sub_element_name).nil?))
           sub_elem_node = Node.new(sub_element_name)
-          sub_elem_node <<  self.send(sub_element_name) 
+          sub_elem_node <<  self.send(sub_element_name)
           wpt <<  sub_elem_node
         end
       end

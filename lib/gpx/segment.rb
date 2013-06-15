@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006  Doug Fales 
+# Copyright (c) 2006  Doug Fales
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -29,7 +29,7 @@ module GPX
    class Segment < Base
 
       attr_reader :earliest_point, :latest_point, :bounds, :highest_point, :lowest_point, :distance
-      attr_accessor :points, :track 
+      attr_accessor :points, :track
 
       # If a XML::Node object is passed-in, this will initialize a new
       # Segment based on its contents.  Otherwise, a blank Segment is created.
@@ -47,8 +47,8 @@ module GPX
             segment_element = opts[:element]
             last_pt = nil
             if segment_element.is_a?(Hpricot::Elem)
-               segment_element.search("//trkpt").each do |trkpt| 
-                  pt = TrackPoint.new(:element => trkpt, :segment => self, :gpx_file => @gpx_file)  
+               segment_element.search("//trkpt").each do |trkpt|
+                  pt = TrackPoint.new(:element => trkpt, :segment => self, :gpx_file => @gpx_file)
                   unless pt.time.nil?
                      @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
                      @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
@@ -117,7 +117,7 @@ module GPX
          reset_meta_data
          keep_points = []
          last_pt = nil
-         points.each do |pt| 
+         points.each do |pt|
             unless yield(pt)
                keep_points << pt
                update_meta_data(pt, last_pt)
@@ -175,7 +175,7 @@ module GPX
       RADIUS = 6371; # earth's mean radius in km
 
       # Calculate the Haversine distance between two points. This is the method
-      # the library uses to calculate the cumulative distance of GPX files. 
+      # the library uses to calculate the cumulative distance of GPX files.
       def haversine_distance(p1, p2)
          d_lat = p2.latr - p1.latr;
          d_lon = p2.lonr - p1.lonr;

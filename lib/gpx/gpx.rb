@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006  Doug Fales 
+# Copyright (c) 2006  Doug Fales
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -31,7 +31,7 @@ module GPX
 	# an attribute to be initialized on the instance.  This means you don't
 	# have to pick out individual text elements in each initializer of each
 	# class (Route, TrackPoint, Track, etc).  Just pass an array of possible
-	# attributes to this method.  
+	# attributes to this method.
 	def instantiate_with_text_elements(parent, text_elements)
 	  text_elements.each do |el|
 		child_xpath = "//#{el}"

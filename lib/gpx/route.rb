@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006  Doug Fales 
+# Copyright (c) 2006  Doug Fales
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -24,7 +24,7 @@ module GPX
 
    # A Route in GPX is very similar to a Track, but it is created by a user
    # from a series of Waypoints, whereas a Track is created by the GPS device
-   # automatically logging your progress at regular intervals.  
+   # automatically logging your progress at regular intervals.
    class Route < Base
 
       attr_accessor :points, :name, :gpx_file
