@@ -87,22 +87,5 @@ module GPX
          @lonr = (longitude * D_TO_R)
          @lon = longitude
       end
-
-      # Convert this point to a XML::Node.
-      def to_xml(elem_name = 'trkpt')
-         pt = Node.new(elem_name)
-         pt['lat'] = lat.to_s
-         pt['lon'] = lon.to_s
-         unless time.nil?
-            time_elem = Node.new('time')
-            time_elem << time.xmlschema
-            pt << time_elem
-         end
-         elev = Node.new('ele')
-         elev << elevation
-         pt <<  elev
-         pt
-      end
-
    end
 end

@@ -46,8 +46,8 @@ module GPX
          if(opts[:element])
             segment_element = opts[:element]
             last_pt = nil
-            if segment_element.is_a?(Hpricot::Elem)
-               segment_element.search("//trkpt").each do |trkpt|
+            if segment_element.is_a?(Nokogiri::XML::Node)
+               segment_element.search("trkpt").each do |trkpt|
                   pt = TrackPoint.new(:element => trkpt, :segment => self, :gpx_file => @gpx_file)
                   unless pt.time.nil?
                      @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
@@ -130,13 +130,6 @@ module GPX
       # Returns true if this Segment has no points.
       def empty?
          (points.nil? or (points.size == 0))
-      end
-
-      # Converts this Segment to a XML::Node object.
-      def to_xml
-         seg = Node.new('trkseg')
-         points.each { |pt| seg <<  pt.to_xml }
-         seg
       end
 
       # Prints out a nice summary of this Segment.
