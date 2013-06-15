@@ -18,5 +18,5 @@ Gem::Specification.new do |s|
 
   s.homepage = "http://dougfales.github.com/gpx/"
   s.rubyforge_project = "gpx"
-  s.add_dependency 'hpricot'
+  s.add_dependency 'nokogiri'
 end

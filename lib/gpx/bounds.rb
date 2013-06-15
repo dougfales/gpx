@@ -43,15 +43,6 @@ module GPX
          (min_lon + distance)
       end
 
-      def to_xml
-         bnd = XML::Node.new('bounds')
-         bnd['minlat'] = min_lat.to_s
-         bnd['minlon'] = min_lon.to_s
-         bnd['maxlat'] = max_lat.to_s
-         bnd['maxlon'] = max_lon.to_s
-         bnd
-      end
-
       # Returns true if the pt is within these bounds.
       def contains?(pt)
          (pt.lat >=  min_lat and pt.lat <= max_lat and pt.lon >= min_lon and pt.lon <= max_lon)

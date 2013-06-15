@@ -34,7 +34,7 @@ module GPX
 	# attributes to this method.
 	def instantiate_with_text_elements(parent, text_elements)
 	  text_elements.each do |el|
-		child_xpath = "//#{el}"
+		child_xpath = "#{el}"
 		unless parent.at(child_xpath).nil?
 		  val = parent.at(child_xpath).inner_text
 		  self.send("#{el}=", val)

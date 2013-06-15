@@ -20,6 +20,9 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
+
+require 'csv'
+
 module GPX
 
    # This class will parse the lat/lon and time data from a Magellan track log,

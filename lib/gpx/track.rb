@@ -41,8 +41,8 @@ module GPX
          reset_meta_data
          if(opts[:element])
             trk_element = opts[:element]
-            @name = (trk_element.at("//name").inner_text rescue "")
-            trk_element.search("//trkseg").each do |seg_element|
+            @name = (trk_element.at("name").inner_text rescue "")
+            trk_element.search("trkseg").each do |seg_element|
                seg = Segment.new(:element => seg_element, :track => self, :gpx_file => @gpx_file)
                update_meta_data(seg)
                @segments << seg
@@ -98,18 +98,6 @@ module GPX
       # true even when the track has empty segments.
       def empty?
          (points.nil? or points.size.zero?)
-      end
-
-      # Creates a new XML::Node from the contents of this instance.
-      def to_xml
-         trk= Node.new('trk')
-         name_elem = Node.new('name')
-         name_elem <<  name
-         trk <<  name_elem
-         segments.each do |seg|
-            trk <<  seg.to_xml
-         end
-         trk
       end
 
       # Prints out a friendly summary of this track (sans points).  Useful for

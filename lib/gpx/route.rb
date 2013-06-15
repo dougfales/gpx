@@ -34,9 +34,9 @@ module GPX
 		if(opts[:gpx_file] and opts[:element])
          rte_element = opts[:element]
          @gpx_file = opts[:gpx_file]
-         @name = rte_element.at("//name").inner_text
+         @name = rte_element.at("name").inner_text
          @points = []
-         rte_element.search("//rtept").each do |point|
+         rte_element.search("rtept").each do |point|
 		   @points << Point.new(:element => point, :gpx_file => @gpx_file)
          end
 	   else
@@ -55,16 +55,5 @@ module GPX
       def delete_area(area)
          points.delete_if{ |pt| area.contains? pt }
       end
-
-      # Convert this Route to a XML::Node.
-      def to_xml
-         rte = Node.new('rte')
-         name_elem = Node.new('name')
-         name_elem <<  name
-         rte <<  name_elem
-         points.each { |rte_pt| rte <<  rte_pt.to_xml('rtept') }
-         rte
-      end
-
    end
 end
