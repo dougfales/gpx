@@ -1,5 +1,5 @@
 require 'test/unit'
-require File.dirname(__FILE__) + '/../lib/gpx'
+require 'gpx'
 
 class RouteTest < Test::Unit::TestCase
 

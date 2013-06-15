@@ -1,5 +1,5 @@
 require 'test/unit'
-require File.dirname(__FILE__) + '/../lib/gpx'
+require 'gpx'
 
 class MagellanTest < Test::Unit::TestCase
    MAGELLAN_TRACK_LOG = File.join(File.dirname(__FILE__), "gpx_files/magellan_track.log")
