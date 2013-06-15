@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006  Doug Fales 
+# Copyright (c) 2006  Doug Fales
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -42,7 +42,7 @@ module GPX
       #         some_track = get_track_from_csv('some_other_format.csv')
       #         gpx_file = GPXFile.new(:tracks => [some_track])
       #
-      def initialize(opts = {}) 
+      def initialize(opts = {})
          @duration = 0
          if(opts[:gpx_file] or opts[:gpx_data])
             if opts[:gpx_file]
@@ -51,7 +51,7 @@ module GPX
               #when String
               #   gpx_file = File.open(gpx_file)
               #end
-              gpx_file = gpx_file.name if gpx_file.is_a?(File) 
+              gpx_file = gpx_file.name if gpx_file.is_a?(File)
               @xml = Hpricot(File.open(gpx_file))
             else
               @xml = Hpricot(opts[:gpx_data])
@@ -62,7 +62,7 @@ module GPX
             #else
             #  @ns = 'gpx:http://www.topografix.com/GPX/1/1'  # default to GPX 1.1
             #end
-            
+
             reset_meta_data
             bounds_element = (@xml.at("//metadata/bounds") rescue nil)
             if bounds_element
@@ -76,13 +76,13 @@ module GPX
 
 		    @time = Time.parse(@xml.at("//metadata/time").inner_text) rescue nil
 			@name = @xml.at("//metadata/name").inner_text rescue nil
-            @tracks = [] 
-            @xml.search("//trk").each do |trk| 
-               trk = Track.new(:element => trk, :gpx_file => self) 
+            @tracks = []
+            @xml.search("//trk").each do |trk|
+               trk = Track.new(:element => trk, :gpx_file => self)
                update_meta_data(trk, get_bounds)
                @tracks << trk
             end
-            @waypoints = [] 
+            @waypoints = []
             @xml.search("//wpt").each { |wpt| @waypoints << Waypoint.new(:element => wpt, :gpx_file => self) }
             @routes = []
             @xml.search("//rte").each { |rte| @routes << Route.new(:element => rte, :gpx_file => self) }
@@ -116,7 +116,7 @@ module GPX
       def distance(opts = { :units => 'kilometers' })
          case opts[:units]
          when /kilometers/i
-            return @distance 
+            return @distance
          when /meters/i
             return (@distance * 1000)
          when /miles/i
@@ -126,7 +126,7 @@ module GPX
 
       # Returns the average speed, in km/hr, meters/hr, or miles/hr, of this
       # GPXFile.  The calculation is based on the total distance divided by the
-      # total duration of the entire file.  
+      # total duration of the entire file.
       def average_speed(opts = { :units => 'kilometers' })
          case opts[:units]
          when /kilometers/i
@@ -145,11 +145,11 @@ module GPX
       def crop(area)
          reset_meta_data
          keep_tracks = []
-         tracks.each do |trk| 
-            trk.crop(area) 
+         tracks.each do |trk|
+            trk.crop(area)
             unless trk.empty?
                update_meta_data(trk)
-               keep_tracks << trk 
+               keep_tracks << trk
             end
          end
          @tracks = keep_tracks
@@ -167,11 +167,11 @@ module GPX
       def delete_area(area)
          reset_meta_data
          keep_tracks = []
-         tracks.each do |trk| 
-            trk.delete_area(area) 
+         tracks.each do |trk|
+            trk.delete_area(area)
             unless trk.empty?
                update_meta_data(trk)
-               keep_tracks << trk 
+               keep_tracks << trk
             end
          end
          @tracks =  keep_tracks
@@ -180,7 +180,7 @@ module GPX
       end
 
       # Resets the meta data for this GPX file.  Meta data includes the bounds,
-      # the high and low points, and the distance.  
+      # the high and low points, and the distance.
       def reset_meta_data
          @bounds = Bounds.new
          @highest_point = nil
@@ -214,7 +214,7 @@ module GPX
          doc.to_s
       end
 
-      private 
+      private
       def generate_xml_doc
          doc = Document.new
          doc.root = Node.new('gpx')
@@ -222,9 +222,9 @@ module GPX
          gpx_elem['xsi'] = "http://www.w3.org/2001/XMLSchema-instance"
          @version = '1.1' if (@version.nil? || !(['1.0', '1.1'].include?(@version))) # default to version 1.1 of the schema (only version 1.0 and 1.1 of the schema exist)
          version_dir = @version.gsub('.','/')
-         gpx_elem['xmlns'] = @ns || "http://www.topografix.com/GPX/#{version_dir}" 
+         gpx_elem['xmlns'] = @ns || "http://www.topografix.com/GPX/#{version_dir}"
          gpx_elem['version'] = "#{@version}"
-         gpx_elem['creator'] = "GPX RubyGem #{GPX::VERSION} Copyright 2006-2009 Doug Fales -- http://gpx.rubyforge.org/" 
+         gpx_elem['creator'] = "GPX RubyGem #{GPX::VERSION} Copyright 2006-2009 Doug Fales -- http://gpx.rubyforge.org/"
          gpx_elem['xsi:schemaLocation'] = "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd"
 
          # setup the metadata elements
@@ -237,12 +237,12 @@ module GPX
          if (@version == '1.0') then
            gpx_elem << name_elem
            gpx_elem << time_elem
-           gpx_elem << bounds.to_xml                      
+           gpx_elem << bounds.to_xml
          else
            meta_data_elem = Node.new('metadata')
            meta_data_elem << name_elem
            meta_data_elem << time_elem
-           meta_data_elem << bounds.to_xml           
+           meta_data_elem << bounds.to_xml
            gpx_elem << meta_data_elem
          end
 

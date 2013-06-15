@@ -16,7 +16,7 @@ class SegmentTest < Test::Unit::TestCase
       assert_equal(1144437991, @segment.latest_point.time.to_i)
       assert_equal(1334.447, @segment.lowest_point.elevation)
       assert_equal(1480.087, @segment.highest_point.elevation)
-      assert_in_delta(6.98803359528853, @segment.distance, 0.001) 
+      assert_in_delta(6.98803359528853, @segment.distance, 0.001)
    end
 
    def test_segment_crop
@@ -26,8 +26,8 @@ class SegmentTest < Test::Unit::TestCase
                                    :max_lon=> -108.999000)
       @segment.crop(crop_rectangle)
 
-      assert_equal(106, @segment.points.size) 
-      assert_in_delta(4.11422061733046, @segment.distance, 0.001) 
+      assert_equal(106, @segment.points.size)
+      assert_in_delta(4.11422061733046, @segment.distance, 0.001)
       assert_equal(1144435041, @segment.earliest_point.time.to_i)
       assert_equal(1144437752,  @segment.latest_point.time.to_i)
       assert_equal(1407.027, @segment.lowest_point.elevation)
@@ -44,8 +44,8 @@ class SegmentTest < Test::Unit::TestCase
                                    :max_lat=> 39.188000,
                                    :max_lon=> -108.999000)
       @segment.delete_area(delete_rectangle)
-      assert_equal(83, @segment.points.size) 
-      assert_in_delta(3.35967118153605, @segment.distance, 0.001) 
+      assert_equal(83, @segment.points.size)
+      assert_in_delta(3.35967118153605, @segment.distance, 0.001)
       assert_equal(1144433525, @segment.earliest_point.time.to_i)
       assert_equal(1144437991,  @segment.latest_point.time.to_i)
       assert_equal(1334.447, @segment.lowest_point.elevation)
