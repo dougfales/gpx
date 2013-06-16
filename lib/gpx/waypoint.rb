@@ -20,9 +20,7 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
-
 module GPX
-
   # This class supports the concept of a waypoint.  Beware that this class has
   # not seen much use yet, since WalkingBoss does not use waypoints right now.
   class Waypoint < Point
