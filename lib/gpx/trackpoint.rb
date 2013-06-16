@@ -21,15 +21,15 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 module GPX
-   # Basically the same as a point, the TrackPoint class is supposed to
-   # represent the points that are children of Segment elements.  So, the only
-   # real difference is that TrackPoints hold a reference to their parent
-   # Segments.
-   class TrackPoint < Point
-      attr_accessor :segment
-      def initialize(opts = {})
-         super(opts)
-         @segment = opts[:segment]
-      end
-   end
+  # Basically the same as a point, the TrackPoint class is supposed to
+  # represent the points that are children of Segment elements.  So, the only
+  # real difference is that TrackPoints hold a reference to their parent
+  # Segments.
+  class TrackPoint < Point
+    attr_accessor :segment
+    def initialize(opts = {})
+      super(opts)
+      @segment = opts[:segment]
+    end
+  end
 end
