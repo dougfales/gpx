@@ -22,7 +22,7 @@
 #++
 module GPX
   class GPXFile < Base
-    attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :creator
+    attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :version, :creator
 
     DEFAULT_CREATOR = "GPX RubyGem #{GPX::VERSION} -- http://dougfales.github.io/gpx/".freeze
 
@@ -211,17 +211,18 @@ module GPX
 
     private
     def generate_xml_doc
-      version = '1.1'
+      @version ||= '1.1'
       version_dir = version.gsub('.','/')
 
       doc = Nokogiri::XML::Builder.new do |xml|
         xml.gpx(
           'xsi' => "http://www.w3.org/2001/XMLSchema-instance",
-          'version' => version.to_s,
+          'version' => @version.to_s,
           'creator' => @creator.nil? ? DEFAULT_CREATOR : @creator.to_s,
           'xsi:schemaLocation' => "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd") \
         {
-            xml.metadata {
+            # version 1.0 of the schema doesn't support the metadata element, so push them straight to the root 'gpx' element
+            if (@version == '1.0') then
               xml.name @name
               xml.time @time.xmlschema
               xml.bound(
@@ -230,7 +231,18 @@ module GPX
                 maxlat: bounds.max_lat,
                 maxlon: bounds.max_lon,
               )
-            }
+            else
+              xml.metadata {
+                xml.name @name
+                xml.time @time.xmlschema
+                xml.bound(
+                  minlat: bounds.min_lat,
+                  minlon: bounds.min_lon,
+                  maxlat: bounds.max_lat,
+                  maxlon: bounds.max_lon,
+                )
+              }
+            end
 
             tracks.each do |t|
               xml.trk {
