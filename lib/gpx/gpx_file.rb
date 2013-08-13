@@ -22,7 +22,9 @@
 #++
 module GPX
   class GPXFile < Base
-    attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name
+    attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :creator
+
+    DEFAULT_CREATOR = "GPX RubyGem #{GPX::VERSION} -- http://dougfales.github.io/gpx/".freeze
 
     # This initializer can be used to create a new GPXFile from an existing
     # file or to create a new GPXFile instance with no data (so that you can
@@ -216,7 +218,7 @@ module GPX
         xml.gpx(
           'xsi' => "http://www.w3.org/2001/XMLSchema-instance",
           'version' => version.to_s,
-          'creator' => "GPX RubyGem #{GPX::VERSION}",
+          'creator' => @creator.nil? ? DEFAULT_CREATOR : @creator.to_s,
           'xsi:schemaLocation' => "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd") \
         {
             xml.metadata {
