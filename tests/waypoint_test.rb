@@ -24,7 +24,7 @@ class WaypointTest < Test::Unit::TestCase
     assert_equal('001', first_wpt.cmt)
     assert_equal('Just some waypoint...', first_wpt.desc)
     assert_equal('Waypoint', first_wpt.sym)
-	assert_equal(1639.161, first_wpt.elevation)
+  	assert_equal(1639.161, first_wpt.elevation)
 
     #    Second Waypoint
     #    <wpt lat="39.993070" lon="-105.296588">
@@ -37,7 +37,7 @@ class WaypointTest < Test::Unit::TestCase
     assert_equal(-105.296588, second_wpt.lon)
     assert_equal('002', second_wpt.name)
     assert_equal('Waypoint', second_wpt.sym)
-	assert_equal(1955.192, second_wpt.elevation)
+    assert_equal(1955.192, second_wpt.elevation)
 
   end
 end

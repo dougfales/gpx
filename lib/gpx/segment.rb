@@ -164,27 +164,20 @@ module GPX
       end
     end
 
-    RADIUS = 6371; # earth's mean radius in km
-
     # Calculate the Haversine distance between two points. This is the method
     # the library uses to calculate the cumulative distance of GPX files.
     def haversine_distance(p1, p2)
-      d_lat = p2.latr - p1.latr;
-      d_lon = p2.lonr - p1.lonr;
-      a = Math.sin(d_lat/2) * Math.sin(d_lat/2) + Math.cos(p1.latr) * Math.cos(p2.latr) * Math.sin(d_lon/2) * Math.sin(d_lon/2);
-      c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      d = RADIUS * c;
-      return d;
+      p1.haversine_distance_from(p2)
     end
 
     # Calculate the plain Pythagorean difference between two points.  Not currently used.
     def pythagorean_distance(p1, p2)
-      Math.sqrt((p2.latr - p1.latr)**2 + (p2.lonr - p1.lonr)**2)
+      p1.pythagorean_distance_from(p2)
     end
 
     # Calculates the distance between two points using the Law of Cosines formula.  Not currently used.
     def law_of_cosines_distance(p1, p2)
-      (Math.acos(Math.sin(p1.latr)*Math.sin(p2.latr) + Math.cos(p1.latr)*Math.cos(p2.latr)*Math.cos(p2.lonr-p1.lonr)) * RADIUS)
+      p1.law_of_cosines_distance_from(p2)
     end
 
     def reset_meta_data
