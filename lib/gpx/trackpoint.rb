@@ -35,6 +35,7 @@ module GPX
       @segment = opts[:segment]
     end
 
+    # Units are in km
     def haversine_distance_from(p2)
       d_lat = p2.latr - latr;
       d_lon = p2.lonr - lonr;
@@ -44,10 +45,12 @@ module GPX
       return d;
     end
 
+    # Units are in km
     def pythagorean_distance_from(p2)
       Math.sqrt((p2.latr - latr)**2 + (p2.lonr - lonr)**2)
     end
 
+    # Units are in km
     def law_of_cosines_distance_from(p2)
       (Math.acos(Math.sin(latr)*Math.sin(p2.latr) + Math.cos(latr)*Math.cos(p2.latr)*Math.cos(p2.lonr-lonr)) * RADIUS)
     end
