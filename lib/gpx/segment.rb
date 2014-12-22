@@ -144,6 +144,50 @@ module GPX
       result
     end
 
+    def find_point_by_time_or_offset(indicator)
+      if indicator.nil?
+        return nil
+      elsif indicator.is_a?(Integer)
+        return self.closest_point(self.earliest_point.time + indicator)
+      elsif(indicator.is_a?(Time))
+        return self.closest_point(indicator)
+      else
+        raise Exception, "find_end_point_by_time_or_offset requires an argument of type Time or Integer"
+      end
+    end
+  
+    def smooth_location_by_average(opts={})
+      seconds_either_side = opts[:averaging_window] || 20
+      earliest = (find_point_by_time_or_offset(opts[:start]) || self.earliest_point).time
+      latest = (find_point_by_time_or_offset(opts[:end]) || self.latest_point).time
+      self.points.each do |point|
+        next if point.time > latest || point.time < earliest
+        lat_av = 0.to_f
+        lon_av = 0.to_f
+        alt_av = 0.to_f
+        n = 0
+        (-1*seconds_either_side..seconds_either_side).each do |k|
+          contributing_point = self.closest_point(point.time + k)
+          lat_av += contributing_point.lat
+          lon_av += contributing_point.lon
+          alt_av += contributing_point.elevation
+          n += 1
+        end
+        point.new_lon = (lon_av) / n
+        point.new_elevation = (alt_av) / n
+        point.new_lat = (lat_av) / n
+      end
+      last_pt = nil
+      @distance = 0
+      self.points.each do |point|
+        if point.time <= latest || point.time >= earliest
+          point.update_new_values
+        end
+        @distance += haversine_distance(last_pt, point) unless last_pt.nil?
+        last_pt = point
+      end
+    end
+
     protected
     def find_closest(pts, time)
       return pts.first if pts.size == 1
