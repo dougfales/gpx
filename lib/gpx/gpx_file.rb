@@ -209,6 +209,14 @@ module GPX
       "<#{self.class.name}:...>"
     end
 
+    def recalculate_distance
+      @distance = 0
+      @tracks.each do |track|
+        track.recalculate_distance
+        @distance += track.distance
+      end
+    end
+
     private
     def generate_xml_doc
       @version ||= '1.1'
@@ -216,7 +224,7 @@ module GPX
 
       doc = Nokogiri::XML::Builder.new do |xml|
         xml.gpx(
-          'xsi' => "http://www.w3.org/2001/XMLSchema-instance",
+          'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance",
           'version' => @version.to_s,
           'creator' => @creator.nil? ? DEFAULT_CREATOR : @creator.to_s,
           'xsi:schemaLocation' => "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd") \

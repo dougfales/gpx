@@ -24,15 +24,15 @@
 require 'time'
 require 'nokogiri'
 
-require 'gpx/version'
+require File.expand_path('../gpx/version', __FILE__)
 
-require 'gpx/gpx'
-require 'gpx/gpx_file'
-require 'gpx/bounds'
-require 'gpx/track'
-require 'gpx/route'
-require 'gpx/segment'
-require 'gpx/point'
-require 'gpx/trackpoint'
-require 'gpx/waypoint'
-require 'gpx/magellan_track_log'
+require File.expand_path('../gpx/gpx', __FILE__)
+require File.expand_path('../gpx/gpx_file', __FILE__)
+require File.expand_path('../gpx/bounds', __FILE__)
+require File.expand_path('../gpx/track', __FILE__)
+require File.expand_path('../gpx/route', __FILE__)
+require File.expand_path('../gpx/segment', __FILE__)
+require File.expand_path('../gpx/point', __FILE__)
+require File.expand_path('../gpx/trackpoint', __FILE__)
+require File.expand_path('../gpx/waypoint', __FILE__)
+require File.expand_path('../gpx/magellan_track_log', __FILE__)

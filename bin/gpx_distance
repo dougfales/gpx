@@ -1,0 +1,8 @@
+require File.expand_path('../../lib/gpx', __FILE__)
+
+filename = ARGV[0]
+gpx =  GPX::GPXFile.new(:gpx_file => filename)
+puts "read track with distance #{gpx.distance}"
+
+
+
