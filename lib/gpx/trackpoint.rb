@@ -28,7 +28,7 @@ module GPX
   class TrackPoint < Point
     RADIUS = 6371; # earth's mean radius in km
 
-    attr_accessor :segment, :new_lat, :new_lon, :new_elevation
+    attr_accessor :segment
 
 
     def initialize(opts = {})
@@ -56,10 +56,5 @@ module GPX
       (Math.acos(Math.sin(latr)*Math.sin(p2.latr) + Math.cos(latr)*Math.cos(p2.latr)*Math.cos(p2.lonr-lonr)) * RADIUS)
     end
 
-    def update_new_values
-      self.lon = self.new_lon if self.new_lon
-      self.lat = self.new_lat if self.new_lat
-      self.elevation = self.new_elevation if self.new_elevation
-    end
   end
 end

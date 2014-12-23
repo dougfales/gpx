@@ -262,6 +262,7 @@ module GPX
                       xml.trkpt(lat: p.lat, lon: p.lon) {
                         xml.time p.time.xmlschema unless p.time.nil?
                         xml.ele p.elevation unless p.elevation.nil?
+                        xml << p.extensions.to_xml unless p.extensions.nil?
                       }
                     end
                   }

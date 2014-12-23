@@ -24,7 +24,7 @@ module GPX
   # The base class for all points.  Trackpoint and Waypoint both descend from this base class.
   class Point < Base
     D_TO_R = Math::PI/180.0;
-    attr_accessor :lat, :lon, :time, :elevation, :gpx_file, :speed
+    attr_accessor :lat, :lon, :time, :elevation, :gpx_file, :speed, :extensions
 
     # When you need to manipulate individual points, you can create a Point
     # object with a latitude, a longitude, an elevation, and a time.  In
@@ -40,12 +40,14 @@ module GPX
         @time = (Time.xmlschema(elem.at("time").inner_text) rescue nil)
         @elevation = elem.at("ele").inner_text.to_f unless elem.at("ele").nil?
         @speed = elem.at("speed").inner_text.to_f unless elem.at("speed").nil?
+        @extensions = elem.at("extensions") unless elem.at("extensions").nil?
       else
         @lat = opts[:lat]
         @lon = opts[:lon]
         @elevation = opts[:elevation]
         @time = opts[:time]
         @speed = opts[:speed]
+        @extensions = opts[:extensions]
       end
 
     end

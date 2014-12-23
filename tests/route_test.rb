@@ -1,7 +1,7 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'gpx'
 
-class RouteTest < Test::Unit::TestCase
+class RouteTest < Minitest::Test
 
   def test_read_routes
     gpx = GPX::GPXFile.new(:gpx_file => File.join(File.dirname(__FILE__), "gpx_files/routes.gpx"))

@@ -1,7 +1,7 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'gpx'
 
-class WaypointTest < Test::Unit::TestCase
+class WaypointTest < Minitest::Test
 
   def test_read_waypoints
 

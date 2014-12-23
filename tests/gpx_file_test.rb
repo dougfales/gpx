@@ -1,7 +1,7 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'gpx'
 
-class GPXFileTest < Test::Unit::TestCase
+class GPXFileTest < Minitest::Test
 
   ONE_TRACK_FILE = File.join(File.dirname(__FILE__), "gpx_files/one_track.gpx")
   WITH_OR_WITHOUT_ELEV_FILE = File.join(File.dirname(__FILE__), "gpx_files/with_or_without_elev.gpx")
