@@ -48,23 +48,7 @@ module GPX
         if segment_element.is_a?(Nokogiri::XML::Node)
           segment_element.search("trkpt").each do |trkpt|
             pt = TrackPoint.new(:element => trkpt, :segment => self, :gpx_file => @gpx_file)
-            unless pt.time.nil?
-              @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
-              @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
-            end
-            unless pt.elevation.nil?
-              @lowest_point   = pt if(@lowest_point.nil? or pt.elevation < @lowest_point.elevation)
-              @highest_point  = pt if(@highest_point.nil? or pt.elevation > @highest_point.elevation)
-            end
-            @bounds.min_lat = pt.lat if pt.lat < @bounds.min_lat
-            @bounds.min_lon = pt.lon if pt.lon < @bounds.min_lon
-            @bounds.max_lat = pt.lat if pt.lat > @bounds.max_lat
-            @bounds.max_lon = pt.lon if pt.lon > @bounds.max_lon
-
-            @distance += haversine_distance(last_pt, pt) unless last_pt.nil?
-
-            @points << pt
-            last_pt  = pt
+            append_point(pt)
           end
         end
       end
@@ -73,10 +57,14 @@ module GPX
     # Tack on a point to this Segment.  All meta-data will be updated.
     def append_point(pt)
       last_pt = @points[-1]
-      @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
-      @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
-      @lowest_point   = pt if(@lowest_point.nil? or pt.elevation < @lowest_point.elevation)
-      @highest_point  = pt if(@highest_point.nil? or pt.elevation > @highest_point.elevation)
+      unless pt.time.nil?
+        @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
+        @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
+      end
+      unless pt.elevation.nil?
+        @lowest_point   = pt if(@lowest_point.nil? or pt.elevation < @lowest_point.elevation)
+        @highest_point  = pt if(@highest_point.nil? or pt.elevation > @highest_point.elevation)
+      end
       @bounds.min_lat = pt.lat if pt.lat < @bounds.min_lat
       @bounds.min_lon = pt.lon if pt.lon < @bounds.min_lon
       @bounds.max_lat = pt.lat if pt.lat > @bounds.max_lat
@@ -148,43 +136,57 @@ module GPX
       if indicator.nil?
         return nil
       elsif indicator.is_a?(Integer)
-        return self.closest_point(self.earliest_point.time + indicator)
+        return closest_point(@earliest_point.time + indicator)
       elsif(indicator.is_a?(Time))
-        return self.closest_point(indicator)
+        return closest_point(indicator)
       else
         raise Exception, "find_end_point_by_time_or_offset requires an argument of type Time or Integer"
       end
     end
   
+    # smooths the location data in the segment (by recalculating the location as an average of 20 neighbouring points.  Useful for removing noise from GPS traces.
     def smooth_location_by_average(opts={})
       seconds_either_side = opts[:averaging_window] || 20
-      earliest = (find_point_by_time_or_offset(opts[:start]) || self.earliest_point).time
-      latest = (find_point_by_time_or_offset(opts[:end]) || self.latest_point).time
-      self.points.each do |point|
-        next if point.time > latest || point.time < earliest
+
+      #calculate the first and last points to which the smoothing should be applied
+      earliest = (find_point_by_time_or_offset(opts[:start]) || @earliest_point).time
+      latest = (find_point_by_time_or_offset(opts[:end]) || @latest_point).time
+
+      tmp_points = []
+
+      @points.each do |point|
+        if point.time > latest || point.time < earliest
+          tmp_points.push point #add the point unaltered
+          next 
+        end
         lat_av = 0.to_f
         lon_av = 0.to_f
         alt_av = 0.to_f
         n = 0
+        # k ranges from the time of the current point +/- 20s 
         (-1*seconds_either_side..seconds_either_side).each do |k|
-          contributing_point = self.closest_point(point.time + k)
+          # find the point nearest to the time offset indicated by k
+          contributing_point = closest_point(point.time + k)
+          #sum up the contributions to the average
           lat_av += contributing_point.lat
           lon_av += contributing_point.lon
           alt_av += contributing_point.elevation
           n += 1
         end
-        point.new_lon = (lon_av) / n
-        point.new_elevation = (alt_av) / n
-        point.new_lat = (lat_av) / n
+        # calculate the averages
+        tmp_point = point.clone
+        tmp_point.lon = ((lon_av) / n).round(7)
+        tmp_point.elevation = ((alt_av) / n).round(2)
+        tmp_point.lat = ((lat_av) / n).round(7)
+        tmp_points.push tmp_point
       end
       last_pt = nil
       @distance = 0
-      self.points.each do |point|
-        if point.time <= latest || point.time >= earliest
-          point.update_new_values
-        end
-        @distance += haversine_distance(last_pt, point) unless last_pt.nil?
-        last_pt = point
+      @points.clear
+      reset_meta_data
+      #now commit the averages back and recalculate the distances
+      tmp_points.each do |point|
+        append_point(point)
       end
     end
 

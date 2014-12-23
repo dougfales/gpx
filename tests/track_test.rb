@@ -1,7 +1,7 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'gpx'
 
-class TrackTest < Test::Unit::TestCase
+class TrackTest < Minitest::Test
    ONE_TRACK = File.join(File.dirname(__FILE__), "gpx_files/one_track.gpx")
 
    def setup

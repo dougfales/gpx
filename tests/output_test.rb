@@ -1,8 +1,8 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'fileutils'
 require 'gpx'
 
-class OutputTest < Test::Unit::TestCase
+class OutputTest < Minitest::Test
 
   include GPX
 
