@@ -45,6 +45,8 @@ module GPX
     #
     def initialize(opts = {})
       @duration = 0
+      @attributes = {}
+      @namespace_defs = []
       if(opts[:gpx_file] or opts[:gpx_data])
         if opts[:gpx_file]
           gpx_file = opts[:gpx_file]
@@ -54,6 +56,13 @@ module GPX
           @xml = Nokogiri::XML(opts[:gpx_data])
         end
 
+        gpx_element = @xml.at('gpx')
+        @attributes = gpx_element.attributes
+        @namespace_defs = gpx_element.namespace_definitions
+        #$stderr.puts gpx_element.attributes.sort.inspect
+        #$stderr.puts @xmlns.inspect
+        #$stderr.puts @xsi.inspect
+        @version = gpx_element['version']
         reset_meta_data
         bounds_element = (@xml.at("metadata/bounds") rescue nil)
         if bounds_element
@@ -218,16 +227,39 @@ module GPX
     end
 
     private
+    def attributes_and_nsdefs_as_gpx_attributes
+      #$stderr.puts @namespace_defs.inspect
+      gpx_header = {}
+      @attributes.each do |k,v|
+        k = v.namespace.prefix + ':' + k if v.namespace
+        gpx_header[k] = v.value
+      end 
+
+      @namespace_defs.each do |nsd|
+        tag = 'xmlns'
+        if nsd.prefix
+          tag += ':' + nsd.prefix
+        end
+        gpx_header[tag] = nsd.href
+      end
+      return gpx_header
+    end
+ 
     def generate_xml_doc
       @version ||= '1.1'
       version_dir = version.gsub('.','/')
 
+      gpx_header = attributes_and_nsdefs_as_gpx_attributes
+      
+      gpx_header['version'] = @version.to_s if !gpx_header['version']
+      gpx_header['creator'] = DEFAULT_CREATOR if !gpx_header['creator']
+      gpx_header['xsi:schemaLocation'] = "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd" if !gpx_header['xsi:schemaLocation']
+      gpx_header['xsi'] = "http://www.w3.org/2001/XMLSchema-instance" if !gpx_header['xsi'] and !gpx_header['xmlns:xsi']
+      
+      #$stderr.puts gpx_header.keys.inspect
+
       doc = Nokogiri::XML::Builder.new do |xml|
-        xml.gpx(
-          'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance",
-          'version' => @version.to_s,
-          'creator' => @creator.nil? ? DEFAULT_CREATOR : @creator.to_s,
-          'xsi:schemaLocation' => "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd") \
+        xml.gpx(gpx_header) \
         {
             # version 1.0 of the schema doesn't support the metadata element, so push them straight to the root 'gpx' element
             if (@version == '1.0') then
