@@ -1,5 +1,7 @@
 = GPX Gem
 
+{<img src="https://travis-ci.org/andrewhao/gpx.svg" alt="Build Status" />}[https://travis-ci.org/andrewhao/gpx]
+
 Copyright (C) 2006 Doug Fales mailto:doug@falesafeconsulting.com
 
 == What It Does
