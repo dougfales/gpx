@@ -6,8 +6,10 @@ desc "Default Task"
 task :default => [ :test ]
 
 namespace :ci do
-  task :prepare => [:test] do
+  task :build do
+    puts "Creating tests/output directory..."
     FileUtils.mkdir_p "tests/output"
+    Rake::Task[:test].invoke
   end
 end
 
