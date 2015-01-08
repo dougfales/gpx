@@ -30,6 +30,7 @@ module GPX
 
     attr_accessor :segment
 
+
     def initialize(opts = {})
       super(opts)
       @segment = opts[:segment]
@@ -54,5 +55,6 @@ module GPX
     def law_of_cosines_distance_from(p2)
       (Math.acos(Math.sin(latr)*Math.sin(p2.latr) + Math.cos(latr)*Math.cos(p2.latr)*Math.cos(p2.lonr-lonr)) * RADIUS)
     end
+
   end
 end

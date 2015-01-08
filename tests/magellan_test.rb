@@ -1,7 +1,7 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'gpx'
 
-class MagellanTest < Test::Unit::TestCase
+class MagellanTest < Minitest::Test
    MAGELLAN_TRACK_LOG = File.join(File.dirname(__FILE__), "gpx_files/magellan_track.log")
    GPX_FILE = File.join(File.dirname(__FILE__), "gpx_files/one_segment.gpx")
 

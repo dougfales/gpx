@@ -114,6 +114,13 @@ module GPX
       result
     end
 
+    def recalculate_distance
+      @distance = 0
+      @segments.each do |seg|
+        @distance += seg.distance
+      end
+    end
+ 
     protected
 
     def update_meta_data(seg)

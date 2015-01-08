@@ -1,7 +1,7 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'gpx'
 
-class TrackPointTest < Test::Unit::TestCase
+class TrackPointTest < Minitest::Test
   def setup
     @point1 = GPX::TrackPoint.new({
       :lat => 37.7985474,

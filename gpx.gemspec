@@ -19,4 +19,6 @@ Gem::Specification.new do |s|
   s.homepage = "http://www.github.com/andrewhao/gpx"
   s.add_dependency 'rake'
   s.add_dependency 'nokogiri'
+  s.add_development_dependency 'bundler'
+  s.add_development_dependency 'minitest'
 end
