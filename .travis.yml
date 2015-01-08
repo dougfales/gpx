@@ -5,4 +5,4 @@ rvm:
   - 2.1
   - 2.2
   - jruby-19mode
-
+script: "bundle exec rake ci:build"
