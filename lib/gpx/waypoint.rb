@@ -25,7 +25,7 @@ module GPX
   # not seen much use yet, since WalkingBoss does not use waypoints right now.
   class Waypoint < Point
 
-    SUB_ELEMENTS = %w{ magvar geoidheight name cmt desc src link sym type fix sat hdop vdop pdop ageofdgpsdata dgpsid extensions ele}
+    SUB_ELEMENTS = %w{ele magvar geoidheight name cmt desc src link sym type fix sat hdop vdop pdop ageofdgpsdata dgpsid extensions}
 
     attr_reader :gpx_file
     SUB_ELEMENTS.each { |sub_el| attr_accessor sub_el.to_sym }
