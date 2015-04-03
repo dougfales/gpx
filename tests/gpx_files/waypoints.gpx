@@ -17,4 +17,6 @@
 <wpt lat="39.999840" lon="-105.214696"><name><![CDATA[SBDR]]></name><sym>Waypoint</sym><ele>1612.965</ele></wpt>
 <wpt lat="39.989739" lon="-105.295285"><name><![CDATA[TO]]></name><sym>Waypoint</sym><ele>2163.556</ele></wpt>
 <wpt lat="40.035301" lon="-105.254443"><name><![CDATA[VICS]]></name><sym>Waypoint</sym><ele>1535.34</ele></wpt>
+<wpt lat="8.992441" lon="-79.530365"><time>2015-01-01T12:12:12Z</time><name>loma la pava ???</name><desc>Mar 22, 2015, 10:46:17</desc>
+</wpt>
 </gpx>

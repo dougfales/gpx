@@ -42,7 +42,8 @@ class OutputTest < Minitest::Test
           {:lat => 25.061783, :lon => 121.640267,  :name => 'GRMTWN', :sym => 'Waypoint', :ele => '38.09766'},
           {:lat => 39.999840, :lon => -105.214696, :name => 'SBDR',   :sym => 'Waypoint', :ele => '1612.965'},
           {:lat => 39.989739, :lon => -105.295285, :name => 'TO',     :sym => 'Waypoint', :ele => '2163.556'},
-          {:lat => 40.035301, :lon => -105.254443, :name => 'VICS',   :sym => 'Waypoint', :ele => '1535.34'}
+          {:lat => 40.035301, :lon => -105.254443, :name => 'VICS',   :sym => 'Waypoint', :ele => '1535.34'},
+          {:lat => 40.035301, :lon => -105.254443, :name => 'TIMEDWPT',   :sym => 'Waypoint', :ele => '1535.34', :time => Time.parse("2005-12-31T22:05:09Z")}
         ]
 	
 	waypoint_data.each do |wpt_hash|
