@@ -205,7 +205,7 @@ module GPX
       @time = Time.now if(@time.nil? or update_time)
       @name ||= File.basename(filename)
       doc = generate_xml_doc
-      File.open(filename, 'w') { |f| f.write(doc.to_xml) }
+      File.open(filename, 'w+') { |f| f.write(doc.to_xml) }
     end
 
     def to_s(update_time = true)
@@ -304,6 +304,7 @@ module GPX
 
             waypoints.each do |w|
               xml.wpt(lat: w.lat, lon: w.lon) {
+                xml.time w.time.xmlschema unless w.time.nil?
                 Waypoint::SUB_ELEMENTS.each do |sub_elem|
                   xml.send(sub_elem, w.send(sub_elem)) if w.respond_to?(sub_elem) && !w.send(sub_elem).nil?
                 end
