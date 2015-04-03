@@ -253,7 +253,7 @@ module GPX
       
       gpx_header['version'] = @version.to_s if !gpx_header['version']
       gpx_header['creator'] = DEFAULT_CREATOR if !gpx_header['creator']
-      gpx_header['xsi:schemaLocation'] = "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd" if !gpx_header['xsi:schemaLocation']
+      gpx_header['xmlns:xsi:schemaLocation'] = "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd" if !gpx_header['xsi:schemaLocation'] and !gpx_header['xmlns:xsi:schemaLocation']
       gpx_header['xsi'] = "http://www.w3.org/2001/XMLSchema-instance" if !gpx_header['xsi'] and !gpx_header['xmlns:xsi']
       
       #$stderr.puts gpx_header.keys.inspect
