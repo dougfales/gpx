@@ -1,8 +1,8 @@
 # GPX Gem
 
-{<img src="https://travis-ci.org/dougfales/gpx.svg" alt="Build Status" />}[https://travis-ci.org/dougfales/gpx]
+[<img src="https://travis-ci.org/andrewhao/gpx.svg" alt="Build Status" />](https://travis-ci.org/andrewhao/gpx)
 
-Copyright (C) 2006 Doug Fales mailto:doug@falesafeconsulting.com
+Copyright (C) 2006 Doug Fales doug@falesafeconsulting.com
 
 ## What It Does
 
@@ -31,6 +31,7 @@ Converting a Magellan track log to GPX:
 if GPX::MagellanTrackLog::is_magellan_file?(filename)
  GPX::MagellanTrackLog::convert_to_gpx(filename, "#{filename}.gpx")
 end
+```
 
 Exporting an ActiveRecord to GPXFile (as Waypoints)
 ```ruby
@@ -38,39 +39,39 @@ Exporting an ActiveRecord to GPXFile (as Waypoints)
     # Our active record in this example is called stop
     #
     
-    # models/stop.rb 
-    class Stop < ActiveRecord::Base
-      # This model has the following attributes:
-      # name
-      # lat
-      # lon
-      # updated_at
-    
-      def self.to_gpx
-        require 'GPX'
-        gpx = GPX::GPXFile.new
-        all.each do |stop|
-          gpx.waypoints << GPX::Waypoint.new({name: stop.name, lat: stop.lat, lon: stop.lon, time: stop.updated_at})
-        end 
-        gpx.to_s
-      end
-    end # class
-    
-    # controllers/stops.rb
-    def index 
-      @stops = Stop.all
-      respond_to do |format|
-        format.html {render :index}
-        format.gpx { send_data @stops.to_gpx, filename: controller_name + '.gpx' }
-      end
-    end
-    
-    # Add this line to config/initializers/mime_types.rb
-    Mime::Type.register "application/gpx+xml", :gpx
-    
-    # 
-    # To get the xml file:
-    #  http://localhost:3000/stops.gpx
+ # models/stop.rb 
+ class Stop < ActiveRecord::Base
+   # This model has the following attributes:
+   # name
+   # lat
+   # lon
+   # updated_at
+   
+   def self.to_gpx
+     require 'GPX'
+     gpx = GPX::GPXFile.new
+     all.each do |stop|
+       gpx.waypoints << GPX::Waypoint.new({name: stop.name, lat: stop.lat, lon: stop.lon, time: stop.updated_at})
+     end 
+     gpx.to_s
+   end
+ end # class
+   
+# controllers/stops.rb
+def index 
+   @stops = Stop.all
+   respond_to do |format|
+    format.html {render :index}
+    format.gpx { send_data @stops.to_gpx, filename: controller_name + '.gpx' }
+   end
+end
+  
+# Add this line to config/initializers/mime_types.rb
+Mime::Type.register "application/gpx+xml", :gpx
+  
+# 
+# To get the xml file:
+#  http://localhost:3000/stops.gpx
 ```
 
 You have a complete example on how to create a GPX file from scratch on the `tests/output_text.rb` file.
