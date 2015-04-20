@@ -205,7 +205,7 @@ module GPX
       @time = Time.now if(@time.nil? or update_time)
       @name ||= File.basename(filename)
       doc = generate_xml_doc
-      File.open(filename, 'w') { |f| f.write(doc.to_xml) }
+      File.open(filename, 'w+') { |f| f.write(doc.to_xml) }
     end
 
     def to_s(update_time = true)
@@ -254,7 +254,7 @@ module GPX
       gpx_header['version'] = @version.to_s if !gpx_header['version']
       gpx_header['creator'] = DEFAULT_CREATOR if !gpx_header['creator']
       gpx_header['xsi:schemaLocation'] = "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd" if !gpx_header['xsi:schemaLocation']
-      gpx_header['xsi'] = "http://www.w3.org/2001/XMLSchema-instance" if !gpx_header['xsi'] and !gpx_header['xmlns:xsi']
+      gpx_header['xmlns:xsi'] = "http://www.w3.org/2001/XMLSchema-instance" if !gpx_header['xsi'] and !gpx_header['xmlns:xsi']
       
       #$stderr.puts gpx_header.keys.inspect
 
@@ -304,6 +304,7 @@ module GPX
 
             waypoints.each do |w|
               xml.wpt(lat: w.lat, lon: w.lon) {
+                xml.time w.time.xmlschema unless w.time.nil?
                 Waypoint::SUB_ELEMENTS.each do |sub_elem|
                   xml.send(sub_elem, w.send(sub_elem)) if w.respond_to?(sub_elem) && !w.send(sub_elem).nil?
                 end
