@@ -35,12 +35,12 @@ end
 
 Exporting an ActiveRecord to GPXFile (as Waypoints)
 ```ruby
-    #
-    # Our active record in this example is called stop
-    #
-    
- # models/stop.rb 
- class Stop < ActiveRecord::Base
+#
+# Our active record in this example is called stop
+#
+ 
+# models/stop.rb 
+class Stop < ActiveRecord::Base
    # This model has the following attributes:
    # name
    # lat
@@ -56,7 +56,8 @@ Exporting an ActiveRecord to GPXFile (as Waypoints)
      gpx.to_s
    end
  end # class
-   
+
+
 # controllers/stops.rb
 def index 
    @stops = Stop.all
@@ -65,16 +66,17 @@ def index
     format.gpx { send_data @stops.to_gpx, filename: controller_name + '.gpx' }
    end
 end
-  
+
+
 # Add this line to config/initializers/mime_types.rb
 Mime::Type.register "application/gpx+xml", :gpx
   
-# 
+ 
 # To get the xml file:
-#  http://localhost:3000/stops.gpx
+#   http://localhost:3000/stops.gpx
 ```
 
-You have a complete example on how to create a GPX file from scratch on the `tests/output_text.rb` file.
+You have a complete example on how to create a gpx file from scratch on `tests/output_text.rb`.
 
 
 ## Notes
