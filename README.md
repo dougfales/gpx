@@ -5,6 +5,8 @@
 
 Copyright (C) 2006 Doug Fales doug@falesafeconsulting.com
 
+Released under the MIT License.
+
 ## What It Does
 
 This library reads GPX files and provides an API for reading and manipulating
