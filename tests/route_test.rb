@@ -1,7 +1,7 @@
-require 'test/unit'
-require File.dirname(__FILE__) + '/../lib/gpx'
+require 'minitest/autorun'
+require 'gpx'
 
-class RouteTest < Test::Unit::TestCase
+class RouteTest < Minitest::Test
 
   def test_read_routes
     gpx = GPX::GPXFile.new(:gpx_file => File.join(File.dirname(__FILE__), "gpx_files/routes.gpx"))
@@ -21,7 +21,7 @@ class RouteTest < Test::Unit::TestCase
     assert_equal(-105.292674, first_route.points[0].lon)
     assert_equal(1766.535,    first_route.points[0].elevation)
 
-  
+
 # Route 1, Second Point
 # <rtept lat="39.995700" lon="-105.292805">
 #  <name><![CDATA[AMPTHT]]></name>
@@ -35,7 +35,7 @@ class RouteTest < Test::Unit::TestCase
 # Route 1, Third Point
 # <rtept lat="39.989739" lon="-105.295285">
 #  <name><![CDATA[TO]]></name>
-#  <sym>Waypoint</sym> 
+#  <sym>Waypoint</sym>
 #  <ele>2163.556</ele>
 # </rtept>
     assert_equal(39.989739,   first_route.points[2].lat)
@@ -50,7 +50,7 @@ class RouteTest < Test::Unit::TestCase
 # Route 2, Only Point
 # <rtept lat="39.999840" lon="-105.214696">
 #   <name><![CDATA[SBDR]]></name>
-#   <sym>Waypoint</sym> 
+#   <sym>Waypoint</sym>
 #   <ele>1612.965</ele>
 # </rtept>
     assert_equal(39.999840,   second_route.points[0].lat)
@@ -59,5 +59,5 @@ class RouteTest < Test::Unit::TestCase
 
   end
 
-  
+
 end

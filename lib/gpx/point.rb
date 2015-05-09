@@ -20,89 +20,73 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
-include Math
 module GPX
-   # The base class for all points.  Trackpoint and Waypoint both descend from this base class.
-   class Point < Base
-      D_TO_R = PI/180.0;
-      attr_accessor :lat, :lon, :time, :elevation, :gpx_file, :speed
+  # The base class for all points.  Trackpoint and Waypoint both descend from this base class.
+  class Point < Base
+    D_TO_R = Math::PI/180.0;
+    attr_accessor :lat, :lon, :time, :elevation, :gpx_file, :speed, :extensions
 
-      # When you need to manipulate individual points, you can create a Point
-      # object with a latitude, a longitude, an elevation, and a time.  In
-      # addition, you can pass an XML element to this initializer, and the
-      # relevant info will be parsed out.
-      def initialize(opts = {:lat => 0.0, :lon => 0.0, :elevation => 0.0, :time => Time.now } )
-         @gpx_file = opts[:gpx_file]
-         if (opts[:element])
-            elem = opts[:element]
-            @lat, @lon = elem["lat"].to_f, elem["lon"].to_f
-            @latr, @lonr = (D_TO_R * @lat), (D_TO_R * @lon)
-            #'-'? yyyy '-' mm '-' dd 'T' hh ':' mm ':' ss ('.' s+)? (zzzzzz)?
-            @time = (Time.xmlschema(elem.at("time").inner_text) rescue nil)
-            @elevation = elem.at("ele").inner_text.to_f unless elem.at("ele").nil?
-            @speed = elem.at("speed").inner_text.to_f unless elem.at("speed").nil?
-         else
-            @lat = opts[:lat]
-            @lon = opts[:lon]
-            @elevation = opts[:elevation]
-            @time = opts[:time]
-            @speed = opts[:speed]
-         end
-
+    # When you need to manipulate individual points, you can create a Point
+    # object with a latitude, a longitude, an elevation, and a time.  In
+    # addition, you can pass an XML element to this initializer, and the
+    # relevant info will be parsed out.
+    def initialize(opts = {:lat => 0.0, :lon => 0.0, :elevation => 0.0, :time => Time.now } )
+      @gpx_file = opts[:gpx_file]
+      if (opts[:element])
+        elem = opts[:element]
+        @lat, @lon = elem["lat"].to_f, elem["lon"].to_f
+        @latr, @lonr = (D_TO_R * @lat), (D_TO_R * @lon)
+        #'-'? yyyy '-' mm '-' dd 'T' hh ':' mm ':' ss ('.' s+)? (zzzzzz)?
+        @time = (Time.xmlschema(elem.at("time").inner_text) rescue nil)
+        @elevation = elem.at("ele").inner_text.to_f unless elem.at("ele").nil?
+        @speed = elem.at("speed").inner_text.to_f unless elem.at("speed").nil?
+        @extensions = elem.at("extensions") unless elem.at("extensions").nil?
+      else
+        @lat = opts[:lat]
+        @lon = opts[:lon]
+        @elevation = opts[:elevation]
+        @time = opts[:time]
+        @speed = opts[:speed]
+        @extensions = opts[:extensions]
       end
 
+    end
 
-      # Returns the latitude and longitude (in that order), separated by the
-      # given delimeter.  This is useful for passing a point into another API
-      # (i.e. the Google Maps javascript API).
-      def lat_lon(delim = ', ')
-        "#{lat}#{delim}#{lon}"
-      end
 
-      # Returns the longitude and latitude (in that order), separated by the
-      # given delimeter.  This is useful for passing a point into another API
-      # (i.e. the Google Maps javascript API).
-      def lon_lat(delim = ', ')
-        "#{lon}#{delim}#{lat}"
-      end
+    # Returns the latitude and longitude (in that order), separated by the
+    # given delimeter.  This is useful for passing a point into another API
+    # (i.e. the Google Maps javascript API).
+    def lat_lon(delim = ', ')
+      "#{lat}#{delim}#{lon}"
+    end
 
-      # Latitude in radians.
-      def latr
-         @latr ||= (@lat * D_TO_R)
-      end
+    # Returns the longitude and latitude (in that order), separated by the
+    # given delimeter.  This is useful for passing a point into another API
+    # (i.e. the Google Maps javascript API).
+    def lon_lat(delim = ', ')
+      "#{lon}#{delim}#{lat}"
+    end
 
-      # Longitude in radians.
-      def lonr
-         @lonr ||= (@lon * D_TO_R)
-      end
+    # Latitude in radians.
+    def latr
+      @latr ||= (@lat * D_TO_R)
+    end
 
-      # Set the latitude (in degrees).
-      def lat=(latitude)
-         @latr = (latitude * D_TO_R)
-         @lat = latitude
-      end
+    # Longitude in radians.
+    def lonr
+      @lonr ||= (@lon * D_TO_R)
+    end
 
-      # Set the longitude (in degrees).
-      def lon=(longitude)
-         @lonr = (longitude * D_TO_R)
-         @lon = longitude
-      end
+    # Set the latitude (in degrees).
+    def lat=(latitude)
+      @latr = (latitude * D_TO_R)
+      @lat = latitude
+    end
 
-      # Convert this point to a XML::Node.
-      def to_xml(elem_name = 'trkpt')
-         pt = Node.new(elem_name)
-         pt['lat'] = lat.to_s
-         pt['lon'] = lon.to_s
-         unless time.nil?
-            time_elem = Node.new('time')
-            time_elem << time.xmlschema
-            pt << time_elem
-         end
-         elev = Node.new('ele')
-         elev << elevation
-         pt <<  elev
-         pt
-      end
-
-   end
+    # Set the longitude (in degrees).
+    def lon=(longitude)
+      @lonr = (longitude * D_TO_R)
+      @lon = longitude
+    end
+  end
 end

@@ -1,8 +1,8 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'fileutils'
-require File.dirname(__FILE__) + '/../lib/gpx'
+require 'gpx'
 
-class OutputTest < Test::Unit::TestCase
+class OutputTest < Minitest::Test
 
   include GPX
 
@@ -13,7 +13,7 @@ class OutputTest < Test::Unit::TestCase
   def test_new_gpx_file_from_scratch
 	gpx_file = GPXFile.new
 
-	track = Track.new(:name => "My First Track") 
+	track = Track.new(:name => "My First Track")
 	segment = Segment.new
 	
 	track_point_data = [
@@ -36,13 +36,14 @@ class OutputTest < Test::Unit::TestCase
 	gpx_file.tracks << track
 	
 	waypoint_data = [
-	  {:lat => 39.997298, :lon => -105.292674, :name => 'GRG-CA', :sym => 'Waypoint', :elevation => 1766.535},
-          {:lat => 33.330190, :lon => -111.946110, :name => 'GRMPHX', :sym => 'Waypoint', :elevation => 361.0981, 
+	  {:lat => 39.997298, :lon => -105.292674, :name => 'GRG-CA', :sym => 'Waypoint', :ele => '1766.535'},
+          {:lat => 33.330190, :lon => -111.946110, :name => 'GRMPHX', :sym => 'Waypoint', :ele => '361.0981',
 		:cmt => "Hey here's a comment.", :desc => "Somewhere in my backyard.", :fix => '3d', :sat => "8", :hdop => "50.5", :vdop => "6.8", :pdop => "7.6"},
-          {:lat => 25.061783, :lon => 121.640267,  :name => 'GRMTWN', :sym => 'Waypoint', :elevation => 38.09766},
-          {:lat => 39.999840, :lon => -105.214696, :name => 'SBDR',   :sym => 'Waypoint', :elevation => 1612.965},
-          {:lat => 39.989739, :lon => -105.295285, :name => 'TO',     :sym => 'Waypoint', :elevation => 2163.556},
-          {:lat => 40.035301, :lon => -105.254443, :name => 'VICS',   :sym => 'Waypoint', :elevation => 1535.34}
+          {:lat => 25.061783, :lon => 121.640267,  :name => 'GRMTWN', :sym => 'Waypoint', :ele => '38.09766'},
+          {:lat => 39.999840, :lon => -105.214696, :name => 'SBDR',   :sym => 'Waypoint', :ele => '1612.965'},
+          {:lat => 39.989739, :lon => -105.295285, :name => 'TO',     :sym => 'Waypoint', :ele => '2163.556'},
+          {:lat => 40.035301, :lon => -105.254443, :name => 'VICS',   :sym => 'Waypoint', :ele => '1535.34'},
+          {:lat => 40.035301, :lon => -105.254443, :name => 'TIMEDWPT',   :sym => 'Waypoint', :ele => '1535.34', :time => Time.parse("2005-12-31T22:05:09Z")}
         ]
 	
 	waypoint_data.each do |wpt_hash|
@@ -100,20 +101,16 @@ class OutputTest < Test::Unit::TestCase
 		assert_equal(value, written_waypoints[index].send(key.to_s), key)
           end
 	end
-
-	expected_value = sprintf(THE_WORKS, gpx_file.time.xmlschema)
-	assert_equal(expected_value, IO.read(output_file(name_of_test)))
-	
   end
-  
+
   def name_of_test
 	caller[0] =~ /`test_([^']*)'/ and $1
   end
-  
+
   def output_file(test_name)
     File.join(File.dirname(__FILE__), "output/#{test_name}.gpx")
   end
-  
+
   THE_WORKS = "<?xml version=\"1.0\"?>\n<gpx xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.topografix.com/GPX/1/1\" version=\"1.1\" creator=\"GPX RubyGem #{GPX::VERSION} Copyright 2006-2009 Doug Fales -- http://gpx.rubyforge.org/\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\">\n  <metadata>\n    <name>new_gpx_file_from_scratch.gpx</name>\n    <time>%s</time>\n    <bounds minlat=\"90.0\" minlon=\"180.0\" maxlat=\"-90.0\" maxlon=\"-180.0\"/>\n  </metadata>\n  <trk>\n    <name/>\n    <trkseg>\n      <trkpt lat=\"40.036926\" lon=\"-105.253487\">\n        <time>2005-12-31T22:01:24Z</time>\n        <ele>1737.24</ele>\n      </trkpt>\n      <trkpt lat=\"40.036604\" lon=\"-105.253487\">\n        <time>2005-12-31T22:02:01Z</time>\n        <ele>1738.682</ele>\n      </trkpt>\n      <trkpt lat=\"40.036347\" lon=\"-105.25383\">\n        <time>2005-12-31T22:02:08Z</time>\n        <ele>1738.682</ele>\n      </trkpt>\n      <trkpt lat=\"40.035574\" lon=\"-105.254045\">\n        <time>2005-12-31T22:02:20Z</time>\n        <ele>1737.24</ele>\n      </trkpt>\n      <trkpt lat=\"40.035467\" lon=\"-105.254366\">\n        <time>2005-12-31T22:02:29Z</time>\n        <ele>1735.798</ele>\n      </trkpt>\n      <trkpt lat=\"40.035317\" lon=\"-105.254388\">\n        <time>2005-12-31T22:02:33Z</time>\n        <ele>1735.798</ele>\n      </trkpt>\n      <trkpt lat=\"40.035274\" lon=\"-105.254431\">\n        <time>2005-12-31T22:02:49Z</time>\n        <ele>1736.278</ele>\n      </trkpt>\n      <trkpt lat=\"40.035274\" lon=\"-105.254431\">\n        <time>2005-12-31T22:02:54Z</time>\n        <ele>1739.643</ele>\n      </trkpt>\n      <trkpt lat=\"40.035317\" lon=\"-105.254431\">\n        <time>2005-12-31T22:05:08Z</time>\n        <ele>1732.433</ele>\n      </trkpt>\n      <trkpt lat=\"40.035317\" lon=\"-105.254431\">\n        <time>2005-12-31T22:05:09Z</time>\n        <ele>1726.665</ele>\n      </trkpt>\n    </trkseg>\n  </trk>\n  <wpt lat=\"39.997298\" lon=\"-105.292674\">\n    <name>GRG-CA</name>\n    <sym>Waypoint</sym>\n    <ele>1766.535</ele>\n  </wpt>\n  <wpt lat=\"33.33019\" lon=\"-111.94611\">\n    <name>GRMPHX</name>\n    <cmt>Hey here's a comment.</cmt>\n    <desc>Somewhere in my backyard.</desc>\n    <sym>Waypoint</sym>\n    <fix>3d</fix>\n    <sat>8</sat>\n    <hdop>50.5</hdop>\n    <vdop>6.8</vdop>\n    <pdop>7.6</pdop>\n    <ele>361.0981</ele>\n  </wpt>\n  <wpt lat=\"25.061783\" lon=\"121.640267\">\n    <name>GRMTWN</name>\n    <sym>Waypoint</sym>\n    <ele>38.09766</ele>\n  </wpt>\n  <wpt lat=\"39.99984\" lon=\"-105.214696\">\n    <name>SBDR</name>\n    <sym>Waypoint</sym>\n    <ele>1612.965</ele>\n  </wpt>\n  <wpt lat=\"39.989739\" lon=\"-105.295285\">\n    <name>TO</name>\n    <sym>Waypoint</sym>\n    <ele>2163.556</ele>\n  </wpt>\n  <wpt lat=\"40.035301\" lon=\"-105.254443\">\n    <name>VICS</name>\n    <sym>Waypoint</sym>\n    <ele>1535.34</ele>\n  </wpt>\n  <rte>\n    <name/>\n    <rtept lat=\"40.035467\" lon=\"-105.254366\">\n      <time>2005-12-31T22:02:29Z</time>\n      <ele>1735.798</ele>\n    </rtept>\n    <rtept lat=\"40.035317\" lon=\"-105.254388\">\n      <time>2005-12-31T22:02:33Z</time>\n      <ele>1735.798</ele>\n    </rtept>\n    <rtept lat=\"40.035274\" lon=\"-105.254431\">\n      <time>2005-12-31T22:02:49Z</time>\n      <ele>1736.278</ele>\n    </rtept>\n  </rte>\n</gpx>\n"
 
 end

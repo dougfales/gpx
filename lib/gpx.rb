@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2006  Doug Fales 
+# Copyright (c) 2006  Doug Fales
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -20,19 +20,19 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
-$:.unshift(File.dirname(__FILE__))
-require 'rubygems'
-require 'hpricot'
-require 'date'
+
 require 'time'
-require 'csv'
-require 'gpx/gpx'
-require 'gpx/gpx_file'
-require 'gpx/bounds'
-require 'gpx/track'
-require 'gpx/route'
-require 'gpx/segment'
-require 'gpx/point'
-require 'gpx/trackpoint'
-require 'gpx/waypoint'
-require 'gpx/magellan_track_log'
+require 'nokogiri'
+
+require File.expand_path('../gpx/version', __FILE__)
+
+require File.expand_path('../gpx/gpx', __FILE__)
+require File.expand_path('../gpx/gpx_file', __FILE__)
+require File.expand_path('../gpx/bounds', __FILE__)
+require File.expand_path('../gpx/track', __FILE__)
+require File.expand_path('../gpx/route', __FILE__)
+require File.expand_path('../gpx/segment', __FILE__)
+require File.expand_path('../gpx/point', __FILE__)
+require File.expand_path('../gpx/trackpoint', __FILE__)
+require File.expand_path('../gpx/waypoint', __FILE__)
+require File.expand_path('../gpx/magellan_track_log', __FILE__)

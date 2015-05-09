@@ -1,12 +1,12 @@
-require 'test/unit'
-require File.dirname(__FILE__) + '/../lib/gpx'
+require 'minitest/autorun'
+require 'gpx'
 
-class WaypointTest < Test::Unit::TestCase
+class WaypointTest < Minitest::Test
 
   def test_read_waypoints
 
     gpx = GPX::GPXFile.new(:gpx_file => File.join(File.dirname(__FILE__), "gpx_files/waypoints.gpx"))
-    assert_equal(17, gpx.waypoints.size)
+    assert_equal(18, gpx.waypoints.size)
 
     #    First Waypoint
     #   <wpt lat="40.035557" lon="-105.248268">
@@ -24,7 +24,7 @@ class WaypointTest < Test::Unit::TestCase
     assert_equal('001', first_wpt.cmt)
     assert_equal('Just some waypoint...', first_wpt.desc)
     assert_equal('Waypoint', first_wpt.sym)
-	assert_equal(1639.161, first_wpt.elevation)
+  	assert_equal(1639.161, first_wpt.elevation)
 
     #    Second Waypoint
     #    <wpt lat="39.993070" lon="-105.296588">
@@ -37,8 +37,12 @@ class WaypointTest < Test::Unit::TestCase
     assert_equal(-105.296588, second_wpt.lon)
     assert_equal('002', second_wpt.name)
     assert_equal('Waypoint', second_wpt.sym)
-	assert_equal(1955.192, second_wpt.elevation)
-
+    assert_equal(1955.192, second_wpt.elevation)
+    
+    # test loads time properly in waypoint
+    time_wpt = gpx.waypoints[17]
+    assert_equal(Time.xmlschema("2015-01-01T12:12:12Z"), time_wpt.time)
+    
   end
 end
 
