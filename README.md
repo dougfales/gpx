@@ -1,7 +1,7 @@
 # GPX Gem
 
-[<img src="https://travis-ci.org/andrewhao/gpx.svg" alt="Build Status" />](https://travis-ci.org/andrewhao/gpx)
-[![Code Climate](https://codeclimate.com/github/andrewhao/gpx/badges/gpa.svg)](https://codeclimate.com/github/andrewhao/gpx)
+[<img src="https://travis-ci.org/dougfales/gpx.svg" alt="Build Status" />](https://travis-ci.org/dougfales/gpx)
+[![Code Climate](https://codeclimate.com/github/dougfales/gpx/badges/gpa.svg)](https://codeclimate.com/github/dougfales/gpx)
 
 Copyright (C) 2006 Doug Fales doug@falesafeconsulting.com
 

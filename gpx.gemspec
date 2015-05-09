@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'gpx/version'
 
 Gem::Specification.new do |s|
-  s.name = 'andrewhao-gpx'
+  s.name = 'gpx'
   s.version = GPX::VERSION
   s.authors = ["Guillaume Dott", "Doug Fales", "Andrew Hao"]
   s.email = ["guillaume+github@dott.fr", "doug.fales@gmail.com", "andrewhao@gmail.com"]
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.has_rdoc = true
 
-  s.homepage = "http://www.github.com/andrewhao/gpx"
+  s.homepage = "http://www.github.com/dougfales/gpx"
   s.add_dependency 'rake'
   s.add_dependency 'nokogiri'
   s.add_development_dependency 'bundler'
