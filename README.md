@@ -3,7 +3,7 @@
 [<img src="https://travis-ci.org/dougfales/gpx.svg" alt="Build Status" />](https://travis-ci.org/dougfales/gpx)
 [![Code Climate](https://codeclimate.com/github/dougfales/gpx/badges/gpa.svg)](https://codeclimate.com/github/dougfales/gpx)
 
-Copyright (C) 2006 Doug Fales doug@falesafeconsulting.com
+Copyright (C) 2006 Doug Fales doug@falesafeconsulting.com 
 
 Released under the MIT License.
 
