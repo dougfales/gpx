@@ -2,7 +2,8 @@
 <gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Link2GPS - 2.0.2 - http://www.hiketech.com" xsi:schemaLocation="ttp://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
 	<metadata>
 		<name><![CDATA[active_log.gpx]]></name>
-		<time>2006-04-08T16:44:28Z</time>
+    <desc><![CDATA[description of my GPX file with special char like &, <, >]]></desc>
+    <time>2006-04-08T16:44:28Z</time>
 		<bounds min_lat="38.681488" min_lon="-109.606948" max_lat="38.791759" max_lon="-109.447045"/>
 	</metadata>
 	<extensions/>
