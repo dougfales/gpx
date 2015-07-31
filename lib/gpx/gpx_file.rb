@@ -22,7 +22,7 @@
 #++
 module GPX
   class GPXFile < Base
-    attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :version, :creator
+    attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :version, :creator, :description
 
     DEFAULT_CREATOR = "GPX RubyGem #{GPX::VERSION} -- http://dougfales.github.io/gpx/".freeze
 
@@ -76,6 +76,7 @@ module GPX
 
         @time = Time.parse(@xml.at("metadata/time").inner_text) rescue nil
         @name = @xml.at("metadata/name").inner_text rescue nil
+        @description = @xml.at('metadata/desc').inner_text rescue nil
         @tracks = []
         @xml.search("trk").each do |trk|
           trk = Track.new(:element => trk, :gpx_file => self)
