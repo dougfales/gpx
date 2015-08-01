@@ -26,6 +26,8 @@ class SegmentTest < Minitest::Test
       gpx_file_no_time = GPX::GPXFile.new(:gpx_file => ONE_SEGMENT_NO_TIME)
       segment_no_time = gpx_file_no_time.tracks.first.segments.first
       assert_equal(189, segment_no_time.points.size)
+      assert_equal(1334.447, segment_no_time.earliest_point.elevation)
+      assert_equal(1413.756, segment_no_time.latest_point.elevation)
       assert_equal(1334.447, segment_no_time.lowest_point.elevation)
       assert_equal(1480.087, segment_no_time.highest_point.elevation)
       assert_in_delta(6.98803359528853, segment_no_time.distance, 0.001)

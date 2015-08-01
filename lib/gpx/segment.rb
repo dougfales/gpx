@@ -61,7 +61,12 @@ module GPX
       unless pt.time.nil?
         @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
         @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
+      else
+        # when no time information in data, we consider the points are ordered
+        @earliest_point = @points[0]
+        @latest_point = pt
       end
+
       unless pt.elevation.nil?
         @lowest_point   = pt if(@lowest_point.nil? or pt.elevation < @lowest_point.elevation)
         @highest_point  = pt if(@highest_point.nil? or pt.elevation > @highest_point.elevation)
@@ -243,7 +248,12 @@ module GPX
       unless pt.time.nil?
         @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
         @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
+      else
+        # when no time information in data, we consider the points are ordered
+        @earliest_point = @points[0]
+        @latest_point = @points[-1]
       end
+
       unless pt.elevation.nil?
         @lowest_point   = pt if(@lowest_point.nil? or pt.elevation < @lowest_point.elevation)
         @highest_point  = pt if(@highest_point.nil? or pt.elevation > @highest_point.elevation)
