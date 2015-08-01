@@ -72,7 +72,7 @@ module GPX
       @bounds.max_lon = pt.lon if pt.lon > @bounds.max_lon
       unless last_pt.nil?
         @distance += haversine_distance(last_pt, pt)
-        @duration += pt.time - last_pt.time
+        @duration += pt.time - last_pt.time unless pt.time.nil? or last_pt.time.nil?
       end
       @points << pt
     end
@@ -251,7 +251,7 @@ module GPX
       @bounds.add(pt)
       unless last_pt.nil?
         @distance += haversine_distance(last_pt, pt)
-        @duration += pt.time - last_pt.time
+        @duration += pt.time - last_pt.time unless pt.time.nil? or last_pt.time.nil?
       end
     end
 
