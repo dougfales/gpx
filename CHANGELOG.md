@@ -1,4 +1,10 @@
-## UNRELEASED
+## [0.8.1] - 2015-08-01
+
+  * Added support for a GPX `desc` tag. (@doc75)
+
+## [0.8] - 2015-05-14
+
+### Introduced changes from andrewhao/gpx fork:
 
   * Fix Rakefiles and move to use Nokigiri (Guillaume Dott)
   * Fix compatibility with 1.0 GPX schemas (Douglas Robertson)
