@@ -28,7 +28,7 @@ module GPX
   # array of the segments that copmrise it, but additionally each track holds
   # a reference to all of its points as one big array called "points".
   class Track < Base
-    attr_reader :points, :bounds, :lowest_point, :highest_point, :distance
+    attr_reader :points, :bounds, :lowest_point, :highest_point, :distance, :moving_duration
     attr_accessor :segments, :name, :gpx_file
 
     # Initialize a track from a XML::Node, or, if no :element option is
@@ -108,6 +108,7 @@ module GPX
       result << "\tSize: #{points.size} points\n"
       result << "\tSegments: #{segments.size} \n"
       result << "\tDistance: #{distance} km\n"
+      result << "\tMoving duration: #{moving_duration} km\n"
       result << "\tLowest Point: #{lowest_point.elevation} \n"
       result << "\tHighest Point: #{highest_point.elevation}\n "
       result << "\tBounds: #{bounds.to_s}"
@@ -128,6 +129,7 @@ module GPX
       @highest_point  = seg.highest_point if(@highest_point.nil? or seg.highest_point.elevation > @highest_point.elevation)
       @bounds.add(seg.bounds)
       @distance += seg.distance
+      @moving_duration += seg.duration
       @points.concat(seg.points)
     end
 
@@ -136,6 +138,7 @@ module GPX
       @highest_point = nil
       @lowest_point = nil
       @distance = 0.0
+      @moving_duration = 0.0
       @points = []
     end
 

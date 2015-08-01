@@ -19,6 +19,11 @@ class GPXFileTest < Minitest::Test
     assert_equal(38.791759, gpx_file.bounds.max_lat)
     assert_equal(-109.447045, gpx_file.bounds.max_lon)
     assert_equal('description of my GPX file with special char like &, <, >', gpx_file.description)
+    assert_equal('description of my GPX file with special char like &, <, >', gpx_file.description)
+    assert_equal(3.0724966849262554, gpx_file.distance)
+    assert_equal(15237.0, gpx_file.duration)
+    assert_equal(3036.0, gpx_file.moving_duration)
+    assert_equal(3.6432767014935834, gpx_file.average_speed)
   end
 
   def test_load_data_from_file
@@ -33,17 +38,27 @@ class GPXFileTest < Minitest::Test
     assert_equal(38.791759, gpx_file.bounds.max_lat)
     assert_equal(-109.447045, gpx_file.bounds.max_lon)
     assert_equal('description of my GPX file with special char like &, <, >', gpx_file.description)
+    assert_equal(3.0724966849262554, gpx_file.distance)
+    assert_equal(15237.0, gpx_file.duration)
+    assert_equal(3036.0, gpx_file.moving_duration)
+    assert_equal(3.6432767014935834, gpx_file.average_speed)
   end
 
   def test_big_file
     gpx_file = GPX::GPXFile.new(:gpx_file => BIG_FILE)
     assert_equal(1, gpx_file.tracks.size)
     assert_equal(7968, gpx_file.tracks.first.points.size)
+    assert_equal(105508.0, gpx_file.duration)
+    assert_equal(57645.0, gpx_file.moving_duration)
+    assert_in_delta(99.60738958686505, gpx_file.average_speed, 1e-13)
   end
 
   def test_with_or_with_elev
     gpx_file = GPX::GPXFile.new(:gpx_file => WITH_OR_WITHOUT_ELEV_FILE)
     assert_equal(2, gpx_file.tracks.size)
+    assert_equal(0, gpx_file.duration)
+    assert_equal(0, gpx_file.moving_duration)
+    assert(gpx_file.average_speed.nan?)
     #assert_equal(7968, gpx_file.tracks.first.points.size)
   end
 

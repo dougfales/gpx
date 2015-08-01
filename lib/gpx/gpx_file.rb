@@ -22,7 +22,7 @@
 #++
 module GPX
   class GPXFile < Base
-    attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :version, :creator, :description
+    attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :version, :creator, :description, :moving_duration
 
     DEFAULT_CREATOR = "GPX RubyGem #{GPX::VERSION} -- http://dougfales.github.io/gpx/".freeze
 
@@ -127,15 +127,16 @@ module GPX
 
     # Returns the average speed, in km/hr, meters/hr, or miles/hr, of this
     # GPXFile.  The calculation is based on the total distance divided by the
-    # total duration of the entire file.
+    # sum of duration of all segments of all tracks
+    # (not taking into accounting pause time).
     def average_speed(opts = { :units => 'kilometers' })
       case opts[:units]
       when /kilometers/i
-        return @distance / (@duration/3600.0)
+        return distance / (moving_duration/3600.0)
       when /meters/i
-        return (@distance * 1000) /  (@duration/3600.0)
+        return (distance * 1000) /  (moving_duration/3600.0)
       when /miles/i
-        return (@distance * 0.62) / (@duration/3600.0)
+        return (distance * 0.62) / (moving_duration/3600.0)
       end
     end
 
@@ -187,6 +188,7 @@ module GPX
       @highest_point = nil
       @lowest_point = nil
       @distance = 0.0
+      @moving_duration = 0.0
     end
 
     # Updates the meta data for this GPX file.  Meta data includes the
@@ -198,6 +200,7 @@ module GPX
       @highest_point  = trk.highest_point if(@highest_point.nil? or (!trk.highest_point.nil? and trk.highest_point.elevation > @highest_point.elevation))
       @bounds.add(trk.bounds) if get_bounds
       @distance += trk.distance
+      @moving_duration += trk.moving_duration
     end
 
     # Serialize the current GPXFile to a gpx file named <filename>.
