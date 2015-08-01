@@ -28,7 +28,7 @@ module GPX
   # array of the segments that copmrise it, but additionally each track holds
   # a reference to all of its points as one big array called "points".
   class Track < Base
-    attr_reader :points, :bounds, :lowest_point, :highest_point, :distance, :moving_duration
+    attr_reader :points, :bounds, :lowest_point, :highest_point, :distance, :moving_duration, :comment, :description
     attr_accessor :segments, :name, :gpx_file
 
     # Initialize a track from a XML::Node, or, if no :element option is
@@ -41,6 +41,8 @@ module GPX
       if(opts[:element])
         trk_element = opts[:element]
         @name = (trk_element.at("name").inner_text rescue "")
+        @comment = (trk_element.at('cmt').inner_text rescue '')
+        @description = (trk_element.at('desc').inner_text rescue '')
         trk_element.search("trkseg").each do |seg_element|
           seg = Segment.new(:element => seg_element, :track => self, :gpx_file => @gpx_file)
           update_meta_data(seg)
@@ -105,6 +107,8 @@ module GPX
     def to_s
       result = "Track \n"
       result << "\tName: #{name}\n"
+      result << "\tComment: #{comment}\n"
+      result << "\tDescription: #{description}\n"
       result << "\tSize: #{points.size} points\n"
       result << "\tSegments: #{segments.size} \n"
       result << "\tDistance: #{distance} km\n"

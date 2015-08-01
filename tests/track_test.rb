@@ -11,6 +11,8 @@ class TrackTest < Minitest::Test
 
    def test_track_read
       assert_equal("ACTIVE LOG", @track.name)
+      assert_equal("Comment Log", @track.comment)
+      assert_equal("Description Log", @track.description)
       assert_equal( 182, @track.points.size)
       assert_equal(8, @track.segments.size)
       assert_in_delta(3.07249668492626, @track.distance, 0.001)
@@ -31,6 +33,8 @@ class TrackTest < Minitest::Test
          :max_lon => -109.450000)
       @track.crop(area)
       assert_equal("ACTIVE LOG", @track.name)
+      assert_equal("Comment Log", @track.comment)
+      assert_equal("Description Log", @track.description)
       assert_equal( 111, @track.points.size)
       assert_equal(4, @track.segments.size)
       assert_in_delta(1.62136024923607, @track.distance, 0.001)
