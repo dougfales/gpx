@@ -27,7 +27,7 @@ module GPX
   # latest points, distance, and bounds.
   class Segment < Base
 
-    attr_reader :earliest_point, :latest_point, :bounds, :highest_point, :lowest_point, :distance
+    attr_reader :earliest_point, :latest_point, :bounds, :highest_point, :lowest_point, :distance, :duration
     attr_accessor :points, :track
 
     # If a XML::Node object is passed-in, this will initialize a new
@@ -41,6 +41,7 @@ module GPX
       @highest_point = nil
       @lowest_point = nil
       @distance = 0.0
+      @duration = 0.0
       @bounds = Bounds.new
       if(opts[:element])
         segment_element = opts[:element]
@@ -69,7 +70,10 @@ module GPX
       @bounds.min_lon = pt.lon if pt.lon < @bounds.min_lon
       @bounds.max_lat = pt.lat if pt.lat > @bounds.max_lat
       @bounds.max_lon = pt.lon if pt.lon > @bounds.max_lon
-      @distance += haversine_distance(last_pt, pt) unless last_pt.nil?
+      unless last_pt.nil?
+        @distance += haversine_distance(last_pt, pt)
+        @duration += pt.time - last_pt.time
+      end
       @points << pt
     end
 
@@ -181,7 +185,6 @@ module GPX
         tmp_points.push tmp_point
       end
       last_pt = nil
-      @distance = 0
       @points.clear
       reset_meta_data
       #now commit the averages back and recalculate the distances
@@ -232,6 +235,7 @@ module GPX
       @highest_point = nil
       @lowest_point = nil
       @distance = 0.0
+      @duration = 0.0
       @bounds = Bounds.new
     end
 
@@ -245,7 +249,10 @@ module GPX
         @highest_point  = pt if(@highest_point.nil? or pt.elevation > @highest_point.elevation)
       end
       @bounds.add(pt)
-      @distance += haversine_distance(last_pt, pt) unless last_pt.nil?
+      unless last_pt.nil?
+        @distance += haversine_distance(last_pt, pt)
+        @duration += pt.time - last_pt.time
+      end
     end
 
   end

@@ -18,6 +18,7 @@ class SegmentTest < Minitest::Test
       assert_equal(1334.447, @segment.lowest_point.elevation)
       assert_equal(1480.087, @segment.highest_point.elevation)
       assert_in_delta(6.98803359528853, @segment.distance, 0.001)
+      assert_equal(4466.0, @segment.duration)
    end
 
    def test_segment_crop
@@ -37,6 +38,7 @@ class SegmentTest < Minitest::Test
       assert_equal(-109.009995, @segment.bounds.min_lon)
       assert_equal(39.187868,   @segment.bounds.max_lat)
       assert_equal(-108.999546, @segment.bounds.max_lon)
+      assert_equal(2711.0, @segment.duration)
    end
 
    def test_segment_delete
@@ -55,6 +57,7 @@ class SegmentTest < Minitest::Test
       assert_equal(-109.016604, @segment.bounds.min_lon)
       assert_equal(39.188747,   @segment.bounds.max_lat)
       assert_equal(-109.007978, @segment.bounds.max_lon)
+      assert_equal(4466.0, @segment.duration)
    end
 
    def test_segment_smooth
@@ -65,6 +68,7 @@ class SegmentTest < Minitest::Test
       assert_equal(1342.58, @segment.lowest_point.elevation)
       assert_equal(1479.09, @segment.highest_point.elevation)
       assert_in_delta(6.458085658, @segment.distance, 0.001)
+      assert_equal(4466.0, @segment.duration)
    end
 
    def test_segment_smooth_offset
@@ -75,6 +79,7 @@ class SegmentTest < Minitest::Test
       assert_equal(1334.447, @segment.lowest_point.elevation)
       assert_equal(1480.087, @segment.highest_point.elevation)
       assert_in_delta(6.900813095, @segment.distance, 0.001)
+      assert_equal(4466.0, @segment.duration)
    end
 
    def test_segment_smooth_absolute
@@ -85,6 +90,7 @@ class SegmentTest < Minitest::Test
       assert_equal(1334.447, @segment.lowest_point.elevation)
       assert_equal(1480.087, @segment.highest_point.elevation)
       assert_in_delta(6.900813095, @segment.distance, 0.001)
+      assert_equal(4466.0, @segment.duration)
    end
 
 end
