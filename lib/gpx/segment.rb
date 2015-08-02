@@ -58,7 +58,7 @@ module GPX
     # Tack on a point to this Segment.  All meta-data will be updated.
     def append_point(pt)
       last_pt = @points[-1]
-      unless pt.time.nil?
+      if pt.time
         @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
         @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
       else
@@ -67,7 +67,7 @@ module GPX
         @latest_point = pt
       end
 
-      unless pt.elevation.nil?
+      if pt.elevation
         @lowest_point   = pt if(@lowest_point.nil? or pt.elevation < @lowest_point.elevation)
         @highest_point  = pt if(@highest_point.nil? or pt.elevation > @highest_point.elevation)
       end
@@ -75,9 +75,9 @@ module GPX
       @bounds.min_lon = pt.lon if pt.lon < @bounds.min_lon
       @bounds.max_lat = pt.lat if pt.lat > @bounds.max_lat
       @bounds.max_lon = pt.lon if pt.lon > @bounds.max_lon
-      unless last_pt.nil?
+      if last_pt
         @distance += haversine_distance(last_pt, pt)
-        @duration += pt.time - last_pt.time unless pt.time.nil? or last_pt.time.nil?
+        @duration += pt.time - last_pt.time if pt.time and last_pt.time
       end
       @points << pt
     end
@@ -245,7 +245,7 @@ module GPX
     end
 
     def update_meta_data(pt, last_pt)
-      unless pt.time.nil?
+      if pt.time
         @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
         @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
       else
@@ -254,14 +254,14 @@ module GPX
         @latest_point = @points[-1]
       end
 
-      unless pt.elevation.nil?
+      if pt.elevation
         @lowest_point   = pt if(@lowest_point.nil? or pt.elevation < @lowest_point.elevation)
         @highest_point  = pt if(@highest_point.nil? or pt.elevation > @highest_point.elevation)
       end
       @bounds.add(pt)
-      unless last_pt.nil?
+      if last_pt
         @distance += haversine_distance(last_pt, pt)
-        @duration += pt.time - last_pt.time unless pt.time.nil? or last_pt.time.nil?
+        @duration += pt.time - last_pt.time if pt.time and last_pt.time
       end
     end
 
