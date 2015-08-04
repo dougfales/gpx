@@ -15,7 +15,7 @@ class TrackPointTest < Minitest::Test
 
   def test_haversine_distance_from
     distance = @point1.haversine_distance_from(@point2)
-    assert_equal(0.00197862991592239, distance)
+    assert_in_delta(0.00197862991592239, distance, 1e-18)
   end
 
   def test_pythagorean_distance_from

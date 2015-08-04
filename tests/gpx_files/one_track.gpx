@@ -9,6 +9,8 @@
 	<extensions/>
 	<trk>
 		<name><![CDATA[ACTIVE LOG]]></name>
+		<cmt><![CDATA[Comment Log]]></cmt>
+		<desc><![CDATA[Description Log]]></desc>
 		<trkseg>
 			<trkpt lat="38.782575" lon="-109.595146">
 				<time>2006-04-08T18:25:33Z</time>

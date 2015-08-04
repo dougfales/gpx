@@ -5,6 +5,7 @@ require 'gpx'
 
 class SegmentTest < Minitest::Test
    ONE_SEGMENT = File.join(File.dirname(__FILE__), "gpx_files/one_segment.gpx")
+   ONE_SEGMENT_NO_TIME = File.join(File.dirname(__FILE__), "gpx_files/one_segment_no_time.gpx")
 
    def setup
       @gpx_file = GPX::GPXFile.new(:gpx_file => ONE_SEGMENT)
@@ -18,6 +19,19 @@ class SegmentTest < Minitest::Test
       assert_equal(1334.447, @segment.lowest_point.elevation)
       assert_equal(1480.087, @segment.highest_point.elevation)
       assert_in_delta(6.98803359528853, @segment.distance, 0.001)
+      assert_equal(4466.0, @segment.duration)
+   end
+
+   def test_segment_read_no_time
+      gpx_file_no_time = GPX::GPXFile.new(:gpx_file => ONE_SEGMENT_NO_TIME)
+      segment_no_time = gpx_file_no_time.tracks.first.segments.first
+      assert_equal(189, segment_no_time.points.size)
+      assert_equal(1334.447, segment_no_time.earliest_point.elevation)
+      assert_equal(1413.756, segment_no_time.latest_point.elevation)
+      assert_equal(1334.447, segment_no_time.lowest_point.elevation)
+      assert_equal(1480.087, segment_no_time.highest_point.elevation)
+      assert_in_delta(6.98803359528853, segment_no_time.distance, 0.001)
+      assert_equal(0, segment_no_time.duration)
    end
 
    def test_segment_crop
@@ -37,6 +51,7 @@ class SegmentTest < Minitest::Test
       assert_equal(-109.009995, @segment.bounds.min_lon)
       assert_equal(39.187868,   @segment.bounds.max_lat)
       assert_equal(-108.999546, @segment.bounds.max_lon)
+      assert_equal(2711.0, @segment.duration)
    end
 
    def test_segment_delete
@@ -55,6 +70,7 @@ class SegmentTest < Minitest::Test
       assert_equal(-109.016604, @segment.bounds.min_lon)
       assert_equal(39.188747,   @segment.bounds.max_lat)
       assert_equal(-109.007978, @segment.bounds.max_lon)
+      assert_equal(4466.0, @segment.duration)
    end
 
    def test_segment_smooth
@@ -65,6 +81,7 @@ class SegmentTest < Minitest::Test
       assert_equal(1342.58, @segment.lowest_point.elevation)
       assert_equal(1479.09, @segment.highest_point.elevation)
       assert_in_delta(6.458085658, @segment.distance, 0.001)
+      assert_equal(4466.0, @segment.duration)
    end
 
    def test_segment_smooth_offset
@@ -75,6 +92,7 @@ class SegmentTest < Minitest::Test
       assert_equal(1334.447, @segment.lowest_point.elevation)
       assert_equal(1480.087, @segment.highest_point.elevation)
       assert_in_delta(6.900813095, @segment.distance, 0.001)
+      assert_equal(4466.0, @segment.duration)
    end
 
    def test_segment_smooth_absolute
@@ -85,6 +103,7 @@ class SegmentTest < Minitest::Test
       assert_equal(1334.447, @segment.lowest_point.elevation)
       assert_equal(1480.087, @segment.highest_point.elevation)
       assert_in_delta(6.900813095, @segment.distance, 0.001)
+      assert_equal(4466.0, @segment.duration)
    end
 
 end
