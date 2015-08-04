@@ -1,3 +1,8 @@
+## [0.8.2] - 2015-08-03
+
+  * Enhance calculation of average speed (with usage of new
+    moving_duration). (@doc75)
+
 ## [0.8.1] - 2015-08-01
 
   * Added support for a GPX `desc` tag. (@doc75)
