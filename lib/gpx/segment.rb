@@ -59,8 +59,8 @@ module GPX
     def append_point(pt)
       last_pt = @points[-1]
       if pt.time
-        @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
-        @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
+        @earliest_point = pt if GPX::Util.earlier_time?(@earliest_point, pt)
+        @latest_point   = pt if GPX::Util.latter_time?(@latest_point, pt)
       else
         # when no time information in data, we consider the points are ordered
         @earliest_point = @points[0]
@@ -68,8 +68,8 @@ module GPX
       end
 
       if pt.elevation
-        @lowest_point   = pt if(@lowest_point.nil? or pt.elevation < @lowest_point.elevation)
-        @highest_point  = pt if(@highest_point.nil? or pt.elevation > @highest_point.elevation)
+        @lowest_point   = pt if GPX::Util.lower_elevation?(@lowest_point, pt)
+        @highest_point  = pt if GPX::Util.higher_elevation?(@highest_point, pt)
       end
       @bounds.min_lat = pt.lat if pt.lat < @bounds.min_lat
       @bounds.min_lon = pt.lon if pt.lon < @bounds.min_lon
@@ -152,7 +152,7 @@ module GPX
         raise Exception, "find_end_point_by_time_or_offset requires an argument of type Time or Integer"
       end
     end
-  
+
     # smooths the location data in the segment (by recalculating the location as an average of 20 neighbouring points.  Useful for removing noise from GPS traces.
     def smooth_location_by_average(opts={})
       seconds_either_side = opts[:averaging_window] || 20
@@ -166,13 +166,13 @@ module GPX
       @points.each do |point|
         if point.time > latest || point.time < earliest
           tmp_points.push point #add the point unaltered
-          next 
+          next
         end
         lat_av = 0.to_f
         lon_av = 0.to_f
         alt_av = 0.to_f
         n = 0
-        # k ranges from the time of the current point +/- 20s 
+        # k ranges from the time of the current point +/- 20s
         (-1*seconds_either_side..seconds_either_side).each do |k|
           # find the point nearest to the time offset indicated by k
           contributing_point = closest_point(point.time + k)
@@ -246,8 +246,8 @@ module GPX
 
     def update_meta_data(pt, last_pt)
       if pt.time
-        @earliest_point = pt if(@earliest_point.nil? or pt.time < @earliest_point.time)
-        @latest_point   = pt if(@latest_point.nil? or pt.time > @latest_point.time)
+        @earliest_point = pt if GPX::Util.earlier_time?(@earliest_point, pt)
+        @latest_point   = pt if GPX::Util.latter_time?(@latest_point, pt)
       else
         # when no time information in data, we consider the points are ordered
         @earliest_point = @points[0]
@@ -255,8 +255,8 @@ module GPX
       end
 
       if pt.elevation
-        @lowest_point   = pt if(@lowest_point.nil? or pt.elevation < @lowest_point.elevation)
-        @highest_point  = pt if(@highest_point.nil? or pt.elevation > @highest_point.elevation)
+        @lowest_point   = pt if GPX::Util.lower_elevation?(@lowest_point, pt)
+        @highest_point  = pt if GPX::Util.higher_elevation?(@highest_point, pt)
       end
       @bounds.add(pt)
       if last_pt

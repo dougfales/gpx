@@ -196,8 +196,8 @@ module GPX
     # you modify the GPX data (i.e. by adding or deleting points) and you
     # want the meta data to accurately reflect the new data.
     def update_meta_data(trk, get_bounds = true)
-      @lowest_point   = trk.lowest_point if(@lowest_point.nil? or (!trk.lowest_point.nil? and trk.lowest_point.elevation < @lowest_point.elevation))
-      @highest_point  = trk.highest_point if(@highest_point.nil? or (!trk.highest_point.nil? and trk.highest_point.elevation > @highest_point.elevation))
+      @lowest_point = trk.lowest_point if GPX::Util.lower_elevation?(@lowest_point, trk.lowest_point)
+      @highest_point = trk.highest_point if GPX::Util.higher_elevation?(@highest_point, trk.highest_point)
       @bounds.add(trk.bounds) if get_bounds
       @distance += trk.distance
       @moving_duration += trk.moving_duration
@@ -237,7 +237,7 @@ module GPX
       @attributes.each do |k,v|
         k = v.namespace.prefix + ':' + k if v.namespace
         gpx_header[k] = v.value
-      end 
+      end
 
       @namespace_defs.each do |nsd|
         tag = 'xmlns'
@@ -248,18 +248,18 @@ module GPX
       end
       return gpx_header
     end
- 
+
     def generate_xml_doc
       @version ||= '1.1'
       version_dir = version.gsub('.','/')
 
       gpx_header = attributes_and_nsdefs_as_gpx_attributes
-      
+
       gpx_header['version'] = @version.to_s if !gpx_header['version']
       gpx_header['creator'] = DEFAULT_CREATOR if !gpx_header['creator']
       gpx_header['xsi:schemaLocation'] = "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd" if !gpx_header['xsi:schemaLocation']
       gpx_header['xmlns:xsi'] = "http://www.w3.org/2001/XMLSchema-instance" if !gpx_header['xsi'] and !gpx_header['xmlns:xsi']
-      
+
       #$stderr.puts gpx_header.keys.inspect
 
       doc = Nokogiri::XML::Builder.new do |xml|
