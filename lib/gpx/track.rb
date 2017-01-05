@@ -25,11 +25,11 @@ module GPX
   # multiple points (in this library, those points are instances of
   # TrackPoint).  Each instance of this class has its own meta-data, including
   # low point, high point, and distance.  Of course, each track references an
-  # array of the segments that copmrise it, but additionally each track holds
+  # array of the segments that comprise it, but additionally each track holds
   # a reference to all of its points as one big array called "points".
   class Track < Base
-    attr_reader :points, :bounds, :lowest_point, :highest_point, :distance, :moving_duration, :comment, :description
-    attr_accessor :segments, :name, :gpx_file
+    attr_reader :points, :bounds, :lowest_point, :highest_point, :distance, :moving_duration
+    attr_accessor :segments, :name, :gpx_file, :description, :comment
 
     # Initialize a track from a XML::Node, or, if no :element option is
     # passed, initialize a blank Track object.
