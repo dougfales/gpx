@@ -1,3 +1,8 @@
+## [0.8.3] - 2017-01-05
+
+  * Make Track comment and description fields be `attr_accessible` (#17 via
+    @wallclimber21)
+
 ## [0.8.2] - 2015-08-03
 
   * Enhance calculation of average speed (with usage of new
