@@ -1,3 +1,4 @@
 tests/output/*
 .*.swp
 Gemfile.lock
+pkg
