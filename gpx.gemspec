@@ -11,6 +11,8 @@ Gem::Specification.new do |s|
   s.summary = %q{A basic API for reading and writing GPX files.}
   s.description = %q{A basic API for reading and writing GPX files.}
 
+  s.required_ruby_version = '~>2.1'
+
   s.files = `git ls-files`.split($/)
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
@@ -18,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.homepage = "http://www.github.com/dougfales/gpx"
   s.add_dependency 'rake'
-  s.add_dependency 'nokogiri'
+  s.add_dependency 'nokogiri', '~>1.7'
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'minitest'
 end

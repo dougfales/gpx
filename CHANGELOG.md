@@ -1,3 +1,8 @@
+## [0.9.0] - 2017-01-05
+
+  * Upgrade Nokogiri deps to be more explicit, then explicitly bump the Ruby
+    dependency.
+
 ## [0.8.3] - 2017-01-05
 
   * Make Track comment and description fields be `attr_accessible` (#17 via
