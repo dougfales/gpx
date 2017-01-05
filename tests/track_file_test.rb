@@ -2,13 +2,22 @@ require 'minitest/autorun'
 require 'gpx'
 
 class TrackFileTest < Minitest::Test
-   TRACK_FILE = File.join(File.dirname(__FILE__), "gpx_files/tracks.gpx")
-   OTHER_TRACK_FILE = File.join(File.dirname(__FILE__), "gpx_files/arches.gpx")
+  TRACK_FILE = File.join(File.dirname(__FILE__), "gpx_files/tracks.gpx")
+  OTHER_TRACK_FILE = File.join(File.dirname(__FILE__), "gpx_files/arches.gpx")
+  CONVERT_ROUTE_TO_TRACK_FILE = File.join(File.dirname(__FILE__), "gpx_files/convert_route_to_track.gpx")
 
-   def setup
-      @track_file = GPX::GPXFile.new(:gpx_file => TRACK_FILE)
-      @other_track_file = GPX::GPXFile.new(:gpx_file => OTHER_TRACK_FILE)
-   end
+  def setup
+    @track_file = GPX::GPXFile.new(:gpx_file => TRACK_FILE)
+    @other_track_file = GPX::GPXFile.new(:gpx_file => OTHER_TRACK_FILE)
+    @convert_file = GPX::GPXFile.new(gpx_file: CONVERT_ROUTE_TO_TRACK_FILE)
+  end
+
+  def test_conversion_of_route_to_track
+    track = track_from_route(@convert_file.routes[0])
+    @convert_file.update_meta_data(track)
+    @convert_file.tracks = [track]
+    assert_equal(track.points.count, @convert_file.routes[0].points.count)
+  end
 
    def test_track_read
       assert_equal(3, @track_file.tracks.size)
@@ -69,7 +78,30 @@ class TrackFileTest < Minitest::Test
    end
 
    def test_write
-      @other_track_file.write("tests/output/myoutput.gpx")
+      @other_track_file.write("./tests/output/myoutput.gpx")
    end
 
+
+
+  def track_from_route(route)
+    track = GPX::Track.new
+    track.append_segment(segment_from_route(route))
+    track
+  end
+
+  def segment_from_route(route)
+    segment = GPX::Segment.new
+    trackpoints(route).each { |point| segment.append_point(point) }
+    segment
+  end
+
+  def trackpoints(route)
+    route.points.map { |point| trackpoint_from_point(point) }
+  end
+
+  def trackpoint_from_point(point)
+    GPX::TrackPoint.new({
+      lat: point.lat, lon: point.lon, elevation: point.elevation, time: point.time, speed: point.speed, extensions: point.extensions
+    })
+  end
 end
