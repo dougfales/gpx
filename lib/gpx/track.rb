@@ -128,8 +128,8 @@ module GPX
     protected
 
     def update_meta_data(seg)
-      @lowest_point   = seg.lowest_point if(@lowest_point.nil? or seg.lowest_point.elevation < @lowest_point.elevation)
-      @highest_point  = seg.highest_point if(@highest_point.nil? or seg.highest_point.elevation > @highest_point.elevation)
+      @lowest_point   = seg.lowest_point if GPX::Util.lower_elevation?(@lowest_point, seg.lowest_point)
+      @highest_point  = seg.highest_point if GPX::Util.higher_elevation?(@highest_point, seg.highest_point)
       @bounds.add(seg.bounds)
       @distance += seg.distance
       @moving_duration += seg.duration
