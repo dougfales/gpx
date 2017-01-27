@@ -55,7 +55,6 @@ module GPX
     def append_segment(seg)
       update_meta_data(seg)
       @segments << seg
-      @points.concat(seg.points) unless seg.nil?
     end
 
     # Returns true if the given time occurs within any of the segments of this track.
@@ -125,7 +124,7 @@ module GPX
         @distance += seg.distance
       end
     end
- 
+
     protected
 
     def update_meta_data(seg)
