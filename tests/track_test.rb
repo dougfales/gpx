@@ -69,4 +69,13 @@ class TrackTest < Minitest::Test
       assert_equal(-109.447045, @track.bounds.max_lon)
    end
 
+   def test_append_segment
+     trk = GPX::Track.new
+     seg = GPX::Segment.new(track: trk)
+     pt = GPX::TrackPoint.new(lat: -118, lon: 34)
+     seg.append_point(pt)
+     trk.append_segment(seg)
+     assert_equal(1, trk.points.size)
+   end
+
 end
