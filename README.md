@@ -10,10 +10,9 @@ the data as objects.  For more info on the GPX format, see
 http://www.topografix.com/gpx.asp.
 
 In addition to parsing GPX files, this library is capable of converting
-Magellan NMEA files to GPX, and writing new GPX files.  It can crop and delete
-rectangular areas within a file, and it also calculates some meta-data about
-the tracks and points in a file (such as distance, duration, average speed,
-etc).
+Magellan NMEA files to GPX, converting GeoJSON data to GPX, and writing
+new GPX files.  It can crop and delete rectangular areas within a file,
+and it also calculates some meta-data about the tracks and points in a file (such as distance, duration, average speed, etc).
 
 ## Requirements
 
@@ -35,6 +34,17 @@ Converting a Magellan track log to GPX:
 if GPX::MagellanTrackLog::is_magellan_file?(filename)
  GPX::MagellanTrackLog::convert_to_gpx(filename, "#{filename}.gpx")
 end
+```
+
+Converting GeoJSON data to GPX can be achieved by providing a
+file path, file, or the data in string format:
+```ruby
+# Converting from a file name
+gpx_file = GPX::Geojson.convert_to_gpx(geojson_file: 'mygeojsonfile.json')
+
+# Converting from a string
+data = JSON.generate(my_geojson_hash)
+gpx_file = GPX::Geojson.convert_to_gpx(geojson_data: data)
 ```
 
 Exporting an ActiveRecord to GPXFile (as Waypoints)
