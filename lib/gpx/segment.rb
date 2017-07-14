@@ -45,7 +45,7 @@ module GPX
       @bounds = Bounds.new
       if(opts[:element])
         segment_element = opts[:element]
-        last_pt = nil
+        #last_pt = nil
         if segment_element.is_a?(Nokogiri::XML::Node)
           segment_element.search("trkpt").each do |trkpt|
             pt = TrackPoint.new(:element => trkpt, :segment => self, :gpx_file => @gpx_file)
@@ -189,7 +189,7 @@ module GPX
         tmp_point.lat = ((lat_av) / n).round(7)
         tmp_points.push tmp_point
       end
-      last_pt = nil
+      #last_pt = nil
       @points.clear
       reset_meta_data
       #now commit the averages back and recalculate the distances

@@ -24,7 +24,8 @@ module GPX
   # The base class for all points.  Trackpoint and Waypoint both descend from this base class.
   class Point < Base
     D_TO_R = Math::PI/180.0;
-    attr_accessor :lat, :lon, :time, :elevation, :gpx_file, :speed, :extensions, :extensions_h
+    attr_reader :lat, :lon
+    attr_accessor  :time, :elevation, :gpx_file, :speed, :extensions, :extensions_h
 
     # When you need to manipulate individual points, you can create a Point
     # object with a latitude, a longitude, an elevation, and a time.  In
@@ -92,7 +93,13 @@ module GPX
       e = {}
       element.children.each do |c|
         if c.class == Nokogiri::XML::Element
-          e[c.name] = c.text
+          if c.name ==  'WaypointExtension' and c.namespace.prefix == 'wptx1' # garmin nested extension
+            c.children.each do |gc|
+              e[gc.name] = gc.text
+            end
+          else
+            e[c.name] = c.text
+          end
         end
       end
       return e
