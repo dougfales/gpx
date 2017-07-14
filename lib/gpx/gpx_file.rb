@@ -93,7 +93,7 @@ module GPX
       else
         reset_meta_data
         opts.each { |attr_name, value| instance_variable_set("@#{attr_name.to_s}", value) }
-        unless(@tracks.nil? or @tracks.size.zero?)
+        unless(!defined?(@tracks) or @tracks.nil? or @tracks.size.zero?)
           @tracks.each { |trk| update_meta_data(trk) }
           calculate_duration
         end

@@ -24,7 +24,8 @@ module GPX
   # The base class for all points.  Trackpoint and Waypoint both descend from this base class.
   class Point < Base
     D_TO_R = Math::PI/180.0;
-    attr_accessor :lat, :lon, :time, :elevation, :gpx_file, :speed, :extensions
+    attr_reader :lat, :lon
+    attr_accessor  :time, :elevation, :gpx_file, :speed, :extensions, :extensions_h
 
     # When you need to manipulate individual points, you can create a Point
     # object with a latitude, a longitude, an elevation, and a time.  In
@@ -40,7 +41,7 @@ module GPX
         @time = (Time.xmlschema(elem.at("time").inner_text) rescue nil)
         @elevation = elem.at("ele").inner_text.to_f unless elem.at("ele").nil?
         @speed = elem.at("speed").inner_text.to_f unless elem.at("speed").nil?
-        @extensions = elem.at("extensions") unless elem.at("extensions").nil?
+        @extensions_h = wp_extensions(elem.at("extensions")) unless elem.at("extensions").nil?
       else
         @lat = opts[:lat]
         @lon = opts[:lon]
@@ -51,7 +52,6 @@ module GPX
       end
 
     end
-
 
     # Returns the latitude and longitude (in that order), separated by the
     # given delimeter.  This is useful for passing a point into another API
@@ -87,6 +87,22 @@ module GPX
     def lon=(longitude)
       @lonr = (longitude * D_TO_R)
       @lon = longitude
+    end
+
+    def wp_extensions( element )
+      e = {}
+      element.children.each do |c|
+        if c.class == Nokogiri::XML::Element
+          if c.name ==  'WaypointExtension' and c.namespace.prefix == 'wptx1' # garmin nested extension
+            c.children.each do |gc|
+              e[gc.name] = gc.text
+            end
+          else
+            e[c.name] = c.text
+          end
+        end
+      end
+      return e
     end
   end
 end
