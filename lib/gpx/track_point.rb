@@ -47,7 +47,7 @@ module GPX
 
     # Units are in km
     def law_of_cosines_distance_from(p2)
-      (Math.acos(Math.sin(latr)*Math.sin(p2.latr) + Math.cos(latr)*Math.cos(p2.latr)*Math.cos(p2.lonr-lonr)) * RADIUS)
+      Math.acos(Math.sin(latr) * Math.sin(p2.latr) + Math.cos(latr) * Math.cos(p2.latr) * Math.cos(p2.lonr-lonr)) * RADIUS
     end
 
   end
