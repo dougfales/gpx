@@ -224,11 +224,6 @@ module GPX
       p1.haversine_distance_from(p2)
     end
 
-    # Calculate the plain Pythagorean difference between two points.  Not currently used.
-    def pythagorean_distance(p1, p2)
-      p1.pythagorean_distance_from(p2)
-    end
-
     # Calculates the distance between two points using the Law of Cosines formula.  Not currently used.
     def law_of_cosines_distance(p1, p2)
       p1.law_of_cosines_distance_from(p2)

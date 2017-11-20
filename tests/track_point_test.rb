@@ -18,11 +18,6 @@ class TrackPointTest < Minitest::Test
     assert_in_delta(0.00197862991592239, distance, 1e-18)
   end
 
-  def test_pythagorean_distance_from
-    distance = @point1.pythagorean_distance_from(@point2)
-    assert_equal(3.642891416092969e-07, distance)
-  end
-
   def test_law_of_cosines_distance_from
     distance = @point1.law_of_cosines_distance_from(@point2)
     assert_equal(0.001982307218559664, distance)

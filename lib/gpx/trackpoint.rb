@@ -26,7 +26,7 @@ module GPX
   # real difference is that TrackPoints hold a reference to their parent
   # Segments.
   class TrackPoint < Point
-    RADIUS = 6371; # earth's mean radius in km
+    RADIUS = 6371 # earth's mean radius in km
 
     attr_accessor :segment
 
@@ -38,17 +38,11 @@ module GPX
 
     # Units are in km
     def haversine_distance_from(p2)
-      d_lat = p2.latr - latr;
-      d_lon = p2.lonr - lonr;
-      a = Math.sin(d_lat/2) * Math.sin(d_lat/2) + Math.cos(latr) * Math.cos(p2.latr) * Math.sin(d_lon/2) * Math.sin(d_lon/2);
-      c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      d = RADIUS * c;
-      return d;
-    end
-
-    # Units are in km
-    def pythagorean_distance_from(p2)
-      Math.sqrt((p2.latr - latr)**2 + (p2.lonr - lonr)**2)
+      d_lat = p2.latr - latr
+      d_lon = p2.lonr - lonr
+      a = Math.sin(d_lat/2) * Math.sin(d_lat/2) + Math.cos(latr) * Math.cos(p2.latr) * Math.sin(d_lon/2) * Math.sin(d_lon/2)
+      c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+      RADIUS * c
     end
 
     # Units are in km
