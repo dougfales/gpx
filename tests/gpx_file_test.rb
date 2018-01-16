@@ -5,6 +5,7 @@ class GPXFileTest < Minitest::Test
 
   ONE_TRACK_FILE = File.join(File.dirname(__FILE__), "gpx_files/one_track.gpx")
   WITH_OR_WITHOUT_ELEV_FILE = File.join(File.dirname(__FILE__), "gpx_files/with_or_without_elev.gpx")
+  WITH_EMPTY_TRACKS = File.join(File.dirname(__FILE__), "gpx_files/with_empty_tracks.gpx")
   BIG_FILE = File.join(File.dirname(__FILE__), "gpx_files/big.gpx")
 
   def test_load_data_from_string
@@ -60,6 +61,17 @@ class GPXFileTest < Minitest::Test
     assert_equal(0, gpx_file.moving_duration)
     assert(gpx_file.average_speed.nan?)
     #assert_equal(7968, gpx_file.tracks.first.points.size)
+  end
+
+  def test_with_empty_tracks
+    gpx_file = GPX::GPXFile.new(:gpx_file => WITH_EMPTY_TRACKS)
+    # is read correctly
+    assert_equal(1, gpx_file.tracks.size)
+    # and ignores empty segments
+    assert_equal(1, gpx_file.tracks.first.segments.size)
+    assert_equal(21.0, gpx_file.duration)
+    assert_equal(21.0, gpx_file.moving_duration)
+    assert_equal(6.674040636626879, gpx_file.average_speed)
   end
 
 end
