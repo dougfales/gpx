@@ -3,18 +3,18 @@ require 'gpx'
 
 class TrackPointTest < Minitest::Test
   def setup
-    @point1 = GPX::TrackPoint.new({
-      :lat => 37.7985474,
-      :lon => -122.2554386
-    })
-    @point2 = GPX::TrackPoint.new({
-      :lat => 37.7985583,
-      :lon => -122.2554564
-    })
-    @point3 = GPX::TrackPoint.new({
-      :lat => 38.7985583,
-      :lon => -121.2554564
-     })
+    @point1 = GPX::TrackPoint.new(
+      lat: 37.7985474,
+      lon: -122.2554386
+    )
+    @point2 = GPX::TrackPoint.new(
+      lat: 37.7985583,
+      lon: -122.2554564
+    )
+    @point3 = GPX::TrackPoint.new(
+      lat: 38.7985583,
+      lon: -121.2554564
+    )
   end
 
   def test_haversine_distance_from
