@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Open GPX Tracker for iOS">
+	<wpt lat="51.185170" lon="4.662453">
+		<time>2018-01-16T11:35:01Z</time>
+		<name>12:35:01</name>
+		<desc>16 jan. 2018 12:35:01</desc>
+	</wpt>
+	<trk>
+		<trkseg>
+			<trkpt lat="51.183019" lon="4.664619">
+				<ele>0.751247</ele>
+				<time>2018-01-16T11:06:00Z</time>
+			</trkpt>
+			<trkpt lat="51.183037" lon="4.664587">
+				<ele>0.622036</ele>
+				<time>2018-01-16T11:06:02Z</time>
+			</trkpt>
+			<trkpt lat="51.183053" lon="4.664553">
+				<ele>0.042019</ele>
+				<time>2018-01-16T11:06:04Z</time>
+			</trkpt>
+			<trkpt lat="51.183073" lon="4.664515">
+				<ele>0.177456</ele>
+				<time>2018-01-16T11:06:06Z</time>
+			</trkpt>
+			<trkpt lat="51.183095" lon="4.664480">
+				<ele>0.564846</ele>
+				<time>2018-01-16T11:06:08Z</time>
+			</trkpt>
+			<trkpt lat="51.183115" lon="4.664446">
+				<ele>0.941067</ele>
+				<time>2018-01-16T11:06:10Z</time>
+			</trkpt>
+			<trkpt lat="51.183143" lon="4.664401">
+				<ele>1.960781</ele>
+				<time>2018-01-16T11:06:12Z</time>
+			</trkpt>
+			<trkpt lat="51.183160" lon="4.664372">
+				<ele>2.115200</ele>
+				<time>2018-01-16T11:06:13Z</time>
+			</trkpt>
+			<trkpt lat="51.183176" lon="4.664342">
+				<ele>2.191250</ele>
+				<time>2018-01-16T11:06:14Z</time>
+			</trkpt>
+			<trkpt lat="51.183192" lon="4.664315">
+				<ele>2.492947</ele>
+				<time>2018-01-16T11:06:15Z</time>
+			</trkpt>
+			<trkpt lat="51.183205" lon="4.664291">
+				<ele>2.459927</ele>
+				<time>2018-01-16T11:06:16Z</time>
+			</trkpt>
+			<trkpt lat="51.183217" lon="4.664270">
+				<ele>2.226833</ele>
+				<time>2018-01-16T11:06:17Z</time>
+			</trkpt>
+			<trkpt lat="51.183240" lon="4.664233">
+				<ele>2.175198</ele>
+				<time>2018-01-16T11:06:19Z</time>
+			</trkpt>
+			<trkpt lat="51.183255" lon="4.664207">
+				<ele>2.643887</ele>
+				<time>2018-01-16T11:06:21Z</time>
+			</trkpt>
+		</trkseg>
+		<trkseg>
+		</trkseg>
+		<trkseg>
+		</trkseg>
+	</trk>
+</gpx>

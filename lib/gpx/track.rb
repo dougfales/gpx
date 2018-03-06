@@ -45,16 +45,17 @@ module GPX
         @description = (trk_element.at('desc').inner_text rescue '')
         trk_element.search("trkseg").each do |seg_element|
           seg = Segment.new(:element => seg_element, :track => self, :gpx_file => @gpx_file)
-          update_meta_data(seg)
-          @segments << seg
+          append_segment(seg)
         end
       end
     end
 
     # Append a segment to this track, updating its meta data along the way.
     def append_segment(seg)
-      update_meta_data(seg)
-      @segments << seg
+      if seg.points.size > 0
+        update_meta_data(seg)
+        @segments << seg
+      end
     end
 
     # Returns true if the given time occurs within any of the segments of this track.
