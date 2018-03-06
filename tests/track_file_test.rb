@@ -41,33 +41,12 @@ class TrackFileTest < Minitest::Test
     assert_equal(-105.292368, second_to_last_segment.points.last.lon)
   end
 
-  def test_find_nearest_point_by_time
-    time = Time.parse('2005-12-31T22:02:01Z')
-    pt = @track_file.tracks[0].closest_point(time)
-    # puts "pt: #{pt.lat_lon}"
-  end
-
-  def test_find_distance
-    # puts "Distance: #{@other_track_file.distance(:units => 'miles')} miles"
-    # puts "Distance: #{@track_file.distance(:units => 'miles')} miles"
-  end
-
-  def test_high_low_elevation
-    # puts "Lowest: #{@track_file.lowest_point.elevation} m"
-    # puts "Highest: #{@track_file.highest_point.elevation} m"
-  end
-
-  def test_duration
-    # puts "Duration 1: #{@other_track_file.duration} "
-    # puts "Duration 2: #{@track_file.duration} "
-  end
-
-  def test_average_speed
-    # puts "Speed 1: #{@other_track_file.average_speed} "
-    # puts "Speed 2: #{@track_file.average_speed} "
-  end
-
   def test_write
-    @other_track_file.write('tests/output/myoutput.gpx')
+    output_path = 'tests/output/myoutput.gpx'
+    @other_track_file.write(output_path)
+    new_track_file = GPX::GPXFile.new(gpx_file: output_path)
+    orig_segments = @other_track_file.tracks.first.segments
+    new_segments = new_track_file.tracks.first.segments
+    assert_equal(orig_segments.first.points.map(&:lat_lon), new_segments.first.points.map(&:lat_lon))
   end
 end
