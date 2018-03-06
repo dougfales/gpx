@@ -38,13 +38,25 @@ module GPX
       @segments = []
       @points = []
       reset_meta_data
-      if(opts[:element])
+      if opts[:element]
         trk_element = opts[:element]
-        @name = (trk_element.at("name").inner_text rescue "")
-        @comment = (trk_element.at('cmt').inner_text rescue '')
-        @description = (trk_element.at('desc').inner_text rescue '')
-        trk_element.search("trkseg").each do |seg_element|
-          seg = Segment.new(:element => seg_element, :track => self, :gpx_file => @gpx_file)
+        @name = (begin
+                   trk_element.at('name').inner_text
+                 rescue StandardError
+                   ''
+                 end)
+        @comment = (begin
+                      trk_element.at('cmt').inner_text
+                    rescue StandardError
+                      ''
+                    end)
+        @description = (begin
+                          trk_element.at('desc').inner_text
+                        rescue StandardError
+                          ''
+                        end)
+        trk_element.search('trkseg').each do |seg_element|
+          seg = Segment.new(element: seg_element, track: self, gpx_file: @gpx_file)
           append_segment(seg)
         end
       end
@@ -52,7 +64,7 @@ module GPX
 
     # Append a segment to this track, updating its meta data along the way.
     def append_segment(seg)
-      if seg.points.size > 0
+      unless seg.points.empty?
         update_meta_data(seg)
         @segments << seg
       end
@@ -63,7 +75,7 @@ module GPX
       segments.each do |seg|
         return true if seg.contains_time?(time)
       end
-      return false
+      false
     end
 
     # Finds the closest point (to "time") within this track.  Useful for
@@ -82,7 +94,7 @@ module GPX
         seg.crop(area)
         update_meta_data(seg) unless seg.empty?
       end
-      segments.delete_if { |seg| seg.empty? }
+      segments.delete_if(&:empty?)
     end
 
     # Deletes all points within a given area and updates the meta data.
@@ -92,13 +104,13 @@ module GPX
         seg.delete_area(area)
         update_meta_data(seg) unless seg.empty?
       end
-      segments.delete_if { |seg| seg.empty? }
+      segments.delete_if(&:empty?)
     end
 
     # Returns true if this track has no points in it.  This should return
     # true even when the track has empty segments.
     def empty?
-      (points.nil? or points.size.zero?)
+      (points.nil? || points.size.zero?)
     end
 
     # Prints out a friendly summary of this track (sans points).  Useful for
@@ -115,7 +127,7 @@ module GPX
       result << "\tMoving duration: #{moving_duration} km\n"
       result << "\tLowest Point: #{lowest_point.elevation} \n"
       result << "\tHighest Point: #{highest_point.elevation}\n "
-      result << "\tBounds: #{bounds.to_s}"
+      result << "\tBounds: #{bounds}"
       result
     end
 
@@ -129,8 +141,8 @@ module GPX
     protected
 
     def update_meta_data(seg)
-      @lowest_point   = seg.lowest_point if(@lowest_point.nil? or seg.lowest_point.elevation < @lowest_point.elevation)
-      @highest_point  = seg.highest_point if(@highest_point.nil? or seg.highest_point.elevation > @highest_point.elevation)
+      @lowest_point   = seg.lowest_point if @lowest_point.nil? || (seg.lowest_point.elevation < @lowest_point.elevation)
+      @highest_point  = seg.highest_point if @highest_point.nil? || (seg.highest_point.elevation > @highest_point.elevation)
       @bounds.add(seg.bounds)
       @distance += seg.distance
       @moving_duration += seg.duration
@@ -145,6 +157,5 @@ module GPX
       @moving_duration = 0.0
       @points = []
     end
-
   end
 end

@@ -1,10 +1,7 @@
 #!/usr/bin/env ruby
- 
-require File.expand_path('../../lib/gpx', __FILE__)
+
+require File.expand_path('../lib/gpx', __dir__)
 
 filename = ARGV[0]
-gpx =  GPX::GPXFile.new(:gpx_file => filename)
+gpx = GPX::GPXFile.new(gpx_file: filename)
 puts "read track with distance #{gpx.distance}"
-
-
-
