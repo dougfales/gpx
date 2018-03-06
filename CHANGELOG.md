@@ -1,3 +1,11 @@
+## [1.0.0] - 2018-03-06
+
+  * Fix duplication of points on appending segment to track (#20 via @niborg)
+  * Remove pythagorean distance (#28 fixing #27, via @moveson)
+  * Ignore empty segments (#29 via @nathanvda)
+  * Introduce Rubocop (#31)
+  * Explicit test support for Ruby 2.5 (#30)
+
 ## [0.9.0] - 2017-01-05
 
   * Upgrade Nokogiri deps to be more explicit, then explicitly bump the Ruby
