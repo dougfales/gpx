@@ -81,18 +81,14 @@ module GPX
       end
 
       # Tests to see if the given file is a magellan NMEA track log.
-      def is_magellan_file?(filename)
+      def magellan_file?(filename)
         i = 0
         File.open(filename, 'r') do |f|
           f.each do |line|
             i += 1
-            if line =~ /^\$PMGNTRK/
-              return true
-            elsif line =~ /<\?xml/
-              return false
-            elsif i > 10
-              return false
-            end
+            return true if line =~ /^\$PMGNTRK/
+            return false if line =~ /<\?xml/
+            return false if i > 10
           end
         end
         false

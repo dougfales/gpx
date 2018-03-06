@@ -1,9 +1,12 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'rdoc/task'
+require 'rubocop/rake_task'
+
+RuboCop::RakeTask.new
 
 desc 'Default Task'
-task default: [:test]
+task default: %i[test rubocop]
 
 namespace :ci do
   task :build do

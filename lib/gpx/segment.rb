@@ -20,15 +20,12 @@ module GPX
       @distance = 0.0
       @duration = 0.0
       @bounds = Bounds.new
-      if opts[:element]
-        segment_element = opts[:element]
-        last_pt = nil
-        if segment_element.is_a?(Nokogiri::XML::Node)
-          segment_element.search('trkpt').each do |trkpt|
-            pt = TrackPoint.new(element: trkpt, segment: self, gpx_file: @gpx_file)
-            append_point(pt)
-          end
-        end
+
+      segment_element = opts[:element]
+      return unless segment_element && segment_element.is_a?(Nokogiri::XML::Node)
+      segment_element.search('trkpt').each do |trkpt|
+        pt = TrackPoint.new(element: trkpt, segment: self, gpx_file: @gpx_file)
+        append_point(pt)
       end
     end
 
@@ -167,7 +164,6 @@ module GPX
         tmp_point.lat = (lat_av / n).round(7)
         tmp_points.push tmp_point
       end
-      last_pt = nil
       @points.clear
       reset_meta_data
       # now commit the averages back and recalculate the distances
@@ -178,6 +174,7 @@ module GPX
 
     protected
 
+    # rubocop:disable Style/GuardClause
     def find_closest(pts, time)
       return pts.first if pts.size == 1
       midpoint = pts.size / 2
@@ -194,6 +191,7 @@ module GPX
         return find_closest(pts[(midpoint + 1)..-1], time)
       end
     end
+    # rubocop:enable Style/GuardClause
 
     # Calculate the Haversine distance between two points. This is the method
     # the library uses to calculate the cumulative distance of GPX files.
@@ -231,10 +229,10 @@ module GPX
         @highest_point = pt if @highest_point.nil? || (pt.elevation > @highest_point.elevation)
       end
       @bounds.add(pt)
-      if last_pt
-        @distance += haversine_distance(last_pt, pt)
-        @duration += pt.time - last_pt.time if pt.time && last_pt.time
-      end
+
+      return unless last_pt
+      @distance += haversine_distance(last_pt, pt)
+      @duration += pt.time - last_pt.time if pt.time && last_pt.time
     end
   end
 end

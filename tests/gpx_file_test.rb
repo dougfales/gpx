@@ -8,7 +8,7 @@ class GPXFileTest < Minitest::Test
   BIG_FILE = File.join(File.dirname(__FILE__), 'gpx_files/big.gpx')
 
   def test_load_data_from_string
-    gpx_file = GPX::GPXFile.new(gpx_data: open(ONE_TRACK_FILE).read)
+    gpx_file = GPX::GPXFile.new(gpx_data: File.open(ONE_TRACK_FILE).read)
     assert_equal(1, gpx_file.tracks.size)
     assert_equal(8, gpx_file.tracks.first.segments.size)
     assert_equal('ACTIVE LOG', gpx_file.tracks.first.name)

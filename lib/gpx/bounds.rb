@@ -1,6 +1,6 @@
 module GPX
   class Bounds < Base
-    attr_accessor :min_lat, :max_lat, :max_lon, :min_lon, :center_lat, :center_lon
+    attr_accessor :min_lat, :max_lat, :max_lon, :min_lon
 
     # Creates a new bounds object with the passed-in min and max longitudes
     # and latitudes.

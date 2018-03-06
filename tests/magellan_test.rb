@@ -11,7 +11,7 @@ class MagellanTest < Minitest::Test
   end
 
   def test_file_type
-    assert(GPX::MagellanTrackLog.is_magellan_file?(MAGELLAN_TRACK_LOG))
-    assert(!GPX::MagellanTrackLog.is_magellan_file?(GPX_FILE))
+    assert(GPX::MagellanTrackLog.magellan_file?(MAGELLAN_TRACK_LOG))
+    assert(!GPX::MagellanTrackLog.magellan_file?(GPX_FILE))
   end
 end

@@ -157,3 +157,9 @@ Naming/UncommunicativeMethodParamName:
 
 Naming/VariableNumber:
   Enabled: false
+
+Style/DateTime:
+  Enabled: false
+
+Performance/Caller:
+  Enabled: false
