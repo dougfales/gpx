@@ -1,28 +1,7 @@
-#--
-# Copyright (c) 2006  Doug Fales
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#++
 module GPX
   class GPXFile < Base
-    attr_accessor :tracks, :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :version, :creator, :description, :moving_duration
+    attr_accessor :tracks,
+      :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :version, :creator, :description, :moving_duration
 
     DEFAULT_CREATOR = "GPX RubyGem #{GPX::VERSION} -- http://dougfales.github.io/gpx/".freeze
 
@@ -59,16 +38,13 @@ module GPX
         gpx_element = @xml.at('gpx')
         @attributes = gpx_element.attributes
         @namespace_defs = gpx_element.namespace_definitions
-        # $stderr.puts gpx_element.attributes.sort.inspect
-        # $stderr.puts @xmlns.inspect
-        # $stderr.puts @xsi.inspect
         @version = gpx_element['version']
         reset_meta_data
         bounds_element = (begin
-                            @xml.at('metadata/bounds')
-                          rescue StandardError
-                            nil
-                          end)
+          @xml.at('metadata/bounds')
+        rescue StandardError
+          nil
+        end)
         if bounds_element
           @bounds.min_lat = get_bounds_attr_value(bounds_element, %w[min_lat minlat minLat])
           @bounds.min_lon = get_bounds_attr_value(bounds_element, %w[min_lon minlon minLon])
@@ -126,15 +102,15 @@ module GPX
         break unless result.nil?
       end
       (begin
-                result.to_f
-              rescue StandardError
-                nil
-              end)
+        result.to_f
+      rescue StandardError
+        nil
+      end)
     end
 
     # Returns the distance, in kilometers, meters, or miles, of all of the
     # tracks and segments contained in this GPXFile.
-    def distance(opts = { units: 'kilometers' })
+    def distance(opts = {units: 'kilometers'})
       case opts[:units]
       when /kilometers/i
         @distance
@@ -149,7 +125,7 @@ module GPX
     # GPXFile.  The calculation is based on the total distance divided by the
     # sum of duration of all segments of all tracks
     # (not taking into accounting pause time).
-    def average_speed(opts = { units: 'kilometers' })
+    def average_speed(opts = {units: 'kilometers'})
       case opts[:units]
       when /kilometers/i
         distance / (moving_duration / 3600.0)
@@ -216,8 +192,8 @@ module GPX
     # you modify the GPX data (i.e. by adding or deleting points) and you
     # want the meta data to accurately reflect the new data.
     def update_meta_data(trk, get_bounds = true)
-      @lowest_point   = trk.lowest_point if @lowest_point.nil? || (!trk.lowest_point.nil? && (trk.lowest_point.elevation < @lowest_point.elevation))
-      @highest_point  = trk.highest_point if @highest_point.nil? || (!trk.highest_point.nil? && (trk.highest_point.elevation > @highest_point.elevation))
+      @lowest_point = trk.lowest_point if @lowest_point.nil? || (!trk.lowest_point.nil? && (trk.lowest_point.elevation < @lowest_point.elevation))
+      @highest_point = trk.highest_point if @highest_point.nil? || (!trk.highest_point.nil? && (trk.highest_point.elevation > @highest_point.elevation))
       @bounds.add(trk.bounds) if get_bounds
       @distance += trk.distance
       @moving_duration += trk.moving_duration
@@ -282,8 +258,7 @@ module GPX
       # $stderr.puts gpx_header.keys.inspect
 
       doc = Nokogiri::XML::Builder.new do |xml|
-        xml.gpx(gpx_header) \
-        do
+        xml.gpx(gpx_header) do
           # version 1.0 of the schema doesn't support the metadata element, so push them straight to the root 'gpx' element
           if @version == '1.0'
             xml.name @name
@@ -292,7 +267,7 @@ module GPX
               minlat: bounds.min_lat,
               minlon: bounds.min_lon,
               maxlat: bounds.max_lat,
-              maxlon: bounds.max_lon
+              maxlon: bounds.max_lon,
             )
           else
             xml.metadata do
@@ -302,7 +277,7 @@ module GPX
                 minlat: bounds.min_lat,
                 minlon: bounds.min_lon,
                 maxlat: bounds.max_lat,
-                maxlon: bounds.max_lon
+                maxlon: bounds.max_lon,
               )
             end
           end

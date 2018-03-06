@@ -1,25 +1,3 @@
-#--
-# Copyright (c) 2006  Doug Fales
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#++
 module GPX
   # The base class for all points.  Trackpoint and Waypoint both descend from this base class.
   class Point < Base
@@ -30,7 +8,7 @@ module GPX
     # object with a latitude, a longitude, an elevation, and a time.  In
     # addition, you can pass an XML element to this initializer, and the
     # relevant info will be parsed out.
-    def initialize(opts = { lat: 0.0, lon: 0.0, elevation: 0.0, time: Time.now })
+    def initialize(opts = {lat: 0.0, lon: 0.0, elevation: 0.0, time: Time.now})
       @gpx_file = opts[:gpx_file]
       if opts[:element]
         elem = opts[:element]
@@ -40,10 +18,10 @@ module GPX
         @lonr = (D_TO_R * @lon)
         # '-'? yyyy '-' mm '-' dd 'T' hh ':' mm ':' ss ('.' s+)? (zzzzzz)?
         @time = (begin
-                   Time.xmlschema(elem.at('time').inner_text)
-                 rescue StandardError
-                   nil
-                 end)
+          Time.xmlschema(elem.at('time').inner_text)
+        rescue StandardError
+          nil
+        end)
         @elevation = elem.at('ele').inner_text.to_f unless elem.at('ele').nil?
         @speed = elem.at('speed').inner_text.to_f unless elem.at('speed').nil?
         @extensions = elem.at('extensions') unless elem.at('extensions').nil?

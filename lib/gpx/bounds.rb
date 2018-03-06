@@ -1,32 +1,10 @@
-#--
-# Copyright (c) 2006  Doug Fales
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#++
 module GPX
   class Bounds < Base
     attr_accessor :min_lat, :max_lat, :max_lon, :min_lon, :center_lat, :center_lon
 
     # Creates a new bounds object with the passed-in min and max longitudes
     # and latitudes.
-    def initialize(opts = { min_lat: 90.0, max_lat: -90.0, min_lon: 180.0, max_lon: -180.0 })
+    def initialize(opts = {min_lat: 90.0, max_lat: -90.0, min_lon: 180.0, max_lon: -180.0})
       @min_lat = opts[:min_lat].to_f
       @max_lat = opts[:max_lat].to_f
       @min_lon = opts[:min_lon].to_f

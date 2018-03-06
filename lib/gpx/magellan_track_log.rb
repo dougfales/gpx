@@ -1,25 +1,3 @@
-#--
-# Copyright (c) 2006  Doug Fales
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#++
 module GPX
   # This class will parse the lat/lon and time data from a Magellan track log,
   # which is a NMEA formatted CSV list of points.
@@ -42,13 +20,13 @@ module GPX
     # $PMGNTRK,llll.ll,a,yyyyy.yy,a,xxxxx,a,hhmmss.ss,A,c----c,ddmmyy*hh<CR><LF>
     require 'csv'
 
-    LAT       = 1
-    LAT_HEMI  = 2
-    LON       = 3
-    LON_HEMI  = 4
-    ELE       = 5
+    LAT = 1
+    LAT_HEMI = 2
+    LON = 3
+    LON_HEMI = 4
+    ELE = 5
     ELE_UNITS = 6
-    TIME      = 7
+    TIME = 7
     INVALID_FLAG = 8
     DATE = 10
 
@@ -63,15 +41,15 @@ module GPX
         CSV.open(magellan_filename, 'r').each do |row|
           next if (row.size < 10) || (row[INVALID_FLAG] == 'V')
 
-          lat_deg  = row[LAT][0..1]
-          lat_min  = row[LAT][2...-1]
+          lat_deg = row[LAT][0..1]
+          lat_min = row[LAT][2...-1]
           lat_hemi = row[LAT_HEMI]
 
           lat = lat_deg.to_f + (lat_min.to_f / 60.0)
           lat = -lat if lat_hemi == 'S'
 
           lon_deg = row[LON][0..2]
-          lon_min  = row[LON][3..-1]
+          lon_min = row[LON][3..-1]
           lon_hemi = row[LON_HEMI]
 
           lon = lon_deg.to_f + (lon_min.to_f / 60.0)
@@ -82,12 +60,12 @@ module GPX
           ele = ele.to_f
           ele *= FEET_TO_METERS if ele_units == 'F'
 
-          hrs  = row[TIME][0..1].to_i
+          hrs = row[TIME][0..1].to_i
           mins = row[TIME][2..3].to_i
           secs = row[TIME][4..5].to_i
-          day  = row[DATE][0..1].to_i
-          mon  = row[DATE][2..3].to_i
-          yr   = 2000 + row[DATE][4..5].to_i
+          day = row[DATE][0..1].to_i
+          mon = row[DATE][2..3].to_i
+          yr = 2000 + row[DATE][4..5].to_i
 
           time = Time.gm(yr, mon, day, hrs, mins, secs)
 

@@ -1,25 +1,3 @@
-#--
-# Copyright (c) 2006  Doug Fales
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#++
 module GPX
   # A segment is the basic container in a GPX file.  A Segment contains points
   # (in this lib, they're called TrackPoints).  A Track contains Segments.  An
@@ -59,7 +37,7 @@ module GPX
       last_pt = @points[-1]
       if pt.time
         @earliest_point = pt if @earliest_point.nil? || (pt.time < @earliest_point.time)
-        @latest_point   = pt if @latest_point.nil? || (pt.time > @latest_point.time)
+        @latest_point = pt if @latest_point.nil? || (pt.time > @latest_point.time)
       else
         # when no time information in data, we consider the points are ordered
         @earliest_point = @points[0]
@@ -67,8 +45,8 @@ module GPX
       end
 
       if pt.elevation
-        @lowest_point   = pt if @lowest_point.nil? || (pt.elevation < @lowest_point.elevation)
-        @highest_point  = pt if @highest_point.nil? || (pt.elevation > @highest_point.elevation)
+        @lowest_point = pt if @lowest_point.nil? || (pt.elevation < @lowest_point.elevation)
+        @highest_point = pt if @highest_point.nil? || (pt.elevation > @highest_point.elevation)
       end
       @bounds.min_lat = pt.lat if pt.lat < @bounds.min_lat
       @bounds.min_lon = pt.lon if pt.lon < @bounds.min_lon
@@ -209,9 +187,7 @@ module GPX
         return (diff_1 < diff_2 ? pts[0] : pts[1])
       end
       if (time >= pts[midpoint].time) && (time <= pts[midpoint + 1].time)
-
         return pts[midpoint]
-
       elsif time <= pts[midpoint].time
         return find_closest(pts[0..midpoint], time)
       else
@@ -243,7 +219,7 @@ module GPX
     def update_meta_data(pt, last_pt)
       if pt.time
         @earliest_point = pt if @earliest_point.nil? || (pt.time < @earliest_point.time)
-        @latest_point   = pt if @latest_point.nil? || (pt.time > @latest_point.time)
+        @latest_point = pt if @latest_point.nil? || (pt.time > @latest_point.time)
       else
         # when no time information in data, we consider the points are ordered
         @earliest_point = @points[0]
@@ -251,8 +227,8 @@ module GPX
       end
 
       if pt.elevation
-        @lowest_point   = pt if @lowest_point.nil? || (pt.elevation < @lowest_point.elevation)
-        @highest_point  = pt if @highest_point.nil? || (pt.elevation > @highest_point.elevation)
+        @lowest_point = pt if @lowest_point.nil? || (pt.elevation < @lowest_point.elevation)
+        @highest_point = pt if @highest_point.nil? || (pt.elevation > @highest_point.elevation)
       end
       @bounds.add(pt)
       if last_pt

@@ -1,25 +1,3 @@
-#--
-# Copyright (c) 2006  Doug Fales
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#++
 module GPX
   # In GPX, a single Track can hold multiple Segments, each of which hold
   # multiple points (in this library, those points are instances of
@@ -41,20 +19,20 @@ module GPX
       if opts[:element]
         trk_element = opts[:element]
         @name = (begin
-                   trk_element.at('name').inner_text
-                 rescue StandardError
-                   ''
-                 end)
+          trk_element.at('name').inner_text
+        rescue StandardError
+          ''
+        end)
         @comment = (begin
-                      trk_element.at('cmt').inner_text
-                    rescue StandardError
-                      ''
-                    end)
+          trk_element.at('cmt').inner_text
+        rescue StandardError
+          ''
+        end)
         @description = (begin
-                          trk_element.at('desc').inner_text
-                        rescue StandardError
-                          ''
-                        end)
+          trk_element.at('desc').inner_text
+        rescue StandardError
+          ''
+        end)
         trk_element.search('trkseg').each do |seg_element|
           seg = Segment.new(element: seg_element, track: self, gpx_file: @gpx_file)
           append_segment(seg)
@@ -141,8 +119,8 @@ module GPX
     protected
 
     def update_meta_data(seg)
-      @lowest_point   = seg.lowest_point if @lowest_point.nil? || (seg.lowest_point.elevation < @lowest_point.elevation)
-      @highest_point  = seg.highest_point if @highest_point.nil? || (seg.highest_point.elevation > @highest_point.elevation)
+      @lowest_point = seg.lowest_point if @lowest_point.nil? || (seg.lowest_point.elevation < @lowest_point.elevation)
+      @highest_point = seg.highest_point if @highest_point.nil? || (seg.highest_point.elevation > @highest_point.elevation)
       @bounds.add(seg.bounds)
       @distance += seg.distance
       @moving_duration += seg.duration
