@@ -17,7 +17,7 @@ etc).
 
 ## Requirements
 
-As of `0.10.0`, `gpx` requires at least Ruby 2.2 to run.
+As of `1.0.0`, `gpx` requires at least Ruby 2.2 to run.
 
 ## Examples
 
