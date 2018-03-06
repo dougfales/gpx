@@ -1,7 +1,7 @@
 module GPX
   class GPXFile < Base
     attr_accessor :tracks,
-      :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :version, :creator, :description, :moving_duration
+                  :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :version, :creator, :description, :moving_duration
 
     DEFAULT_CREATOR = "GPX RubyGem #{GPX::VERSION} -- http://dougfales.github.io/gpx/".freeze
 
@@ -26,6 +26,9 @@ module GPX
       @duration = 0
       @attributes = {}
       @namespace_defs = []
+      @tracks = []
+      @time = nil
+
       if opts[:gpx_file] || opts[:gpx_data]
         if opts[:gpx_file]
           gpx_file = opts[:gpx_file]
@@ -69,7 +72,6 @@ module GPX
                        rescue StandardError
                          nil
                        end
-        @tracks = []
         @xml.search('trk').each do |trk|
           trk = Track.new(element: trk, gpx_file: self)
           update_meta_data(trk, get_bounds)
@@ -110,7 +112,7 @@ module GPX
 
     # Returns the distance, in kilometers, meters, or miles, of all of the
     # tracks and segments contained in this GPXFile.
-    def distance(opts = {units: 'kilometers'})
+    def distance(opts = { units: 'kilometers' })
       case opts[:units]
       when /kilometers/i
         @distance
@@ -125,7 +127,7 @@ module GPX
     # GPXFile.  The calculation is based on the total distance divided by the
     # sum of duration of all segments of all tracks
     # (not taking into accounting pause time).
-    def average_speed(opts = {units: 'kilometers'})
+    def average_speed(opts = { units: 'kilometers' })
       case opts[:units]
       when /kilometers/i
         distance / (moving_duration / 3600.0)
@@ -257,6 +259,7 @@ module GPX
 
       # $stderr.puts gpx_header.keys.inspect
 
+      # rubocop:disable Metrics/BlockLength
       doc = Nokogiri::XML::Builder.new do |xml|
         xml.gpx(gpx_header) do
           # version 1.0 of the schema doesn't support the metadata element, so push them straight to the root 'gpx' element
@@ -267,7 +270,7 @@ module GPX
               minlat: bounds.min_lat,
               minlon: bounds.min_lon,
               maxlat: bounds.max_lat,
-              maxlon: bounds.max_lon,
+              maxlon: bounds.max_lon
             )
           else
             xml.metadata do
@@ -277,7 +280,7 @@ module GPX
                 minlat: bounds.min_lat,
                 minlon: bounds.min_lon,
                 maxlat: bounds.max_lat,
-                maxlon: bounds.max_lon,
+                maxlon: bounds.max_lon
               )
             end
           end
@@ -329,6 +332,7 @@ module GPX
           end
         end
       end
+      # rubocop:enable Metrics/BlockLength
 
       doc
     end

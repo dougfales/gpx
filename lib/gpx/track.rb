@@ -16,36 +16,36 @@ module GPX
       @segments = []
       @points = []
       reset_meta_data
-      if opts[:element]
-        trk_element = opts[:element]
-        @name = (begin
-          trk_element.at('name').inner_text
-        rescue StandardError
-          ''
-        end)
-        @comment = (begin
-          trk_element.at('cmt').inner_text
-        rescue StandardError
-          ''
-        end)
-        @description = (begin
-          trk_element.at('desc').inner_text
-        rescue StandardError
-          ''
-        end)
-        trk_element.search('trkseg').each do |seg_element|
-          seg = Segment.new(element: seg_element, track: self, gpx_file: @gpx_file)
-          append_segment(seg)
-        end
+
+      return unless opts[:element]
+
+      trk_element = opts[:element]
+      @name = (begin
+        trk_element.at('name').inner_text
+      rescue StandardError
+        ''
+      end)
+      @comment = (begin
+        trk_element.at('cmt').inner_text
+      rescue StandardError
+        ''
+      end)
+      @description = (begin
+        trk_element.at('desc').inner_text
+      rescue StandardError
+        ''
+      end)
+      trk_element.search('trkseg').each do |seg_element|
+        seg = Segment.new(element: seg_element, track: self, gpx_file: @gpx_file)
+        append_segment(seg)
       end
     end
 
     # Append a segment to this track, updating its meta data along the way.
     def append_segment(seg)
-      unless seg.points.empty?
-        update_meta_data(seg)
-        @segments << seg
-      end
+      return if seg.points.empty?
+      update_meta_data(seg)
+      @segments << seg
     end
 
     # Returns true if the given time occurs within any of the segments of this track.
