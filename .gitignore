@@ -2,3 +2,6 @@ tests/output/*
 .*.swp
 Gemfile.lock
 pkg
+
+# RubyMine files
+/.idea
