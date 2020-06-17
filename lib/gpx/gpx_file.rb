@@ -260,7 +260,7 @@ module GPX
       # $stderr.puts gpx_header.keys.inspect
 
       # rubocop:disable Metrics/BlockLength
-      doc = Nokogiri::XML::Builder.new do |xml|
+      doc = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
         xml.gpx(gpx_header) do
           # version 1.0 of the schema doesn't support the metadata element, so push them straight to the root 'gpx' element
           if @version == '1.0'
