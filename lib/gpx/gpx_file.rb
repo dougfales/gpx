@@ -256,6 +256,7 @@ module GPX
       gpx_header['creator'] = DEFAULT_CREATOR unless gpx_header['creator']
       gpx_header['xsi:schemaLocation'] = "http://www.topografix.com/GPX/#{version_dir} http://www.topografix.com/GPX/#{version_dir}/gpx.xsd" unless gpx_header['xsi:schemaLocation']
       gpx_header['xmlns:xsi'] = 'http://www.w3.org/2001/XMLSchema-instance' if !gpx_header['xsi'] && !gpx_header['xmlns:xsi']
+      gpx_header['xmlns'] = "http://www.topografix.com/GPX/#{version_dir}"
 
       # $stderr.puts gpx_header.keys.inspect
 
@@ -276,7 +277,7 @@ module GPX
             xml.metadata do
               xml.name @name
               xml.time @time.xmlschema
-              xml.bound(
+              xml.bounds(
                 minlat: bounds.min_lat,
                 minlon: bounds.min_lon,
                 maxlat: bounds.max_lat,
