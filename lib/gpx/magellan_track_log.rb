@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GPX
   # This class will parse the lat/lon and time data from a Magellan track log,
   # which is a NMEA formatted CSV list of points.
