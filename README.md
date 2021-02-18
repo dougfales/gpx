@@ -40,11 +40,11 @@ Converting GeoJSON data to GPX can be achieved by providing a
 file path, file, or the data in string format:
 ```ruby
 # Converting from a file name
-gpx_file = GPX::Geojson.convert_to_gpx(geojson_file: 'mygeojsonfile.json')
+gpx_file = GPX::GeoJSON.convert_to_gpx(geojson_file: 'mygeojsonfile.json')
 
 # Converting from a string
 data = JSON.generate(my_geojson_hash)
-gpx_file = GPX::Geojson.convert_to_gpx(geojson_data: data)
+gpx_file = GPX::GeoJSON.convert_to_gpx(geojson_data: data)
 ```
 
 Exporting an ActiveRecord to GPXFile (as Waypoints)

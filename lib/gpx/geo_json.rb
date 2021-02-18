@@ -10,7 +10,7 @@ module GPX
   # Note that GeoJSON coordinates are specified in lon/lat format,
   # instead of the more traditional lat/lon format.
   #
-  class Geojson
+  class GeoJSON
     class << self
       FEATURE = 'Feature'
       LINESTRING = 'LineString'
@@ -21,13 +21,13 @@ module GPX
       # Conversion can be initiated by either specifying a file,
       # file name, or by passing in GeoJSON data as a string.
       # Examples:
-      #   GPX::Geojson.convert_to_gpx(geojson_file: 'mygeojsonfile.json')
+      #   GPX::GeoJSON.convert_to_gpx(geojson_file: 'mygeojsonfile.json')
       # or
       #   file = File.new('mygeojsonfile.json', 'r')
-      #   GPX::Geojson.convert_to_gpx(geojson_file: file)
+      #   GPX::GeoJSON.convert_to_gpx(geojson_file: file)
       # or
       #   data = JSON.generate(my_geojson_hash)
-      #   GPX::Geojson.convert_to_gpx(geojson_data: data)
+      #   GPX::GeoJSON.convert_to_gpx(geojson_data: data)
       #
       # Returns a GPX::GPX_File object populated with the converted data.
       #
@@ -64,7 +64,7 @@ module GPX
       def add_tracks_to(gpx_file, geojson)
         tracks = [line_strings_to_track(geojson)] +
                  multi_line_strings_to_tracks(geojson)
-        tracks.reject!(&:nil?)
+        tracks.compact!
         gpx_file.tracks += tracks
         gpx_file.tracks.each { |t| gpx_file.update_meta_data(t) }
       end
@@ -115,12 +115,10 @@ module GPX
       # feature into a GPX waypoint.
       #
       def points_to_waypoints(geojson, gpx_file)
-        waypoints = []
-        points_in(geojson).each do |pt|
+        points_in(geojson).reduce([]) do |acc, pt|
           coords = pt['geometry']['coordinates']
-          waypoints << point_to_waypoint(coords, gpx_file)
+          acc << point_to_waypoint(coords, gpx_file)
         end
-        waypoints
       end
 
       # Converts GeoJSON 'MultiPoint' features.
@@ -135,10 +133,9 @@ module GPX
       # See http://www.topografix.com/gpx/1/1/#type_rteType
       #
       def multi_points_to_waypoints(geojson, gpx_file)
-        waypoints = []
-        multi_points_in(geojson).each do |mpt|
+        multi_points_in(geojson).reduce([]) do |acc, pt|
           mpt['geometry']['coordinates'].each do |coords|
-            waypoints << point_to_waypoint(coords, gpx_file)
+            acc << point_to_waypoint(coords, gpx_file)
           end
         end
         waypoints
