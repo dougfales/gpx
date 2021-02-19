@@ -133,12 +133,11 @@ module GPX
       # See http://www.topografix.com/gpx/1/1/#type_rteType
       #
       def multi_points_to_waypoints(geojson, gpx_file)
-        multi_points_in(geojson).reduce([]) do |acc, pt|
+        multi_points_in(geojson).reduce([]) do |acc, mpt|
           mpt['geometry']['coordinates'].each do |coords|
             acc << point_to_waypoint(coords, gpx_file)
           end
         end
-        waypoints
       end
 
       # Given an array of [lng, lat, ele] coordinates,
