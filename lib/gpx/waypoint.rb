@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GPX
   # This class supports the concept of a waypoint.  Beware that this class has
   # not seen much use yet, since WalkingBoss does not use waypoints right now.

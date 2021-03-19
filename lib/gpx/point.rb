@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GPX
   # The base class for all points.  Trackpoint and Waypoint both descend from this base class.
   class Point < Base
@@ -18,7 +20,8 @@ module GPX
         @latr = (D_TO_R * @lat)
         @lonr = (D_TO_R * @lon)
         # '-'? yyyy '-' mm '-' dd 'T' hh ':' mm ':' ss ('.' s+)? (zzzzzz)?
-        @time = (begin
+        @time = (
+        begin
           Time.xmlschema(elem.at('time').inner_text)
         rescue StandardError
           nil

@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3
 
 Style/Alias:
   Enabled: false
@@ -152,14 +152,11 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Enabled: false
 
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Enabled: false
 
 Naming/VariableNumber:
   Enabled: false
 
 Style/DateTime:
-  Enabled: false
-
-Performance/Caller:
   Enabled: false

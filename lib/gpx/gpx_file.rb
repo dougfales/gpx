@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module GPX
   class GPXFile < Base
     attr_accessor :tracks,
                   :routes, :waypoints, :bounds, :lowest_point, :highest_point, :duration, :ns, :time, :name, :version, :creator, :description, :moving_duration
 
-    DEFAULT_CREATOR = "GPX RubyGem #{GPX::VERSION} -- http://dougfales.github.io/gpx/".freeze
+    DEFAULT_CREATOR = "GPX RubyGem #{GPX::VERSION} -- http://dougfales.github.io/gpx/"
 
     # This initializer can be used to create a new GPXFile from an existing
     # file or to create a new GPXFile instance with no data (so that you can
@@ -43,7 +45,8 @@ module GPX
         @namespace_defs = gpx_element.namespace_definitions
         @version = gpx_element['version']
         reset_meta_data
-        bounds_element = (begin
+        bounds_element = (
+        begin
           @xml.at('metadata/bounds')
         rescue StandardError
           nil
@@ -103,7 +106,8 @@ module GPX
         result = el[name]
         break unless result.nil?
       end
-      (begin
+      (
+      begin
         result.to_f
       rescue StandardError
         nil
@@ -285,19 +289,17 @@ module GPX
             end
           end
 
-          unless tracks.nil?
-            tracks.each do |t|
-              xml.trk do
-                xml.name t.name
+          tracks&.each do |t|
+            xml.trk do
+              xml.name t.name
 
-                t.segments.each do |seg|
-                  xml.trkseg do
-                    seg.points.each do |p|
-                      xml.trkpt(lat: p.lat, lon: p.lon) do
-                        xml.time p.time.xmlschema unless p.time.nil?
-                        xml.ele p.elevation unless p.elevation.nil?
-                        xml << p.extensions.to_xml unless p.extensions.nil?
-                      end
+              t.segments.each do |seg|
+                xml.trkseg do
+                  seg.points.each do |p|
+                    xml.trkpt(lat: p.lat, lon: p.lon) do
+                      xml.time p.time.xmlschema unless p.time.nil?
+                      xml.ele p.elevation unless p.elevation.nil?
+                      xml << p.extensions.to_xml unless p.extensions.nil?
                     end
                   end
                 end
@@ -305,27 +307,23 @@ module GPX
             end
           end
 
-          unless waypoints.nil?
-            waypoints.each do |w|
-              xml.wpt(lat: w.lat, lon: w.lon) do
-                xml.time w.time.xmlschema unless w.time.nil?
-                Waypoint::SUB_ELEMENTS.each do |sub_elem|
-                  xml.send(sub_elem, w.send(sub_elem)) if w.respond_to?(sub_elem) && !w.send(sub_elem).nil?
-                end
+          waypoints&.each do |w|
+            xml.wpt(lat: w.lat, lon: w.lon) do
+              xml.time w.time.xmlschema unless w.time.nil?
+              Waypoint::SUB_ELEMENTS.each do |sub_elem|
+                xml.send(sub_elem, w.send(sub_elem)) if w.respond_to?(sub_elem) && !w.send(sub_elem).nil?
               end
             end
           end
 
-          unless routes.nil?
-            routes.each do |r|
-              xml.rte do
-                xml.name r.name
+          routes&.each do |r|
+            xml.rte do
+              xml.name r.name
 
-                r.points.each do |p|
-                  xml.rtept(lat: p.lat, lon: p.lon) do
-                    xml.time p.time.xmlschema unless p.time.nil?
-                    xml.ele p.elevation unless p.elevation.nil?
-                  end
+              r.points.each do |p|
+                xml.rtept(lat: p.lat, lon: p.lon) do
+                  xml.time p.time.xmlschema unless p.time.nil?
+                  xml.ele p.elevation unless p.elevation.nil?
                 end
               end
             end
@@ -343,7 +341,9 @@ module GPX
       @duration = 0
       if @tracks.nil? || @tracks.size.zero? || @tracks[0].segments.nil? || @tracks[0].segments.size.zero?
         return @duration
+
       end
+
       @duration = (@tracks[-1].segments[-1].points[-1].time - @tracks.first.segments.first.points.first.time)
     rescue StandardError
       @duration = 0

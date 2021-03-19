@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GPX
   # Basically the same as a point, the TrackPoint class is supposed to
   # represent the points that are children of Segment elements.  So, the only
