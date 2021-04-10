@@ -12,6 +12,12 @@ class TrackFileTest < Minitest::Test
     @other_track_file = GPX::GPXFile.new(gpx_file: OTHER_TRACK_FILE)
   end
 
+  def teardown
+    if File.exist?('tests/output/myoutput.gpx')
+      File.delete('tests/output/myoutput.gpx')
+    end
+  end
+
   def test_track_read
     assert_equal(3, @track_file.tracks.size)
     assert_equal('First Track',  @track_file.tracks[0].name)
@@ -45,6 +51,7 @@ class TrackFileTest < Minitest::Test
 
   def test_write
     output_path = 'tests/output/myoutput.gpx'
+    File.write('tests/output/myoutput.gpx', '')
     @other_track_file.write(output_path)
     new_track_file = GPX::GPXFile.new(gpx_file: output_path)
     orig_segments = @other_track_file.tracks.first.segments
