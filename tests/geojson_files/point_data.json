@@ -5,18 +5,27 @@
         "geometry": {
             "type": "Point",
             "coordinates": [-118.41585, 34.06253, 80]
+        },
+        "properties": {
+            "name": "Foo"
         }
     }, {
         "type": "Feature",
         "geometry": {
             "type": "Point",
             "coordinates": [-118.36855, 34.05844, 40]
+        },
+        "properties": {
+            "name": "Bar"
         }
     }, {
         "type": "Feature",
         "geometry": {
             "type": "Point",
             "coordinates": [-118.35043, 34.0392, 30]
+        },
+        "properties": {
+            "name": "Baz"
         }
     }]
 }
