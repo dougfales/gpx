@@ -34,8 +34,8 @@ module GPX
       def convert_to_gpx(opts = {})
         geojson = geojson_data_from(opts)
         gpx_file = GPX::GPXFile.new
-        add_tracks_to(gpx_file, geojson)
-        add_waypoints_to(gpx_file, geojson)
+        add_tracks_to(gpx_file, geojson, opts)
+        add_waypoints_to(gpx_file, geojson, opts)
         gpx_file
       end
 
@@ -61,32 +61,37 @@ module GPX
         JSON.parse(data)
       end
 
-      def add_tracks_to(gpx_file, geojson)
-        tracks = [line_strings_to_track(geojson)] +
-                 multi_line_strings_to_tracks(geojson)
+      def add_tracks_to(gpx_file, geojson, opts)
+        tracks = [line_strings_to_track(geojson, opts)] +
+                 multi_line_strings_to_tracks(geojson, opts)
         tracks.compact!
         gpx_file.tracks += tracks
         gpx_file.tracks.each { |t| gpx_file.update_meta_data(t) }
       end
 
-      def add_waypoints_to(gpx_file, geojson)
+      def add_waypoints_to(gpx_file, geojson, opts)
         gpx_file.waypoints +=
-          points_to_waypoints(geojson, gpx_file) +
-          multi_points_to_waypoints(geojson, gpx_file)
+          points_to_waypoints(geojson, gpx_file, opts) +
+          multi_points_to_waypoints(geojson, gpx_file, opts)
       end
 
       # Converts GeoJSON 'LineString' features.
       # Current strategy is to convert each LineString into a
       # Track Segment, returning a Track for all LineStrings.
       #
-      def line_strings_to_track(geojson)
+      def line_strings_to_track(geojson, opts)
         line_strings = line_strings_in(geojson)
         return nil unless line_strings.any?
 
         track = GPX::Track.new
         line_strings.each do |ls|
           coords = ls['geometry']['coordinates']
-          track.append_segment(coords_to_segment(coords))
+          segment = coords_to_segment(coords)
+
+          if opts[:line_string_feature_to_segment]
+            opts[:line_string_feature_to_segment].call(ls, segment)
+          end
+          track.append_segment(segment)
         end
         track
       end
@@ -96,14 +101,19 @@ module GPX
       # into a Track, with each set of LineString coordinates
       # within a MultiLineString a Track Segment.
       #
-      def multi_line_strings_to_tracks(geojson)
+      def multi_line_strings_to_tracks(geojson, opts)
         tracks = []
         multi_line_strings_in(geojson).each do |mls|
           track = GPX::Track.new
           mls['geometry']['coordinates'].each do |coords|
             seg = coords_to_segment(coords)
             seg.track = track
+
             track.append_segment(seg)
+          end
+
+          if opts[:multi_line_string_feature_to_track]
+            opts[:multi_line_string_feature_to_track].call(mls, track)
           end
           tracks << track
         end
@@ -114,10 +124,16 @@ module GPX
       # Current strategy is to convert each Point
       # feature into a GPX waypoint.
       #
-      def points_to_waypoints(geojson, gpx_file)
+      def points_to_waypoints(geojson, gpx_file, opts)
         points_in(geojson).reduce([]) do |acc, pt|
           coords = pt['geometry']['coordinates']
-          acc << point_to_waypoint(coords, gpx_file)
+          waypoint = point_to_waypoint(coords, gpx_file)
+          
+          if opts[:point_feature_to_waypoint]
+            opts[:point_feature_to_waypoint].call(pt, waypoint)
+          end
+          
+          acc << waypoint
         end
       end
 
@@ -132,10 +148,16 @@ module GPX
       #    series of turn points leading to a destination."
       # See http://www.topografix.com/gpx/1/1/#type_rteType
       #
-      def multi_points_to_waypoints(geojson, gpx_file)
-        multi_points_in(geojson).reduce([]) do |acc, mpt|
+      def multi_points_to_waypoints(geojson, gpx_file, opts)
+        multi_points_in(geojson).each_with_object([]) do |mpt, acc|
           mpt['geometry']['coordinates'].each do |coords|
-            acc << point_to_waypoint(coords, gpx_file)
+            waypoint = point_to_waypoint(coords, gpx_file)
+
+            if opts[:multi_point_feature_to_waypoint]
+              opts[:multi_point_feature_to_waypoint].call(mpt, waypoint)
+            end
+
+            acc << waypoint
           end
         end
       end
