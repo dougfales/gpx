@@ -12,6 +12,7 @@ module GPX
     # addition, you can pass an XML element to this initializer, and the
     # relevant info will be parsed out.
     def initialize(opts = { lat: 0.0, lon: 0.0, elevation: 0.0, time: Time.now })
+      super()
       @gpx_file = opts[:gpx_file]
       if opts[:element]
         elem = opts[:element]

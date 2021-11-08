@@ -7,14 +7,14 @@ require 'json'
 class GeojsonTest < Minitest::Test
   # Test passing a file name
   def test_geojson_file_name_as_param
-    file_name = File.dirname(__FILE__) + '/geojson_files/line_string_data.json'
+    file_name = "#{File.dirname(__FILE__)}/geojson_files/line_string_data.json"
     gpx_file = GPX::GeoJSON.convert_to_gpx(geojson_file: file_name)
     assert_equal(1, gpx_file.tracks.size)
   end
 
   # Test passing a file
   def test_geojson_file_as_param
-    file_name = File.dirname(__FILE__) + '/geojson_files/line_string_data.json'
+    file_name = "#{File.dirname(__FILE__)}/geojson_files/line_string_data.json"
     file = File.new(file_name, 'r')
     gpx_file = GPX::GeoJSON.convert_to_gpx(geojson_file: file)
     assert_equal(1, gpx_file.tracks.size)

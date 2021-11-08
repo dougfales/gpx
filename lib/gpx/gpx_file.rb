@@ -25,6 +25,7 @@ module GPX
     #         gpx_file = GPXFile.new(:tracks => [some_track])
     #
     def initialize(opts = {})
+      super()
       @duration = 0
       @attributes = {}
       @namespace_defs = []
@@ -61,20 +62,20 @@ module GPX
         end
 
         @time = begin
-                  Time.parse(@xml.at('metadata/time').inner_text)
-                rescue StandardError
-                  nil
-                end
+          Time.parse(@xml.at('metadata/time').inner_text)
+        rescue StandardError
+          nil
+        end
         @name = begin
-                  @xml.at('metadata/name').inner_text
-                rescue StandardError
-                  nil
-                end
+          @xml.at('metadata/name').inner_text
+        rescue StandardError
+          nil
+        end
         @description = begin
-                         @xml.at('metadata/desc').inner_text
-                       rescue StandardError
-                         nil
-                       end
+          @xml.at('metadata/desc').inner_text
+        rescue StandardError
+          nil
+        end
         @xml.search('trk').each do |trk|
           trk = Track.new(element: trk, gpx_file: self)
           update_meta_data(trk, get_bounds)
@@ -193,6 +194,8 @@ module GPX
       @moving_duration = 0.0
     end
 
+    # rubocop:disable Style/OptionalBooleanParameter
+
     # Updates the meta data for this GPX file.  Meta data includes the
     # bounds, the high and low points, and the distance.  This is useful when
     # you modify the GPX data (i.e. by adding or deleting points) and you
@@ -219,6 +222,7 @@ module GPX
       doc = generate_xml_doc
       doc.to_xml
     end
+    # rubocop:enable Style/OptionalBooleanParameter
 
     def inspect
       "<#{self.class.name}:...>"
@@ -238,13 +242,13 @@ module GPX
       # $stderr.puts @namespace_defs.inspect
       gpx_header = {}
       @attributes.each do |k, v|
-        k = v.namespace.prefix + ':' + k if v.namespace
+        k = "#{v.namespace.prefix}:#{k}" if v.namespace
         gpx_header[k] = v.value
       end
 
       @namespace_defs.each do |nsd|
         tag = 'xmlns'
-        tag += ':' + nsd.prefix if nsd.prefix
+        tag += ":#{nsd.prefix}" if nsd.prefix
         gpx_header[tag] = nsd.href
       end
       gpx_header
@@ -264,7 +268,7 @@ module GPX
       # $stderr.puts gpx_header.keys.inspect
 
       # rubocop:disable Metrics/BlockLength
-      doc = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
+      Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
         xml.gpx(gpx_header) do
           # version 1.0 of the schema doesn't support the metadata element, so push them straight to the root 'gpx' element
           if @version == '1.0'
@@ -331,8 +335,6 @@ module GPX
         end
       end
       # rubocop:enable Metrics/BlockLength
-
-      doc
     end
 
     # Calculates and sets the duration attribute by subtracting the time on
