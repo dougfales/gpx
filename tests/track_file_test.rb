@@ -10,6 +10,7 @@ class TrackFileTest < Minitest::Test
   def setup
     @track_file = GPX::GPXFile.new(gpx_file: TRACK_FILE)
     @other_track_file = GPX::GPXFile.new(gpx_file: OTHER_TRACK_FILE)
+    FileUtils.mkdir_p(File.join(File.dirname(__FILE__), 'output'))
   end
 
   def test_track_read
