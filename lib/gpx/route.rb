@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GPX
   # A Route in GPX is very similar to a Track, but it is created by a user
   # from a series of Waypoints, whereas a Track is created by the GPS device

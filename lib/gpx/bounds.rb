@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GPX
   class Bounds < Base
     attr_accessor :min_lat, :max_lat, :max_lon, :min_lon

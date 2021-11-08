@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GPX
   # A common base class which provides a useful initializer method to many
   # class in the GPX library.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GPX
   # A segment is the basic container in a GPX file.  A Segment contains points
   # (in this lib, they're called TrackPoints).  A Track contains Segments.  An
@@ -22,7 +24,8 @@ module GPX
       @bounds = Bounds.new
 
       segment_element = opts[:element]
-      return unless segment_element && segment_element.is_a?(Nokogiri::XML::Node)
+      return unless segment_element&.is_a?(Nokogiri::XML::Node)
+
       segment_element.search('trkpt').each do |trkpt|
         pt = TrackPoint.new(element: trkpt, segment: self, gpx_file: @gpx_file)
         append_point(pt)
@@ -91,6 +94,7 @@ module GPX
       last_pt = nil
       points.each do |pt|
         next if yield(pt)
+
         keep_points << pt
         update_meta_data(pt, last_pt)
         last_pt = pt
@@ -174,9 +178,9 @@ module GPX
 
     protected
 
-    # rubocop:disable Style/GuardClause
     def find_closest(pts, time)
       return pts.first if pts.size == 1
+
       midpoint = pts.size / 2
       if pts.size == 2
         diff_1 = pts[0].time - time
@@ -184,14 +188,13 @@ module GPX
         return (diff_1 < diff_2 ? pts[0] : pts[1])
       end
       if (time >= pts[midpoint].time) && (time <= pts[midpoint + 1].time)
-        return pts[midpoint]
+        pts[midpoint]
       elsif time <= pts[midpoint].time
-        return find_closest(pts[0..midpoint], time)
+        find_closest(pts[0..midpoint], time)
       else
-        return find_closest(pts[(midpoint + 1)..-1], time)
+        find_closest(pts[(midpoint + 1)..-1], time)
       end
     end
-    # rubocop:enable Style/GuardClause
 
     # Calculate the Haversine distance between two points. This is the method
     # the library uses to calculate the cumulative distance of GPX files.
@@ -231,6 +234,7 @@ module GPX
       @bounds.add(pt)
 
       return unless last_pt
+
       @distance += haversine_distance(last_pt, pt)
       @duration += pt.time - last_pt.time if pt.time && last_pt.time
     end
