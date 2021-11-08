@@ -9,7 +9,7 @@ name: Ruby
 
 on:
   push:
-    branches: [ master, ruby3 ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
