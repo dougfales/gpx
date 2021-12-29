@@ -153,7 +153,7 @@ module GPX
         alt_av = 0.to_f
         n = 0
         # k ranges from the time of the current point +/- 20s
-        ((-1 * seconds_either_side)..seconds_either_side).each do |k|
+        (-1 * seconds_either_side..seconds_either_side).each do |k|
           # find the point nearest to the time offset indicated by k
           contributing_point = closest_point(point.time + k)
           # sum up the contributions to the average
