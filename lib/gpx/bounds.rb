@@ -7,6 +7,7 @@ module GPX
     # Creates a new bounds object with the passed-in min and max longitudes
     # and latitudes.
     def initialize(opts = { min_lat: 90.0, max_lat: -90.0, min_lon: 180.0, max_lon: -180.0 })
+      super()
       @min_lat = opts[:min_lat].to_f
       @max_lat = opts[:max_lat].to_f
       @min_lon = opts[:min_lon].to_f

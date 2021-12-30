@@ -6,9 +6,10 @@ require File.expand_path('../lib/gpx', __dir__)
 require 'optparse'
 
 def str_to_int_or_time(str)
-  if str =~ /\A\d{10}\Z/
+  case str
+  when /\A\d{10}\Z/
     Time.at(str.to_i)
-  elsif str =~ /\A\d+\Z/
+  when /\A\d+\Z/
     str.to_i
   else
     DateTime.strptime(str, '%Y%m%d-%H:%M:%S').to_time

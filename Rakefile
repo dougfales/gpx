@@ -34,3 +34,8 @@ Rake::RDocTask.new('doc') do |rdoc|
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+desc 'open an irb session preloaded with this gem'
+task :console do
+  sh 'irb -r pp -r ./lib/gpx.rb'
+end

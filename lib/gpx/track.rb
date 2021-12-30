@@ -14,6 +14,7 @@ module GPX
     # Initialize a track from a XML::Node, or, if no :element option is
     # passed, initialize a blank Track object.
     def initialize(opts = {})
+      super()
       @gpx_file = opts[:gpx_file]
       @segments = []
       @points = []

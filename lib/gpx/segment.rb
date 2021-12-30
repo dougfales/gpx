@@ -12,6 +12,7 @@ module GPX
     # If a XML::Node object is passed-in, this will initialize a new
     # Segment based on its contents.  Otherwise, a blank Segment is created.
     def initialize(opts = {})
+      super()
       @gpx_file = opts[:gpx_file]
       @track = opts[:track]
       @points = []
@@ -24,7 +25,7 @@ module GPX
       @bounds = Bounds.new
 
       segment_element = opts[:element]
-      return unless segment_element&.is_a?(Nokogiri::XML::Node)
+      return unless segment_element.is_a?(Nokogiri::XML::Node)
 
       segment_element.search('trkpt').each do |trkpt|
         pt = TrackPoint.new(element: trkpt, segment: self, gpx_file: @gpx_file)
@@ -128,7 +129,7 @@ module GPX
       elsif indicator.is_a?(Time)
         closest_point(indicator)
       else
-        raise Exception, 'find_end_point_by_time_or_offset requires an argument of type Time or Integer'
+        raise ArgumentError, 'find_end_point_by_time_or_offset requires an argument of type Time or Integer'
       end
     end
 

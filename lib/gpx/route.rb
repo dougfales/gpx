@@ -9,6 +9,7 @@ module GPX
 
     # Initialize a Route from a XML::Node.
     def initialize(opts = {})
+      super()
       if opts[:gpx_file] && opts[:element]
         rte_element = opts[:element]
         @gpx_file = opts[:gpx_file]
