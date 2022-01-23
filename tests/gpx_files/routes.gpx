@@ -6,4 +6,5 @@
 <rtept lat="39.989739" lon="-105.295285"><name><![CDATA[TO]]></name><sym>Waypoint</sym><ele>2163.556</ele></rtept></rte>
 <rte><name><![CDATA[SBDR-SBDR]]></name>
 <rtept lat="39.999840" lon="-105.214696"><name><![CDATA[SBDR]]></name><sym>Waypoint</sym><ele>1612.965</ele></rtept></rte>
+<rte></rte>
 </gpx>

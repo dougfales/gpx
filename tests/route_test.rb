@@ -6,7 +6,7 @@ require 'gpx'
 class RouteTest < Minitest::Test
   def test_read_routes
     gpx = GPX::GPXFile.new(gpx_file: File.join(File.dirname(__FILE__), 'gpx_files/routes.gpx'))
-    assert_equal(2, gpx.routes.size)
+    assert_equal(3, gpx.routes.size)
     first_route = gpx.routes.first
     assert_equal(3, first_route.points.size)
     assert_equal('GRG-CA-TO', first_route.name)
@@ -54,5 +54,10 @@ class RouteTest < Minitest::Test
     assert_equal(39.999840,   second_route.points[0].lat)
     assert_equal(-105.214696, second_route.points[0].lon)
     assert_equal(1612.965,    second_route.points[0].elevation)
+
+    # Route 3, No point, no name
+    third_route = gpx.routes[2]
+    assert_equal(0, third_route.points.size)
+    assert_nil(third_route.name)
   end
 end
