@@ -7,6 +7,7 @@ require 'gpx'
 class SegmentTest < Minitest::Test
   ONE_SEGMENT = File.join(File.dirname(__FILE__), 'gpx_files/one_segment.gpx')
   ONE_SEGMENT_NO_TIME = File.join(File.dirname(__FILE__), 'gpx_files/one_segment_no_time.gpx')
+  ONE_SEGMENT_MIXED_TIMES = File.join(File.dirname(__FILE__), 'gpx_files/one_segment_mixed_times.gpx')
 
   def setup
     @gpx_file = GPX::GPXFile.new(gpx_file: ONE_SEGMENT)
@@ -105,5 +106,15 @@ class SegmentTest < Minitest::Test
     assert_equal(1480.087, @segment.highest_point.elevation)
     assert_in_delta(6.900813095, @segment.distance, 0.001)
     assert_equal(4466.0, @segment.duration)
+  end
+
+  def test_segment_mixed_times
+    gpx_file_mixed_times = GPX::GPXFile.new(gpx_file: ONE_SEGMENT_MIXED_TIMES)
+    segment_mixed_times = gpx_file_mixed_times.tracks.first.segments.first
+    assert_equal(588, segment_mixed_times.points.size)
+    assert_equal(0, segment_mixed_times.earliest_point.time.to_i)
+    assert_equal(0, segment_mixed_times.latest_point.time.to_i)
+    assert_in_delta(40.763726054, segment_mixed_times.distance, 0.001)
+    assert_equal(0.0, segment_mixed_times.duration)
   end
 end
