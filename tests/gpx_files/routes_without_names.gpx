@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Link2GPS - 2.0.2 - http://www.hiketech.com" xsi:schemaLocation="ttp://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <name><![CDATA[routes.gpx]]></name>
+    <time>2006-01-02T08:55:34Z</time>
+    <bounds min_lat="39.989739" min_lon="-105.295285" max_lat="39.999840" max_lon="-105.214696"/>
+  </metadata>
+  <extensions/>
+  <rte>
+    <rtept lat="39.997298" lon="-105.292674">
+      <sym>Waypoint</sym>
+      <ele>1766.535</ele>
+    </rtept>
+    <rtept lat="39.995700" lon="-105.292805">
+      <sym>Waypoint</sym>
+      <ele>1854.735</ele>
+    </rtept>
+    <rtept lat="39.989739" lon="-105.295285">
+      <sym>Waypoint</sym>
+      <ele>2163.556</ele>
+    </rtept>
+  </rte>
+  <rte>
+    <rtept lat="39.999840" lon="-105.214696">
+      <sym>Waypoint</sym>
+      <ele>1612.965</ele>
+    </rtept>
+  </rte>
+</gpx>
