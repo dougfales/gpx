@@ -59,7 +59,12 @@ class GeojsonTest < Minitest::Test
     gpx_file = GPX::GeoJSON.convert_to_gpx(
       geojson_file: file,
       line_string_feature_to_segment: lambda { |line_string, segment|
-        segment.distance = line_string['properties']['distance']
+        segment.points << GPX::Point.new(
+          {
+            lat: line_string['geometry']['coordinates'][0][1],
+            lon: line_string['geometry']['coordinates'][0][0]
+          }
+        )
       }
     )
 
@@ -68,10 +73,7 @@ class GeojsonTest < Minitest::Test
     pts_size = gpx_file.tracks.first.segments[0].points.size +
                gpx_file.tracks.first.segments[1].points.size +
                gpx_file.tracks.first.segments[2].points.size
-    assert_equal(58, pts_size)
-    assert_equal(10, gpx_file.tracks.first.segments[0].distance)
-    assert_equal(100, gpx_file.tracks.first.segments[1].distance)
-    assert_equal(1_000, gpx_file.tracks.first.segments[2].distance)
+    assert_equal(61, pts_size)
   end
 
   def test_multi_line_string_functionality
@@ -107,7 +109,7 @@ class GeojsonTest < Minitest::Test
     gpx_file = GPX::GeoJSON.convert_to_gpx(geojson_file: file)
     assert_equal(3, gpx_file.waypoints.size)
   end
-  
+
   def test_point_functionality_with_proc
     file = File.join(File.dirname(__FILE__), 'geojson_files/point_data.json')
     gpx_file = GPX::GeoJSON.convert_to_gpx(
