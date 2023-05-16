@@ -193,7 +193,7 @@ module GPX
       elsif time <= pts[midpoint].time
         find_closest(pts[0..midpoint], time)
       else
-        find_closest(pts[(midpoint + 1)..-1], time)
+        find_closest(pts[(midpoint + 1)..], time)
       end
     end
 

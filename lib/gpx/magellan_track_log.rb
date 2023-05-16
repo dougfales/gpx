@@ -51,7 +51,7 @@ module GPX
           lat = -lat if lat_hemi == 'S'
 
           lon_deg = row[LON][0..2]
-          lon_min = row[LON][3..-1]
+          lon_min = row[LON][3..]
           lon_hemi = row[LON_HEMI]
 
           lon = lon_deg.to_f + (lon_min.to_f / 60.0)

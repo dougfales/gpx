@@ -16,7 +16,8 @@ and it also calculates some meta-data about the tracks and points in a file (suc
 
 ## Requirements
 
-As of `1.0.0`, `gpx` requires at least Ruby 2.2 to run.
+- As of `1.1.1`, `gpx` requires at least Ruby 2.7 to run.
+- As of `1.0.0`, `gpx` requires at least Ruby 2.2 to run.
 
 ## Installation
 Add to your gemfile:
