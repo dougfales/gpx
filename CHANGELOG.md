@@ -1,4 +1,4 @@
-## [1.1.1] - 2023-05-16
+## [1.1.1] - 2023-05-19
 
   * updates CI, minimal Ruby version now 2.7, updates tooling like rubocop and GitHub actions
   * adds support for Ruby 3.2
