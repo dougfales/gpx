@@ -1,4 +1,4 @@
-## [1.1.0] - 202
+## [1.1.0] - 2023-05-18
   * Specify UTF-8 encoding for XML encoding (#35 via @sh1nduu)
   * Added GeoJSON conversion (#38 via @tyrauber and @niborg)
   * Support Ruby 3 (#43 via @LocoDelAssembly)
