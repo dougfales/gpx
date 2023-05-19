@@ -1,3 +1,9 @@
+## [1.1.0] - 202
+  * Specify UTF-8 encoding for XML encoding (#35 via @sh1nduu)
+  * Added GeoJSON conversion (#38 via @tyrauber and @niborg)
+  * Support Ruby 3 (#43 via @LocoDelAssembly)
+  * Fix nil-to-Time comparison (#46 via @frodrigo)
+  * Fix bug when <rte> GPX file does not specify <name> tag (#41 via @niborg)
 ## [1.0.0] - 2018-03-06
 
   * Fix duplication of points on appending segment to track (#20 via @niborg)

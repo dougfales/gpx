@@ -18,6 +18,11 @@ and it also calculates some meta-data about the tracks and points in a file (suc
 
 As of `1.0.0`, `gpx` requires at least Ruby 2.2 to run.
 
+## Installation
+Add to your gemfile:
+```
+gem 'gpx'
+```
 ## Examples
 
 Reading a GPX file, and cropping its contents to a given area:
