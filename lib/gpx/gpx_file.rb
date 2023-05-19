@@ -91,7 +91,7 @@ module GPX
       else
         reset_meta_data
         opts.each { |attr_name, value| instance_variable_set("@#{attr_name}", value) }
-        unless @tracks.nil? || @tracks.size.zero?
+        unless @tracks.nil? || @tracks.empty?
           @tracks.each { |trk| update_meta_data(trk) }
           calculate_duration
         end
@@ -341,7 +341,7 @@ module GPX
     # the very first point from the time on the very last point.
     def calculate_duration
       @duration = 0
-      if @tracks.nil? || @tracks.size.zero? || @tracks[0].segments.nil? || @tracks[0].segments.size.zero?
+      if @tracks.nil? || @tracks.empty? || @tracks[0].segments.nil? || @tracks[0].segments.empty?
         return @duration
 
       end
