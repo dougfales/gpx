@@ -4,6 +4,7 @@
   * Support Ruby 3 (#43 via @LocoDelAssembly)
   * Fix nil-to-Time comparison (#46 via @frodrigo)
   * Fix bug when <rte> GPX file does not specify <name> tag (#41 via @niborg)
+  * Drop Ruby 2.5 and 2.6 from CI (#50 via @niborg)
 ## [1.0.0] - 2018-03-06
 
   * Fix duplication of points on appending segment to track (#20 via @niborg)
