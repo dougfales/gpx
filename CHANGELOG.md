@@ -1,3 +1,9 @@
+## [1.1.1] - 2023-05-19
+
+  * updates CI, minimal Ruby version now 2.7, updates tooling like rubocop and GitHub actions
+  * adds support for Ruby 3.2
+  * adds UPGRADING.md to document changes between versions
+
 ## [1.1.0] - 2023-05-18
   * Specify UTF-8 encoding for XML encoding (#35 via @sh1nduu)
   * Added GeoJSON conversion (#38 via @tyrauber and @niborg)
@@ -5,6 +11,7 @@
   * Fix nil-to-Time comparison (#46 via @frodrigo)
   * Fix bug when <rte> GPX file does not specify <name> tag (#41 via @niborg)
   * Drop Ruby 2.5 and 2.6 from CI (#50 via @niborg)
+
 ## [1.0.0] - 2018-03-06
 
   * Fix duplication of points on appending segment to track (#20 via @niborg)

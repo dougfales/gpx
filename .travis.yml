@@ -1,8 +1,6 @@
 language: ruby
 rvm:
-  - 2.5
-  - 2.6
   - 2.7
   - 3.0
-#  - 3.1 # Not supported by Travis yet as of 2021-12-29
+  - 3.1
 script: "bundle exec rake"
