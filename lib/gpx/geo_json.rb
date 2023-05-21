@@ -88,9 +88,7 @@ module GPX
           coords = ls['geometry']['coordinates']
           segment = coords_to_segment(coords)
 
-          if opts[:line_string_feature_to_segment]
-            opts[:line_string_feature_to_segment].call(ls, segment)
-          end
+          opts[:line_string_feature_to_segment]&.call(ls, segment)
           track.append_segment(segment)
         end
         track
@@ -112,9 +110,7 @@ module GPX
             track.append_segment(seg)
           end
 
-          if opts[:multi_line_string_feature_to_track]
-            opts[:multi_line_string_feature_to_track].call(mls, track)
-          end
+          opts[:multi_line_string_feature_to_track]&.call(mls, track)
           tracks << track
         end
         tracks
@@ -128,11 +124,9 @@ module GPX
         points_in(geojson).reduce([]) do |acc, pt|
           coords = pt['geometry']['coordinates']
           waypoint = point_to_waypoint(coords, gpx_file)
-          
-          if opts[:point_feature_to_waypoint]
-            opts[:point_feature_to_waypoint].call(pt, waypoint)
-          end
-          
+
+          opts[:point_feature_to_waypoint]&.call(pt, waypoint)
+
           acc << waypoint
         end
       end
@@ -153,9 +147,7 @@ module GPX
           mpt['geometry']['coordinates'].each do |coords|
             waypoint = point_to_waypoint(coords, gpx_file)
 
-            if opts[:multi_point_feature_to_waypoint]
-              opts[:multi_point_feature_to_waypoint].call(mpt, waypoint)
-            end
+            opts[:multi_point_feature_to_waypoint]&.call(mpt, waypoint)
 
             acc << waypoint
           end
