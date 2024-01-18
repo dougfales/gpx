@@ -51,6 +51,19 @@ gpx_file = GPX::GeoJSON.convert_to_gpx(geojson_file: 'mygeojsonfile.json')
 # Converting from a string
 data = JSON.generate(my_geojson_hash)
 gpx_file = GPX::GeoJSON.convert_to_gpx(geojson_data: data)
+
+# The above won't transfer anything but coordinate values. If you want to
+# transfer ad hoc "properties" information, you can specify an object that
+# responds to `call` to manipulate GPX data structures as follows:
+gpx_file = GPX::GeoJSON.convert_to_gpx(
+  geojson_data: data,
+  line_string_feature_to_segment: ->(ls, seg) { seg.distance = ls["properties"]["distance"] },
+  multi_line_string_feature_to_track: lambda { |mls, track|
+    track.name = mls["properties"]["name"]
+  },
+  point_feature_to_waypoint: ->(pt, wpt) { wpt.name = pt["properties"]["name"] }
+  multi_point_feature_to_waypoint: ->(mpt, wpt) { wpt.sym = mpt["properties"]["icon"] }
+)
 ```
 
 Exporting an ActiveRecord to GPXFile (as Waypoints)
