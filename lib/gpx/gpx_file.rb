@@ -35,7 +35,7 @@ module GPX
       if opts[:gpx_file] || opts[:gpx_data]
         if opts[:gpx_file]
           gpx_file = opts[:gpx_file]
-          gpx_file = File.open(gpx_file) unless gpx_file.is_a?(File)
+          gpx_file = File.open(gpx_file) unless gpx_file.respond_to?(:read)
           @xml = Nokogiri::XML(gpx_file)
         else
           @xml = Nokogiri::XML(opts[:gpx_data])
