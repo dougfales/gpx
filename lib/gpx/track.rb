@@ -95,7 +95,7 @@ module GPX
     # Returns true if this track has no points in it.  This should return
     # true even when the track has empty segments.
     def empty?
-      (points.nil? || points.empty?)
+      points.nil? || points.empty?
     end
 
     # Prints out a friendly summary of this track (sans points).  Useful for

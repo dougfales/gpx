@@ -194,8 +194,6 @@ module GPX
       @moving_duration = 0.0
     end
 
-    # rubocop:disable Style/OptionalBooleanParameter
-
     # Updates the meta data for this GPX file.  Meta data includes the
     # bounds, the high and low points, and the distance.  This is useful when
     # you modify the GPX data (i.e. by adding or deleting points) and you
@@ -222,7 +220,6 @@ module GPX
       doc = generate_xml_doc
       doc.to_xml
     end
-    # rubocop:enable Style/OptionalBooleanParameter
 
     def inspect
       "<#{self.class.name}:...>"

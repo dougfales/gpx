@@ -19,7 +19,7 @@ module GPX
           @points << Point.new(element: point, gpx_file: @gpx_file)
         end
       else
-        @points = (opts[:points] || [])
+        @points = opts[:points] || []
         @name = (opts[:name])
       end
     end

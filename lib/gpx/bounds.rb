@@ -28,7 +28,7 @@ module GPX
 
     # Returns true if the pt is within these bounds.
     def contains?(pt)
-      ((pt.lat >= min_lat) && (pt.lat <= max_lat) && (pt.lon >= min_lon) && (pt.lon <= max_lon))
+      (pt.lat >= min_lat) && (pt.lat <= max_lat) && (pt.lon >= min_lon) && (pt.lon <= max_lon)
     end
 
     # Adds an item to itself, expanding its min/max lat/lon as needed to
