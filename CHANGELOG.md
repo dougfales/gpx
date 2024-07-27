@@ -1,3 +1,8 @@
+## [1.1.2] - 2024-07-26
+
+  * Adds ability to address various GeoJSON properties when performing GeoJSON to GPX conversion. (#53 via @niborg)
+  * Allow anything that responds to `read` for GPXFile input. (#55 via @hiroaki)
+
 ## [1.1.1] - 2023-05-19
 
   * updates CI, minimal Ruby version now 2.7, updates tooling like rubocop and GitHub actions
@@ -5,6 +10,7 @@
   * adds UPGRADING.md to document changes between versions
 
 ## [1.1.0] - 2023-05-18
+
   * Specify UTF-8 encoding for XML encoding (#35 via @sh1nduu)
   * Added GeoJSON conversion (#38 via @tyrauber and @niborg)
   * Support Ruby 3 (#43 via @LocoDelAssembly)
