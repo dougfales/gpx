@@ -1,4 +1,4 @@
-## [1.1.2] - 2024-07-26
+## [1.2.0] - 2024-07-26
 
   * Adds ability to address various GeoJSON properties when performing GeoJSON to GPX conversion. (#53 via @niborg)
   * Allow anything that responds to `read` for GPXFile input. (#55 via @hiroaki)
