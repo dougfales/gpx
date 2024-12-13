@@ -171,7 +171,8 @@ module GPX
         GPX::Waypoint.new(gpx_file: gpx_file,
                           lon: point[0],
                           lat: point[1],
-                          elevation: point[2])
+                          elevation: point[2],
+                          time: point[3])
       end
 
       # Given a GeoJSON coorindate point, and
@@ -181,7 +182,8 @@ module GPX
         GPX::TrackPoint.new(segment: seg,
                             lon: point[0],
                             lat: point[1],
-                            elevation: point[2])
+                            elevation: point[2],
+                            time: point[3])
       end
 
       # Returns all features in the passed geojson
