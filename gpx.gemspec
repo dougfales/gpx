@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.homepage = 'http://www.github.com/dougfales/gpx'
   s.add_dependency 'csv'
   s.add_dependency 'nokogiri', '~>1.7'
+  s.add_dependency 'ostruct'
   s.add_dependency 'rake'
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'minitest'

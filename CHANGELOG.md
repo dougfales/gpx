@@ -1,3 +1,7 @@
+## [unreleased] - YYYY-MM-DD
+
+  * changes dependencies, as `ostruct` gem was loaded from the standard library, but will no longer be part of the default gems with Ruby 3.5 
+
 ## [1.2.1] - 2025-02-27
 
   * Changes dependencies, as `CSV` gem was loaded from the standard library, but will no longer be part of the default gems with Ruby 3.4 (#57 via @simonneutert)
