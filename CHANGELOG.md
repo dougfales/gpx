@@ -1,3 +1,7 @@
+## [unreleased] - YYYY-MM-DD
+
+  * changes dependencies, as `CSV` gem was loaded from the standard library, but will no longer be part of the default gems with Ruby 3.4 (#57 via @simonneutert)
+
 ## [1.2.0] - 2024-07-26
 
   * Adds ability to address various GeoJSON properties when performing GeoJSON to GPX conversion. (#53 via @niborg)
@@ -5,8 +9,8 @@
 
 ## [1.1.1] - 2023-05-19
 
-  * updates CI, minimal Ruby version now 2.7, updates tooling like rubocop and GitHub actions
-  * adds support for Ruby 3.2
+  * updates CI, minimal Ruby version now 2.7, updates tooling like rubocop and GitHub actions (#54 via @simonneutert)
+  * adds support for Ruby 3.2 (#52 via @simonneutert)
   * adds UPGRADING.md to document changes between versions
 
 ## [1.1.0] - 2023-05-18
