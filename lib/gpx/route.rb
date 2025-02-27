@@ -20,7 +20,7 @@ module GPX
         end
       else
         @points = opts[:points] || []
-        @name = (opts[:name])
+        @name = opts[:name]
       end
     end
 
