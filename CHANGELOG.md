@@ -1,6 +1,7 @@
-## [unreleased] - YYYY-MM-DD
+## [1.2.1] - 2025-02-27
 
-  * changes dependencies, as `CSV` gem was loaded from the standard library, but will no longer be part of the default gems with Ruby 3.4 (#57 via @simonneutert)
+  * Changes dependencies, as `CSV` gem was loaded from the standard library, but will no longer be part of the default gems with Ruby 3.4 (#57 via @simonneutert)
+  * Rubocop fix (#58 via @niborg)
 
 ## [1.2.0] - 2024-07-26
 
