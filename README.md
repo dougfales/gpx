@@ -79,6 +79,10 @@ gpx_file = GPX::GeoJSON.convert_to_gpx(
 )
 ```
 
+By default, multiple *LineStrings* from the geojson file will get added as segments to the same track. If you want to create a track per *LineString*, please set 
+`line_string_feature_to_track: true` or `line_string_feature_to_track: ->(ls, trk) { ... }`
+
+
 Exporting an ActiveRecord to GPXFile (as Waypoints)
 
 ```ruby

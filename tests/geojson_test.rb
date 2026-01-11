@@ -54,6 +54,18 @@ class GeojsonTest < Minitest::Test
     assert_equal(58, pts_size)
   end
 
+  def test_line_string_functionality_with_feature_to_track
+    file = File.join(File.dirname(__FILE__), 'geojson_files/line_string_data.json')
+    gpx_file = GPX::GeoJSON.convert_to_gpx(geojson_file: file, line_string_feature_to_track: true)
+
+    assert_equal(3, gpx_file.tracks.size)
+    assert_equal(1, gpx_file.tracks.first.segments.size)
+    pts_size = gpx_file.tracks[0].segments[0].points.size +
+               gpx_file.tracks[1].segments[0].points.size +
+               gpx_file.tracks[2].segments[0].points.size
+    assert_equal(58, pts_size)
+  end
+
   def test_line_string_functionality_with_lambda
     file = File.join(File.dirname(__FILE__), 'geojson_files/line_string_data.json')
     gpx_file = GPX::GeoJSON.convert_to_gpx(
