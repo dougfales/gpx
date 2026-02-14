@@ -33,7 +33,7 @@ module GPX
       #
       def convert_to_gpx(opts = {})
         geojson = geojson_data_from(opts)
-        gpx_file = GPX::GPXFile.new
+        gpx_file = GPX::GPXFile.new(name: opts[:name], description: opts[:description])
         add_tracks_to(gpx_file, geojson, opts)
         add_waypoints_to(gpx_file, geojson, opts)
         gpx_file
@@ -62,8 +62,12 @@ module GPX
       end
 
       def add_tracks_to(gpx_file, geojson, opts)
-        tracks = [line_strings_to_track(geojson, opts)] +
-                 multi_line_strings_to_tracks(geojson, opts)
+        tracks = if opts[:line_string_feature_to_track]
+                   line_strings_to_tracks(geojson, opts)
+                 else
+                   [line_strings_to_track_segments(geojson, opts)]
+                 end
+        tracks += multi_line_strings_to_tracks(geojson, opts)
         tracks.compact!
         gpx_file.tracks += tracks
         gpx_file.tracks.each { |t| gpx_file.update_meta_data(t) }
@@ -76,10 +80,31 @@ module GPX
       end
 
       # Converts GeoJSON 'LineString' features.
-      # Current strategy is to convert each LineString into a
-      # Track Segment, returning a Track for all LineStrings.
+      # This method converts each LineString into a
+      # new Track, returning one Track for each LineString.
       #
-      def line_strings_to_track(geojson, opts)
+      def line_strings_to_tracks(geojson, opts)
+        tracks = []
+        line_strings = line_strings_in(geojson)
+        return tracks unless line_strings.any?
+
+        line_strings.each do |ls|
+          track = GPX::Track.new
+          coords = ls['geometry']['coordinates']
+          segment = coords_to_segment(coords)
+
+          opts[:line_string_feature_to_track]&.call(ls, track) if opts[:line_string_feature_to_track].is_a?(Proc)
+          track.append_segment(segment)
+          tracks << track
+        end
+        tracks
+      end
+
+      # Converts GeoJSON 'LineString' features.
+      # Current default strategy is to convert each LineString into a
+      # Track Segment, returning one Track for all LineStrings.
+      #
+      def line_strings_to_track_segments(geojson, opts)
         line_strings = line_strings_in(geojson)
         return nil unless line_strings.any?
 
@@ -88,7 +113,7 @@ module GPX
           coords = ls['geometry']['coordinates']
           segment = coords_to_segment(coords)
 
-          opts[:line_string_feature_to_segment]&.call(ls, segment)
+          opts[:line_string_feature_to_segment]&.call(ls, segment) if opts[:line_string_feature_to_segment].is_a?(Proc)
           track.append_segment(segment)
         end
         track
