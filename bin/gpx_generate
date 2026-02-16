@@ -1,0 +1,84 @@
+#!/usr/bin/env ruby
+
+require File.expand_path('../lib/gpx', __dir__)
+require 'optparse'
+
+options = {
+  start_time: Time.now,
+  duration: 60 * 30,
+  steps: 100,
+  elevation: 0,
+  start_lat: 40.748817,
+  start_lon: -73.985428
+}
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: gpx_generate [options]'
+
+  opts.on('-o', '--output-file FILE', 'Output file to write generated GPX data to (defaults to STDOUT)') do |v|
+    options[:outfile] = v
+  end
+  opts.on('-s', '--start-time [YYYYMMDD-HH:MM:SS|EPOCH]', 'Activity start time (defaults to Time.now)') do |v|
+    options[:start_time] = (v =~ /\A\d{10}\Z/ ? Time.at(v.to_i) : DateTime.parse(v))
+  end
+  opts.on('-d', '--duration [OFFSET]', 'Activity duration (defaults to 30 minutes)') do |v|
+    raise 'Cannot combine --end-time with --duration' if options[:end_time]
+    options[:duration] = v.to_i
+    raise "Invalid duration: #{options[:duration]}" unless options[:duration] > 0
+  end
+  opts.on('-t', '--start-lat NNN', "Activity start latitude (defaults to #{options[:start_lat]}, Empire State Building)") do |v|
+    options[:start_lat] = v.to_f
+    raise "Invalid start_lat: #{options[:start_lat]}" unless options[:start_lat] >= -180 && options[:start_lat] <= 180
+  end
+  opts.on('-l', '--start-lon NNN', "Activity start longitude (defaults to #{options[:start_lon]}, Empire State Building)") do |v|
+    options[:start_lon] = v.to_f
+    raise "Invalid start_lon: #{options[:start_lon]}" unless options[:start_lon] >= -90 && options[:start_lon] <= 90
+  end
+  opts.on('-n', '--steps N', "Number of points to generate (default is #{options[:steps]})") do |v|
+    options[:steps] = v.to_i
+    raise "Invalid steps: #{options[:steps]}" unless options[:steps] > 0
+  end
+  opts.on('-e', '--elevation N', "Start elevation (default is #{options[:elevation]})") do |v|
+    options[:elevation] = v.to_i
+  end
+end.parse!
+
+segment = GPX::Segment.new
+
+current_lat = options[:start_lat]
+current_lon = options[:start_lon]
+current_elevation = options[:elevation]
+current_time = options[:start_time]
+
+# avoid going in circles
+if [0, 1].sample == 0
+  direction_lat = [-1, 1].sample
+  direction_lon = nil
+else
+  direction_lat = nil
+  direction_lon = [-1, 1].sample
+end
+
+dot_increment = 0.05 / options[:steps]
+
+options[:steps].times do
+  pt = GPX::TrackPoint.new(lat: current_lat, lon: current_lon, time: current_time, elevation: current_elevation)
+  segment.append_point(pt)
+
+  current_lat += (direction_lat ? direction_lat * rand(0...dot_increment) : rand(-dot_increment...dot_increment))
+  current_lon += (direction_lon ? direction_lon * rand(0...dot_increment) : rand(-dot_increment...dot_increment))
+
+  current_elevation += rand(-10...10)
+  current_time += (options[:duration] / options[:steps] + rand(0...dot_increment))
+end
+
+trk = GPX::Track.new
+trk.append_segment(segment)
+gpx_file = GPX::GPXFile.new(tracks: [trk])
+
+
+if options[:outfile]
+  gpx_file.write(options[:outfile])
+else
+  puts gpx_file.to_s(false)
+end
